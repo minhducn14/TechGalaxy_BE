@@ -22,10 +22,6 @@ public class ProductsImage {
     @Column(length = 255)
     private String path;
 
-    @ManyToOne
-    @JoinColumns({
-            @JoinColumn(name = "color_id", referencedColumnName = "color_id"),
-            @JoinColumn(name = "product_variant_detail_id", referencedColumnName = "id")
-    })
+    @OneToOne(mappedBy = "productsImage")
     private ProductVariantDetail productVariantDetail;
 }

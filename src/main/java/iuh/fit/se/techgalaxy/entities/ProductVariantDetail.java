@@ -71,6 +71,7 @@ public class ProductVariantDetail {
     @OneToMany(mappedBy = "productVariantDetail", cascade = CascadeType.ALL)
     private List<OrderDetail> ordersDetails;
 
-    @OneToMany(mappedBy = "productVariantDetail", cascade = CascadeType.ALL)
-    private List<ProductsImage> productImages;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "products_image_id", referencedColumnName = "id")
+    private ProductsImage productsImage;
 }
