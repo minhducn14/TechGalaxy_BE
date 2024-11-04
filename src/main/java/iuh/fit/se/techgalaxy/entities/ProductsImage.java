@@ -22,20 +22,10 @@ public class ProductsImage {
     @Column(length = 255)
     private String path;
 
-    // @ManyToOne
-    // @JoinColumn(name = "color_id", referencedColumnName = "color_id", nullable =
-    // true)
-    // private ProductVariantDetail productVariantDetail;
-    //
-    // @ManyToOne
-    // @JoinColumn(name = "product_variant_detail_id")
-    // private ProductVariantDetail productVariantDetailById;
-
     @ManyToOne
     @JoinColumns({
-            @JoinColumn(name = "color_id", referencedColumnName = "color_id", nullable = true),
+            @JoinColumn(name = "color_id", referencedColumnName = "color_id"),
             @JoinColumn(name = "product_variant_detail_id", referencedColumnName = "id")
     })
     private ProductVariantDetail productVariantDetail;
-
 }

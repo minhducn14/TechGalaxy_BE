@@ -1,7 +1,7 @@
 package iuh.fit.se.techgalaxy.entities;
 
-import iuh.fit.se.projectwww.domain.enumDomain.SystemUserLevel;
-import iuh.fit.se.projectwww.domain.enumDomain.SystemUserStatus;
+import iuh.fit.se.techgalaxy.entities.constant.SystemUserLevel;
+import iuh.fit.se.techgalaxy.entities.constant.SystemUserStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

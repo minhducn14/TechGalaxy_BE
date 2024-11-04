@@ -1,7 +1,8 @@
 package iuh.fit.se.techgalaxy.entities;
 
-import iuh.fit.se.projectwww.domain.enumDomain.OrderStatus;
-import iuh.fit.se.projectwww.domain.enumDomain.PaymentStatus;
+
+import iuh.fit.se.techgalaxy.entities.constant.OrderStatus;
+import iuh.fit.se.techgalaxy.entities.constant.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,6 +1,6 @@
 package iuh.fit.se.techgalaxy.entities;
 
-import iuh.fit.se.projectwww.domain.enumDomain.ProductStatus;
+import iuh.fit.se.techgalaxy.entities.constant.ProductStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,9 +12,10 @@ import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
 @Entity
-@Table(name = "Product_Variant_Details")
+@Table(name = "Product_Variant_Details", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"id", "color_id"})
+})
 @Getter
 @Setter
 @NoArgsConstructor

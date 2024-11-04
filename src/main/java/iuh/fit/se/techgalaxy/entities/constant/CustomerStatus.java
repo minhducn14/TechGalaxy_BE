@@ -1,4 +1,4 @@
-package iuh.fit.se.projectwww.domain.enumDomain;
+package iuh.fit.se.techgalaxy.entities.constant;
 
 public enum CustomerStatus {
     ACTIVE,

@@ -1,6 +1,6 @@
 package iuh.fit.se.techgalaxy.entities;
 
-import iuh.fit.se.projectwww.domain.enumDomain.CustomerStatus;
+import iuh.fit.se.techgalaxy.entities.constant.CustomerStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
