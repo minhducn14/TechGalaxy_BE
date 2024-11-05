@@ -1,7 +1,8 @@
 package iuh.fit.se.techgalaxy.entities;
 
-import iuh.fit.se.techgalaxy.entities.constant.SystemUserLevel;
-import iuh.fit.se.techgalaxy.entities.constant.SystemUserStatus;
+import iuh.fit.se.techgalaxy.entities.enumeration.Gender;
+import iuh.fit.se.techgalaxy.entities.enumeration.SystemUserLevel;
+import iuh.fit.se.techgalaxy.entities.enumeration.SystemUserStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -47,8 +48,8 @@ public class SystemUser {
     @Column(length = 50)
     private String phone;
 
-    @Column(length = 50)
-    private String gender;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     @Column(length = 255)
     private String avatar;

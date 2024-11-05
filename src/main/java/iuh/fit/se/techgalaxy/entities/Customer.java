@@ -1,6 +1,7 @@
 package iuh.fit.se.techgalaxy.entities;
 
-import iuh.fit.se.techgalaxy.entities.constant.CustomerStatus;
+import iuh.fit.se.techgalaxy.entities.enumeration.CustomerStatus;
+import iuh.fit.se.techgalaxy.entities.enumeration.Gender;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -42,8 +43,8 @@ public class Customer {
     @Column(length = 50)
     private String phone;
 
-    @Column(length = 50)
-    private String gender;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     @Column(length = 255)
     private String avatar;
