@@ -58,11 +58,9 @@ public class ProductVariantDetail {
     private ProductStatus status;
 
     @CreationTimestamp
-    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(nullable = false)
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "productVariantDetail", cascade = CascadeType.ALL)

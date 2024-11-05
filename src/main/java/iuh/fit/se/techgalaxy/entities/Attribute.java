@@ -31,11 +31,9 @@ public class Attribute {
     private String type;
 
     @CreationTimestamp
-    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(nullable = false)
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "attribute", cascade = CascadeType.ALL)
