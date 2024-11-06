@@ -1,0 +1,16 @@
+spring:
+    application:
+        name: TechGalaxy
+
+    datasource:
+        url: jdbc:sqlserver://localhost:1433;databaseName=TechGalaxy;encrypt=false
+        username: sa
+        password: sapassword
+        driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+    jpa:
+        hibernate:
+            ddl-auto: create-drop
+        show-sql: true
+        database-platform: org.hibernate.dialect.SQLServerDialect
+
