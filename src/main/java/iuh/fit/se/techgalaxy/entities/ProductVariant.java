@@ -1,6 +1,6 @@
 package iuh.fit.se.techgalaxy.entities;
 
-import iuh.fit.se.techgalaxy.entities.constant.ProductStatus;
+import iuh.fit.se.techgalaxy.entities.enumeration.ProductStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
