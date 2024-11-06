@@ -1,19 +1,19 @@
 package iuh.fit.se.techgalaxy.repository;
 
 import iuh.fit.se.techgalaxy.entities.Customer;
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.stereotype.Repository;
 
-public interface CustomerRepository {
-    public Customer save(Customer customer);
+import java.util.List;
 
-    public Customer findById(String id);
+@Repository
+public interface CustomerRepository extends JpaRepository<Customer, String> {
 
-    public Customer findByEmail(String email);
+    @Query("SELECT c FROM  Customer c JOIN c.account a WHERE a.email LIKE :email")
+    public List<Customer> findByEmail(String email);
 
-    public Customer findByPhone(String phone);
-
-//    public
-
-    public Customer update(Customer customer);
-
-    public Customer delete(Customer customer);
+    public PagedModel<Customer> findAll(int page, int size);
 }
