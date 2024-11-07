@@ -20,6 +20,9 @@ public class ProductController {
 
     @GetMapping
     ResponseEntity<DataResponse<Product>> getAllProducts() {
-        return ResponseEntity.ok(DataResponse.<Product>builder().data(productServiceImpl.getAllProducts()).build());
+        return ResponseEntity.ok(DataResponse.<Product>builder()
+                .data(productServiceImpl.getAllProducts())
+                .build());
     }
 }
+

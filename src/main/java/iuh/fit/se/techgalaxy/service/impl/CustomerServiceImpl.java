@@ -16,6 +16,8 @@ import java.util.stream.Collectors;
 public class CustomerServiceImpl implements CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
+    @Autowired
+    private CustomerMapper customerMapper;
 
     @Override
     public PagedModel<CustomerResponse> findAllCustomers(int page, int size) {
@@ -26,8 +28,7 @@ public class CustomerServiceImpl implements CustomerService {
     public List<CustomerResponse> findByEmail(String email) {
         List<Customer> customers = customerRepository.findByEmail(email);
         return customers.stream()
-                .map(CustomerMapper::toCustomerResponse)
-                .collect(Collectors.toList());
+                .map(c -> customerMapper.toCustomerResponse(c)).collect(Collectors.toList());
     }
 
 }
