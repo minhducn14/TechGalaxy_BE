@@ -14,5 +14,6 @@ public interface CustomerRepository extends JpaRepository<Customer, String> {
     @Query("SELECT c FROM  Customer c JOIN c.account a WHERE a.email LIKE :email")
     public List<Customer> findByEmail(String email);
 
+    @Query("SELECT c FROM Customer c")
     public PagedModel<Customer> findAllCustomers(int page, int size);
 }

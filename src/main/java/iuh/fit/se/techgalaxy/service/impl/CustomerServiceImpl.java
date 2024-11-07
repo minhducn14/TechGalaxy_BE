@@ -1,6 +1,8 @@
 package iuh.fit.se.techgalaxy.service.impl;
 
+import iuh.fit.se.techgalaxy.dto.request.CustomerRequest;
 import iuh.fit.se.techgalaxy.dto.response.CustomerResponse;
+import iuh.fit.se.techgalaxy.dto.response.DataResponse;
 import iuh.fit.se.techgalaxy.entities.Customer;
 import iuh.fit.se.techgalaxy.mapper.CustomerMapper;
 import iuh.fit.se.techgalaxy.repository.CustomerRepository;
@@ -17,12 +19,10 @@ import java.util.stream.Collectors;
 @Service
 public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
-    private final CustomerMapper customerMapper;
 
     @Autowired
-    public CustomerServiceImpl(CustomerRepository customerRepository, CustomerMapper customerMapper) {
+    public CustomerServiceImpl(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
-        this.customerMapper = customerMapper;
     }
 
     @Override
@@ -42,6 +42,28 @@ public class CustomerServiceImpl implements CustomerService {
                         customerPage.getTotalElements()
                 )
         );
+    }
+
+    @Override
+    public CustomerResponse findById(String id) {
+        return customerRepository.findById(id)
+                .map(CustomerMapper.INSTANCE::toCustomerResponse)
+                .orElse(null);
+    }
+
+    @Override
+    public DataResponse<CustomerResponse> save(CustomerRequest customerRequest) {
+        return null;
+    }
+
+    @Override
+    public DataResponse<CustomerResponse> update(CustomerRequest customerRequest) {
+        return null;
+    }
+
+    @Override
+    public boolean delete(String id) {
+        return false;
     }
 
     @Override
