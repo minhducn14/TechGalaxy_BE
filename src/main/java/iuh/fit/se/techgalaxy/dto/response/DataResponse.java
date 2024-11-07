@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -17,5 +17,5 @@ public class DataResponse<T> {
     @Builder.Default
     int status = 200;
     String message;
-    List<T> data;
+    Set<T> data;
 }

@@ -2,10 +2,8 @@ package iuh.fit.se.techgalaxy.dto.request;
 
 import iuh.fit.se.techgalaxy.entities.enumeration.CustomerStatus;
 import iuh.fit.se.techgalaxy.entities.enumeration.Gender;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 
@@ -13,13 +11,14 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class CustomerRequest {
-    private String id;
-    private CustomerStatus userStatus;
-    private String name;
-    private String address;
-    private String phone;
-    private Gender gender;
-    private String avatar;
-    private LocalDateTime dateOfBirth;
+    String id;
+    CustomerStatus userStatus;
+    String name;
+    String address;
+    String phone;
+    Gender gender;
+    String avatar;
+    LocalDateTime dateOfBirth;
 }
