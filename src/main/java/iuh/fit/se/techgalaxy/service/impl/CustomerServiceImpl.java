@@ -6,6 +6,8 @@ import iuh.fit.se.techgalaxy.mapper.CustomerMapper;
 import iuh.fit.se.techgalaxy.repository.CustomerRepository;
 import iuh.fit.se.techgalaxy.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 
@@ -14,20 +16,35 @@ import java.util.stream.Collectors;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
+    private final CustomerRepository customerRepository;
+
     @Autowired
-    private CustomerRepository customerRepository;
+    public CustomerServiceImpl(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
 
     @Override
     public PagedModel<CustomerResponse> findAllCustomers(int page, int size) {
-        return null;
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<Customer> customerPage = customerRepository.findAll(pageRequest);
+
+        List<CustomerResponse> customerResponses = customerPage.getContent()
+                .stream()
+                .map(CustomerMapper.INSTANCE::toCustomerResponse)
+                .collect(Collectors.toList());
+        return PagedModel.of(
+                customerResponses,
+                new PagedModel.PageMetadata(
+                        customerPage.getSize(),
+                        customerPage.getNumber(),
+                        customerPage.getTotalElements()
+                )
+        );
     }
 
     @Override
     public List<CustomerResponse> findByEmail(String email) {
-        List<Customer> customers = customerRepository.findByEmail(email);
-        return customers.stream()
-                .map(CustomerMapper::toCustomerResponse)
-                .collect(Collectors.toList());
+        return null;
     }
 
 }
