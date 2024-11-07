@@ -12,12 +12,13 @@ import org.hibernate.annotations.UuidGenerator;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
-@Table(name = "Roles")
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "Roles")
 public class Role {
 
     @Id

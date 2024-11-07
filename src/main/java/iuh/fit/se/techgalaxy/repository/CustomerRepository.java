@@ -1,7 +1,6 @@
 package iuh.fit.se.techgalaxy.repository;
 
 import iuh.fit.se.techgalaxy.entities.Customer;
-import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.hateoas.PagedModel;

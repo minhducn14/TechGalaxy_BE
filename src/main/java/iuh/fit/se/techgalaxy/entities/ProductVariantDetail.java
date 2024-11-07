@@ -12,14 +12,14 @@ import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
 import java.util.List;
-@Entity
-@Table(name = "Product_Variant_Details", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"id", "color_id"})
-})
+
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor@Entity
+@Table(name = "Product_Variant_Details", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"id", "color_id"})
+})
 public class ProductVariantDetail {
 
     @Id
