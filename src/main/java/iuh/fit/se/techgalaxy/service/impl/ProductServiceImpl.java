@@ -1,6 +1,7 @@
 package iuh.fit.se.techgalaxy.service.impl;
 
-import iuh.fit.se.techgalaxy.entities.Product;
+import iuh.fit.se.techgalaxy.dto.response.ProductResponse;
+import iuh.fit.se.techgalaxy.mapper.ProductMapper;
 import iuh.fit.se.techgalaxy.repository.ProductRepository;
 import iuh.fit.se.techgalaxy.service.ProductService;
 import lombok.AccessLevel;
@@ -17,9 +18,12 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ProductServiceImpl implements ProductService {
     ProductRepository productRepository;
-
+    ProductMapper productMapper;
     @Override
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public List<ProductResponse> getAllProducts() {
+
+        return productRepository.findAll().stream()
+                .map(productMapper::toProductResponse)
+                .toList();
     }
 }

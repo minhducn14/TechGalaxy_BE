@@ -1,7 +1,7 @@
 package iuh.fit.se.techgalaxy.controller;
 
 import iuh.fit.se.techgalaxy.dto.response.DataResponse;
-import iuh.fit.se.techgalaxy.entities.Product;
+import iuh.fit.se.techgalaxy.dto.response.ProductResponse;
 import iuh.fit.se.techgalaxy.service.impl.ProductServiceImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +19,8 @@ public class ProductController {
     ProductServiceImpl productServiceImpl;
 
     @GetMapping
-    ResponseEntity<DataResponse<Product>> getAllProducts() {
-        return ResponseEntity.ok(DataResponse.<Product>builder()
+    ResponseEntity<DataResponse<ProductResponse>> getAllProducts() {
+        return ResponseEntity.ok(DataResponse.<ProductResponse>builder()
                 .data(productServiceImpl.getAllProducts())
                 .build());
     }
