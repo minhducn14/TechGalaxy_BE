@@ -11,12 +11,13 @@ import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "Product_Feedbacks")
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "Product_Feedbacks")
 public class ProductFeedback {
 
     @Id

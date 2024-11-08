@@ -11,12 +11,12 @@ import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "Products_Images")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "Products_Images")
 public class ProductsImage {
 
     @Id
@@ -26,7 +26,8 @@ public class ProductsImage {
     @Column(length = 255)
     private String path;
 
-    @OneToOne(mappedBy = "productsImage")
+    @ManyToOne
+    @JoinColumn(name = "product_variant_detail_id")
     private ProductVariantDetail productVariantDetail;
 
     @CreationTimestamp

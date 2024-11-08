@@ -1,0 +1,9 @@
+package iuh.fit.se.techgalaxy.controller;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/variants/{variantId}/details")
+public class ProductVariantDetailController {
+}

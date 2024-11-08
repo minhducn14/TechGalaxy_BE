@@ -15,12 +15,13 @@ import org.hibernate.annotations.UuidGenerator;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
-@Table(name = "System_Users")
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "System_Users")
 public class SystemUser {
 
     @Id

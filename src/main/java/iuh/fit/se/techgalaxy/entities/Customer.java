@@ -14,12 +14,13 @@ import org.hibernate.annotations.UuidGenerator;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
-@Table(name = "Customers")
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "Customers")
 public class Customer {
 
     @Id
@@ -40,7 +41,7 @@ public class Customer {
     @Column(length = 255)
     private String address;
 
-    @Column(length = 50)
+    @Column(length = 50, unique = true)
     private String phone;
 
     @Enumerated(EnumType.STRING)
