@@ -12,9 +12,9 @@ public interface CustomerService {
 
     CustomerResponse findById(String id);
 
-    DataResponse<CustomerResponse> save(CustomerRequest customerRequest);
+    CustomerResponse save(CustomerRequest customerRequest);
 
-    DataResponse<CustomerResponse> update(CustomerRequest customerRequest);
+    CustomerResponse update(CustomerRequest customerRequest);
 
     boolean delete(String id);
 }
