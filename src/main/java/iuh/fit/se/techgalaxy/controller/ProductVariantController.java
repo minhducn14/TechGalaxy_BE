@@ -16,7 +16,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
-@RequestMapping("/products/{productId}/variants")
+@RequestMapping({"/products/{productId}/variants", "/products/variants"})
 public class ProductVariantController {
     ProductVariantServiceImpl productVariantServiceImpl;
     @GetMapping
@@ -30,24 +30,26 @@ public class ProductVariantController {
         createdVariant.add(productVariantServiceImpl.createProductVariant(productId, request));
         return ResponseEntity.ok(DataResponse.<ProductVariantResponse>builder().data(createdVariant).build());
     }
-//
-//    @GetMapping("/{id}")
-//    public ResponseEntity<ProductVariant> getVariantById(@PathVariable String id) {
-//        ProductVariant variant = productVariantService.findVariantById(id);
-//        return ResponseEntity.ok(variant);
-//    }
-//
-//    @PutMapping("/{id}")
-//    public ResponseEntity<ProductVariant> updateVariant(@PathVariable String id, @RequestBody ProductVariant variant) {
-//        ProductVariant updatedVariant = productVariantService.updateVariant(id, variant);
-//        return ResponseEntity.ok(updatedVariant);
-//    }
-//
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Void> deleteVariant(@PathVariable String id) {
-//        productVariantService.deleteVariant(id);
-//        return ResponseEntity.noContent().build();
-//    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DataResponse<ProductVariantResponse>> getVariantById(@PathVariable String id) {
+        Set<ProductVariantResponse> createdVariant = new HashSet<>();
+        createdVariant.add(productVariantServiceImpl.findVariantById(id));
+        return ResponseEntity.ok(DataResponse.<ProductVariantResponse>builder().data(createdVariant).build());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<DataResponse<ProductVariantResponse>> updateVariant(@PathVariable String id, @RequestBody ProductVariantRequest request) {
+        Set<ProductVariantResponse> createdVariant = new HashSet<>();
+        createdVariant.add(productVariantServiceImpl.updateVariant(id, request));
+        return ResponseEntity.ok(DataResponse.<ProductVariantResponse>builder().data(createdVariant).build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<DataResponse<Object>> deleteVariant(@PathVariable String id) {
+        productVariantServiceImpl.deleteVariant(id);
+        return ResponseEntity.ok(DataResponse.<Object>builder().message("Delete "+ id + " success").build());
+    }
 }
 
 

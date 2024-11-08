@@ -25,6 +25,13 @@ public class CustomerServiceImpl implements CustomerService {
         this.customerRepository = customerRepository;
     }
 
+    /**
+     * Find all customers with pagination and convert to CustomerResponse
+     * @param page
+     * @param size
+     * @return PagedModel<CustomerResponse>
+     * author: PhamVanThanh
+     */
     @Override
     public PagedModel<CustomerResponse> findAllCustomers(int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
@@ -44,6 +51,12 @@ public class CustomerServiceImpl implements CustomerService {
         );
     }
 
+    /**
+     * Find customer by id and convert to CustomerResponse if exist else return null
+     * @param id
+     * @return CustomerResponse
+     * author: PhamVanThanh
+     */
     @Override
     public CustomerResponse findById(String id) {
         return customerRepository.findById(id)
@@ -51,21 +64,50 @@ public class CustomerServiceImpl implements CustomerService {
                 .orElse(null);
     }
 
+    /**
+     * Save new customer
+     * @param customerRequest
+     * @return CustomerResponse
+     * author: PhamVanThanh
+     */
     @Override
-    public DataResponse<CustomerResponse> save(CustomerRequest customerRequest) {
-        return null;
+    public CustomerResponse save(CustomerRequest customerRequest) {
+        Customer customer = customerRepository.save(CustomerMapper.INSTANCE.toCustomerFromRequest(customerRequest));
+        return CustomerMapper.INSTANCE.toCustomerResponse(customer);
     }
 
+    /**
+     * Update customer if exist else return null
+     * @param customerRequest
+     * @return CustomerResponse
+     * author: PhamVanThanh
+     */
     @Override
-    public DataResponse<CustomerResponse> update(CustomerRequest customerRequest) {
-        return null;
+    public CustomerResponse update(CustomerRequest customerRequest) {
+        if (!customerRepository.existsById(customerRequest.getId()))
+            return null;
+        Customer customer = customerRepository.save(CustomerMapper.INSTANCE.toCustomerFromRequest(customerRequest));
+        return CustomerMapper.INSTANCE.toCustomerResponse(customer);
     }
 
+    /**
+     * Delete customer by id
+     * @param id
+     * @return boolean
+     */
     @Override
     public boolean delete(String id) {
-        return false;
+        if (!customerRepository.existsById(id))
+            return false;
+        customerRepository.deleteById(id);
+        return true;
     }
 
+    /**
+     * Find customer by email
+     * @param email
+     * @return List<CustomerResponse>
+     */
     @Override
     public List<CustomerResponse> findByEmail(String email) {
         return customerRepository.findByEmail(email)

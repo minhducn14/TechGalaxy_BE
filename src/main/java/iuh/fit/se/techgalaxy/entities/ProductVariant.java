@@ -54,11 +54,9 @@ public class ProductVariant {
     private Product product;
 
     @CreationTimestamp
-    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(nullable = false)
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "productVariant", cascade = CascadeType.ALL)
@@ -66,4 +64,7 @@ public class ProductVariant {
 
     @OneToMany(mappedBy = "productVariant", cascade = CascadeType.ALL)
     private List<ProductFeedback> feedbacks;
+
+    @OneToMany(mappedBy = "productVariant", cascade = CascadeType.ALL)
+    private List<Value> values;
 }

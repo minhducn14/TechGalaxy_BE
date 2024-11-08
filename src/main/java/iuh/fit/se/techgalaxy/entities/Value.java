@@ -32,14 +32,12 @@ public class Value {
     private String value;
 
     @ManyToOne
-    @JoinColumn(name = "product_variant_detail_id")
-    private ProductVariantDetail productVariantDetail;
+    @JoinColumn(name = "product_variant_id")
+    private ProductVariant productVariant;
 
     @CreationTimestamp
-    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(nullable = false)
     private LocalDateTime updatedAt;
 }

@@ -33,8 +33,9 @@ public class ProductVariantServiceImpl implements ProductVariantService {
                 .map(productVariantMapper::toProductVariantResponse).collect(Collectors.toSet());
     }
 
+
     @Override
-    public ProductVariantResponse createProductVariant(String productId,ProductVariantRequest request) {
+    public ProductVariantResponse createProductVariant(String productId, ProductVariantRequest request) {
         UsageCategory usageCategory = usageCategoryRepository.findById(request.getUsageCategoryId()).orElseThrow(
                 () -> new RuntimeException("Usage category not found")
         );
@@ -45,5 +46,26 @@ public class ProductVariantServiceImpl implements ProductVariantService {
         productVariant.setUsageCategory(usageCategory);
         productVariant.setProduct(product);
         return productVariantMapper.toProductVariantResponse(productVariantRepository.save(productVariant));
+    }
+
+    @Override
+    public ProductVariantResponse findVariantById(String id) {
+        return productVariantRepository.findById(id)
+                .map(productVariantMapper::toProductVariantResponse)
+                .orElseThrow(() -> new RuntimeException("Product variant not found"));
+    }
+
+    @Override
+    public ProductVariantResponse updateVariant(String id, ProductVariantRequest request) {
+        ProductVariant productVariant = productVariantRepository.findById(id).orElseThrow(()->
+                new RuntimeException("Product variant not found"));
+        productVariantMapper.updateProductVariantFromRequest(productVariant, request);
+        return productVariantMapper.toProductVariantResponse(productVariantRepository.save(productVariant));
+    }
+    @Override
+    public void deleteVariant(String id) {
+        ProductVariant productVariant = productVariantRepository.findById(id).orElseThrow(()->
+                new RuntimeException("Product variant not found"));
+        productVariantRepository.delete(productVariant);
     }
 }

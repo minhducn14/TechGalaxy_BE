@@ -5,8 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -23,6 +26,13 @@ public class ProductsImage {
     @Column(length = 255)
     private String path;
 
-    @OneToOne(mappedBy = "productsImage")
+    @ManyToOne
+    @JoinColumn(name = "product_variant_detail_id")
     private ProductVariantDetail productVariantDetail;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 }
