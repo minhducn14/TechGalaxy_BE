@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface ProductVariantDetailMapper {
     @Mapping(target = "memories", expression = "java(mapMemories(productVariantDetails))")
-    ProductVariantDetailResponse toDto(ProductVariantDetail productVariantDetail, List<ProductVariantDetail> productVariantDetails);
+    ProductVariantDetailResponse toProductVariantDetailResponse(ProductVariantDetail productVariantDetail, List<ProductVariantDetail> productVariantDetails);
     default Map<String, String[]> mapMemories(List<ProductVariantDetail> productVariantDetails) {
         return productVariantDetails.stream()
                 .collect(Collectors.groupingBy(
