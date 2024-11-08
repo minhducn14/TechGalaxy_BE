@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -15,5 +17,6 @@ public class DataResponse<T> {
     @Builder.Default
     private int status = 200;
     private String message;
-    private List<T> data;
+    private Object data;
+    private Map<String, Object> errors;
 }
