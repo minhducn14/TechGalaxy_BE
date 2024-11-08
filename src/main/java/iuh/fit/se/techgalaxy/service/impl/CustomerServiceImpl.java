@@ -26,7 +26,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     /**
-     * Find all customers with pagination and convert to CustomerResponse
+     * Find all customers with pagination
      * @param page
      * @param size
      * @return PagedModel<CustomerResponse>
@@ -49,6 +49,19 @@ public class CustomerServiceImpl implements CustomerService {
                         customerPage.getTotalElements()
                 )
         );
+    }
+
+    /**
+     * Find all customers
+     * @return List<CustomerResponse>
+     * author: PhamVanThanh
+     */
+    @Override
+    public List<CustomerResponse> findAll() {
+        List<Customer> customers = customerRepository.findAll();
+        return customers.stream()
+                .map(CustomerMapper.INSTANCE::toCustomerResponse)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -83,8 +96,8 @@ public class CustomerServiceImpl implements CustomerService {
      * author: PhamVanThanh
      */
     @Override
-    public CustomerResponse update(CustomerRequest customerRequest) {
-        if (!customerRepository.existsById(customerRequest.getId()))
+    public CustomerResponse update(String id, CustomerRequest customerRequest) {
+        if (!customerRepository.existsById(id))
             return null;
         Customer customer = customerRepository.save(CustomerMapper.INSTANCE.toCustomerFromRequest(customerRequest));
         return CustomerMapper.INSTANCE.toCustomerResponse(customer);

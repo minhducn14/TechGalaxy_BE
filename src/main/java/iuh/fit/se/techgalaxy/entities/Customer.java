@@ -61,5 +61,4 @@ public class Customer {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
 }

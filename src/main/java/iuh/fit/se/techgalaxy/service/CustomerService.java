@@ -10,11 +10,13 @@ public interface CustomerService {
 
     PagedModel<CustomerResponse> findAllCustomers(int page, int size);
 
+    List<CustomerResponse> findAll();
+
     CustomerResponse findById(String id);
 
     CustomerResponse save(CustomerRequest customerRequest);
 
-    CustomerResponse update(CustomerRequest customerRequest);
+    CustomerResponse update(String id, CustomerRequest customerRequest);
 
     boolean delete(String id);
 }
