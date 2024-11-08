@@ -10,7 +10,6 @@ import org.hibernate.annotations.UuidGenerator;
 import java.time.LocalDateTime;
 import java.util.List;
 
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,23 +22,23 @@ public class Product {
 
     @Id
     @UuidGenerator
-     String id;
+    String id;
 
     @Column(nullable = false, length = 255)
-     String name;
+    String name;
 
     @ManyToOne
     @JoinColumn(name = "trademark_id")
-     Trademark trademark;
+    Trademark trademark;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
-     LocalDateTime createdAt;
+    private LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(nullable = false)
-     LocalDateTime updatedAt;
+    private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-     List<ProductVariant> productVersions;
+    List<ProductVariant> productVersions;
 }

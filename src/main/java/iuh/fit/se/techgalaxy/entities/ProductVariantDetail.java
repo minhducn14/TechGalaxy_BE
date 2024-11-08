@@ -58,11 +58,9 @@ public class ProductVariantDetail {
     private ProductStatus status;
 
     @CreationTimestamp
-    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(nullable = false)
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "productVariantDetail", cascade = CascadeType.ALL)
@@ -71,7 +69,6 @@ public class ProductVariantDetail {
     @OneToMany(mappedBy = "productVariantDetail", cascade = CascadeType.ALL)
     private List<OrderDetail> ordersDetails;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "products_image_id", referencedColumnName = "id")
-    private ProductsImage productsImage;
+    @OneToMany(mappedBy = "productVariantDetail", cascade = CascadeType.ALL)
+    private List<ProductsImage> productsImage;
 }
