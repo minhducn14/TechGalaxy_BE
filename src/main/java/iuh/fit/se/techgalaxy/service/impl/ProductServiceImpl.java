@@ -57,4 +57,10 @@ public class ProductServiceImpl implements ProductService {
         productMapper.updateProductFromRequest(product, productRequest);
         return productMapper.toProductResponse(productRepository.save(product));
     }
+
+    @Override
+    public void deleteProduct(String id) {
+        Product product = productRepository.findById(id).orElseThrow(()-> new RuntimeException("Product not found"));
+        productRepository.delete(product);
+    }
 }

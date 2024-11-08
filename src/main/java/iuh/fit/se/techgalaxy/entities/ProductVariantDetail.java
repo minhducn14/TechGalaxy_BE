@@ -64,9 +64,6 @@ public class ProductVariantDetail {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "productVariantDetail", cascade = CascadeType.ALL)
-    private List<Value> values;
-
-    @OneToMany(mappedBy = "productVariantDetail", cascade = CascadeType.ALL)
     private List<OrderDetail> ordersDetails;
 
     @OneToMany(mappedBy = "productVariantDetail", cascade = CascadeType.ALL)

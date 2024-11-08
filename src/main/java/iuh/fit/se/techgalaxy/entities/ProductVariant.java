@@ -64,4 +64,7 @@ public class ProductVariant {
 
     @OneToMany(mappedBy = "productVariant", cascade = CascadeType.ALL)
     private List<ProductFeedback> feedbacks;
+
+    @OneToMany(mappedBy = "productVariant", cascade = CascadeType.ALL)
+    private List<Value> values;
 }
