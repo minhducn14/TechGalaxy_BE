@@ -36,7 +36,7 @@ public class AccountServiceImpl implements AccountService {
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
 
         if (account.getPassword() != null && !account.getPassword().isEmpty()) {
-            existingAccount.setPassword(passwordEncoder.encode(account.getPassword()));
+            existingAccount.setPassword(account.getPassword());
         }
 
         existingAccount.setEmail(account.getEmail());
@@ -72,7 +72,7 @@ public class AccountServiceImpl implements AccountService {
     public void resetPassword(String id, String newPassword) {
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
-        account.setPassword(passwordEncoder.encode(newPassword));
+        account.setPassword(newPassword);
         accountRepository.save(account);
     }
 
