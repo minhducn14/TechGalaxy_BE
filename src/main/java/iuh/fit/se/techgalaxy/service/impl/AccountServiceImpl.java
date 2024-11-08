@@ -40,17 +40,21 @@ public class AccountServiceImpl implements AccountService {
         }
 
         existingAccount.setEmail(account.getEmail());
-        existingAccount.setRole(account.getRole());
+        existingAccount.setRoles(account.getRoles());
 
         return accountRepository.save(existingAccount);
     }
 
     @Override
-    public void deleteAccountById(String id) {
+    public boolean deleteAccountById(String id) {
         if (!accountRepository.existsById(id)) {
-            throw new EntityNotFoundException("Account not found");
+            return false;
         }
-        accountRepository.deleteById(id);
+        if (accountRepository.existsById(id)) {
+            accountRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 
     @Override

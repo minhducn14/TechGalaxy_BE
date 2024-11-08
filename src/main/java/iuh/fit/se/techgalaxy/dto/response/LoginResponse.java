@@ -2,8 +2,6 @@ package iuh.fit.se.techgalaxy.dto.response;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import iuh.fit.se.techgalaxy.entities.Role;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ResLoginDTO {
+public class LoginResponse {
     @JsonProperty("access_token")
     private String accessToken;
 

@@ -29,6 +29,9 @@ public class Role {
     @Column(nullable = false, length = 255)
     private String name;
 
+    @Column(nullable = false)
+    private boolean active;
+
     @Column(columnDefinition = "TEXT")
     private String description;
 
@@ -38,7 +41,7 @@ public class Role {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles")
     private List<Account> accounts;
 
     @ManyToMany(fetch = FetchType.LAZY)

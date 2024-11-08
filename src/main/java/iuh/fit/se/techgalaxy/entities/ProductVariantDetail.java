@@ -17,15 +17,12 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor@Entity
-@Table(name = "Product_Variant_Details", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"id", "color_id"})
-})
+@Table(name = "Product_Variant_Details")
 public class ProductVariantDetail {
 
     @Id
     @UuidGenerator
     private String id;
-
     @ManyToOne
     @JoinColumn(name = "product_variant_id")
     private ProductVariant productVariant;

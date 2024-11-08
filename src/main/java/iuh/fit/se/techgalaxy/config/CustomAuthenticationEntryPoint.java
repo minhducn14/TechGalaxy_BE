@@ -1,7 +1,7 @@
 package iuh.fit.se.techgalaxy.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import iuh.fit.se.techgalaxy.dto.response.RestResponse;
+import iuh.fit.se.techgalaxy.dto.response.DataResponse;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -31,13 +31,13 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         this.delegate.commence(request, response, authException);
         response.setContentType("application/json;charset=UTF-8");
 
-        RestResponse<Object> res = new RestResponse<Object>();
-        res.setStatusCode(HttpStatus.UNAUTHORIZED.value());
+        DataResponse<Object> res = new DataResponse<>();
+        res.setStatus(HttpStatus.UNAUTHORIZED.value());
 
-        String errorMessage = Optional.ofNullable(authException.getCause())
-                .map(Throwable::getMessage)
-                .orElse(authException.getMessage());
-        res.setError(errorMessage);
+//        String errorMessage = Optional.ofNullable(authException.getCause())
+//                .map(Throwable::getMessage)
+//                .orElse(authException.getMessage());
+//        res.setError(errorMessage);
 
         res.setMessage("Token không hợp lệ (hết hạn, không đúng định dạng, hoặc không truyền JWT ở header)...");
 
