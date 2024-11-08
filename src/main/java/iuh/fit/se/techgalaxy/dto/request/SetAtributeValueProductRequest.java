@@ -5,11 +5,9 @@ import java.util.List;
 public class SetAtributeValueProductRequest {
     String productId;
     private List<AttributeValue> attributes;
-
     public static class AttributeValue {
         private String attributeId;
         private String value;
-
         // Getters và Setters
     }
 }
