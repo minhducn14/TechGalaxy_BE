@@ -1,16 +1,18 @@
 package iuh.fit.se.techgalaxy.controller;
 
 
-import iuh.fit.se.techgalaxy.dto.request.ReqLoginDTO;
+import iuh.fit.se.techgalaxy.dto.request.LoginRequest;
 import iuh.fit.se.techgalaxy.dto.response.ResCreateAccountDTO;
-import iuh.fit.se.techgalaxy.dto.response.ResLoginDTO;
+import iuh.fit.se.techgalaxy.dto.response.LoginResponse;
 import iuh.fit.se.techgalaxy.entities.Account;
 import iuh.fit.se.techgalaxy.service.AccountService;
 
 import iuh.fit.se.techgalaxy.util.SecurityUtil;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -30,6 +32,10 @@ public class AccountController {
 
     private final SecurityUtil securityUtil;
 
+    @Value("${jwt.refresh-token-validity-in-seconds}")
+    private long refreshTokenExpiration;
+
+
     public AccountController(AuthenticationManagerBuilder authenticationManagerBuilder,
                              AccountService accountService,
                              PasswordEncoder passwordEncoder,
@@ -42,19 +48,19 @@ public class AccountController {
 
 
     @PostMapping("/auth/login")
-    public ResponseEntity<ResLoginDTO> login(@RequestBody ReqLoginDTO loginDto) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginDto) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 loginDto.getUsername(), loginDto.getPassword());
         try {
             Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            ResLoginDTO res = new ResLoginDTO();
+            LoginResponse res = new LoginResponse();
 
             Account currentUserDB = this.accountService.getAccountByEmail(loginDto.getUsername()).orElse(null);
 
             if (currentUserDB != null) {
-                ResLoginDTO.AccountLogin accountLogin = new ResLoginDTO.AccountLogin(
+                LoginResponse.AccountLogin accountLogin = new LoginResponse.AccountLogin(
                         currentUserDB.getId(),
                         currentUserDB.getEmail());
 
@@ -67,26 +73,35 @@ public class AccountController {
 
             // create refresh token
             String refresh_token = this.securityUtil.createRefreshToken(loginDto.getUsername(), res);
+            res.setAccount(null);
+
+            ResponseCookie resCookies = ResponseCookie
+                    .from("refresh_token", refresh_token)
+                    .httpOnly(true)
+                    .secure(true)
+                    .path("/")
+                    .maxAge(refreshTokenExpiration)
+                    .build();
 
             return ResponseEntity.ok()
+                    .header(HttpHeaders.SET_COOKIE, resCookies.toString())
                     .body(res);
         } catch (AuthenticationException e) {
-            System.out.println(">>> Authentication failed: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        return ResponseEntity.ok().body(new ResLoginDTO());
     }
 
 
     @GetMapping("/auth/account")
-    public ResponseEntity<ResLoginDTO.AccountGetAccount> getAccount() {
+    public ResponseEntity<LoginResponse.AccountGetAccount> getAccount() {
         String email = SecurityUtil.getCurrentUserLogin().isPresent()
                 ? SecurityUtil.getCurrentUserLogin().get()
                 : "";
 
         Account accountCurrnetDB = this.accountService.getAccountByEmail(email).orElse(null);
-        ResLoginDTO.AccountLogin accountLogin = new ResLoginDTO.AccountLogin();
-        ResLoginDTO.AccountGetAccount accountGetAccount = new ResLoginDTO.AccountGetAccount();
+        LoginResponse.AccountLogin accountLogin = new LoginResponse.AccountLogin();
+        LoginResponse.AccountGetAccount accountGetAccount = new LoginResponse.AccountGetAccount();
 
         if (accountCurrnetDB != null) {
             accountLogin.setId(accountCurrnetDB.getId());
@@ -108,7 +123,6 @@ public class AccountController {
 
         String hashPassword = this.passwordEncoder.encode(account.getPassword());
         account.setPassword(hashPassword);
-        System.out.println(">>> Hashed Password on Register: " + hashPassword);
 
         Account account1 = this.accountService.createAccount(account);
         if (account1 == null) {

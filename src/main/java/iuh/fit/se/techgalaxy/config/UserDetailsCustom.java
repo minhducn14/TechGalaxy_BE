@@ -31,20 +31,21 @@ public class UserDetailsCustom implements UserDetailsService {
         Account account = accountService.getAccountByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Username/password không hợp lệ"));
 
-        if (account.getRole() == null) {
-            throw new UsernameNotFoundException("Người dùng không có vai trò hợp lệ.");
-        }
+        List<String> roleNames = account.getRoles().stream()
+                .map(role -> "ROLE_" + role.getName())
+                .toList();
 
-        String roleName = "ROLE_" + account.getRole().getName().toUpperCase();
-        System.out.println(">>> Role name: " + roleName);
-        System.out.println(">>> Password: " + account.getPassword());
+        List<SimpleGrantedAuthority> authorities = roleNames.stream()
+                .map(SimpleGrantedAuthority::new)
+                .toList();
+
         User user = new User(
                 account.getEmail(),
                 account.getPassword(),
-                Collections.singletonList(new SimpleGrantedAuthority(roleName)));
+                authorities
+        );
+
         System.out.println(">>> User: " + user);
         return user;
     }
-
-
 }

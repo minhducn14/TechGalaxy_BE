@@ -2,7 +2,7 @@ package iuh.fit.se.techgalaxy.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 
-public class ReqLoginDTO {
+public class LoginRequest {
     @NotBlank(message = "username không được để trống")
     private String username;
 

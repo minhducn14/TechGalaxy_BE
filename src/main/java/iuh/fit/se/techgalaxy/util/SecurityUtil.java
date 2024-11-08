@@ -9,7 +9,7 @@ import java.util.Optional;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
-import iuh.fit.se.techgalaxy.dto.response.ResLoginDTO;
+import iuh.fit.se.techgalaxy.dto.response.LoginResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -47,8 +47,8 @@ public class SecurityUtil {
     private long refreshTokenExpiration;
 
 
-    public String createAccessToken(String email, ResLoginDTO dto) {
-        ResLoginDTO.AccountInsideToken userToken = new ResLoginDTO.AccountInsideToken();
+    public String createAccessToken(String email, LoginResponse dto) {
+        LoginResponse.AccountInsideToken userToken = new LoginResponse.AccountInsideToken();
         userToken.setId(dto.getAccount().getId());
         userToken.setEmail(dto.getAccount().getEmail());
 
@@ -76,15 +76,14 @@ public class SecurityUtil {
 
     }
 
-    public String createRefreshToken(String email, ResLoginDTO dto) {
+    public String createRefreshToken(String email, LoginResponse dto) {
         Instant now = Instant.now();
         Instant validity = now.plus(this.refreshTokenExpiration, ChronoUnit.SECONDS);
 
-        ResLoginDTO.AccountInsideToken userToken = new ResLoginDTO.AccountInsideToken();
+        LoginResponse.AccountInsideToken userToken = new LoginResponse.AccountInsideToken();
         userToken.setId(dto.getAccount().getId());
         userToken.setEmail(dto.getAccount().getEmail());
 
-        // @formatter:off
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuedAt(now)
                 .expiresAt(validity)

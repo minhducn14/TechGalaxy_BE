@@ -36,7 +36,7 @@ public interface AccountService {
      * @param id ID của tài khoản cần xóa
      * @Author: Vũ Nguyễn Minh Đức
      */
-    void deleteAccountById(String id);
+    boolean deleteAccountById(String id);
 
     /**
      * Lấy danh sách tất cả tài khoản.
