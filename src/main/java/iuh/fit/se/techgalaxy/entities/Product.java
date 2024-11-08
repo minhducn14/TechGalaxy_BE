@@ -1,10 +1,8 @@
 package iuh.fit.se.techgalaxy.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
@@ -17,29 +15,31 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "Products")
 public class Product {
 
     @Id
     @UuidGenerator
-    private String id;
+     String id;
 
     @Column(nullable = false, length = 255)
-    private String name;
+     String name;
 
     @ManyToOne
     @JoinColumn(name = "trademark_id")
-    private Trademark trademark;
+     Trademark trademark;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+     LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(nullable = false)
-    private LocalDateTime updatedAt;
+     LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private List<ProductVariant> productVersions;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+     List<ProductVariant> productVersions;
 }

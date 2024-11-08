@@ -1,14 +1,14 @@
-package iuh.fit.se.techgalaxy.dto.response;
+package iuh.fit.se.techgalaxy.dto.request;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ProductResponse {
-     String id;
+public class ProductRequest {
      String name;
+     String trademarkId;
 }
