@@ -12,7 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProductVariantDetailRequest {
-    Integer viewsCount = 0;
     Double price;
     Double sale;
     ProductStatus status;

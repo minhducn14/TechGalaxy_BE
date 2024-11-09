@@ -36,9 +36,6 @@ public class ProductVariantDetail {
     private Memory memory;
 
     @Column
-    private String name;
-
-    @Column
     private Integer viewsCount;
 
     @Column
