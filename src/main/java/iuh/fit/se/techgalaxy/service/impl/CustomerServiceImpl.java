@@ -3,8 +3,10 @@ package iuh.fit.se.techgalaxy.service.impl;
 import iuh.fit.se.techgalaxy.dto.request.CustomerRequest;
 import iuh.fit.se.techgalaxy.dto.response.CustomerResponse;
 import iuh.fit.se.techgalaxy.dto.response.DataResponse;
+import iuh.fit.se.techgalaxy.entities.Account;
 import iuh.fit.se.techgalaxy.entities.Customer;
 import iuh.fit.se.techgalaxy.mapper.CustomerMapper;
+import iuh.fit.se.techgalaxy.repository.AccountRepository;
 import iuh.fit.se.techgalaxy.repository.CustomerRepository;
 import iuh.fit.se.techgalaxy.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +21,13 @@ import java.util.stream.Collectors;
 @Service
 public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
+    private final AccountRepository accountRepository;
 
     @Autowired
-    public CustomerServiceImpl(CustomerRepository customerRepository) {
+    public CustomerServiceImpl(CustomerRepository customerRepository, AccountRepository accountRepository) {
         this.customerRepository = customerRepository;
+        this.accountRepository = accountRepository;
     }
-
     /**
      * Find all customers with pagination
      * @param page
@@ -85,8 +88,12 @@ public class CustomerServiceImpl implements CustomerService {
      */
     @Override
     public CustomerResponse save(CustomerRequest customerRequest) {
-        Customer customer = customerRepository.save(CustomerMapper.INSTANCE.toCustomerFromRequest(customerRequest));
-        return CustomerMapper.INSTANCE.toCustomerResponse(customer);
+        System.out.println(customerRequest.getAccount().getId());
+        Account account = accountRepository.findById(customerRequest.getAccount().getId()).orElse(null);
+        Customer customer = CustomerMapper.INSTANCE.toCustomerFromRequest(customerRequest);
+        customer.setAccount(account);
+        Customer customerAdd = customerRepository.save(customer);
+        return CustomerMapper.INSTANCE.toCustomerResponse(customerAdd);
     }
 
     /**

@@ -1,19 +1,20 @@
 package iuh.fit.se.techgalaxy.controller;
 
 
+import iuh.fit.se.techgalaxy.dto.request.CustomerRequest;
 import iuh.fit.se.techgalaxy.dto.request.LoginRequest;
 import iuh.fit.se.techgalaxy.dto.request.UserRegisterRequest;
-import iuh.fit.se.techgalaxy.dto.response.DataResponse;
-import iuh.fit.se.techgalaxy.dto.response.ResCreateAccountDTO;
-import iuh.fit.se.techgalaxy.dto.response.LoginResponse;
-import iuh.fit.se.techgalaxy.dto.response.UserCreateResponse;
+import iuh.fit.se.techgalaxy.dto.response.*;
 import iuh.fit.se.techgalaxy.entities.Account;
+import iuh.fit.se.techgalaxy.entities.Customer;
 import iuh.fit.se.techgalaxy.entities.Role;
 import iuh.fit.se.techgalaxy.entities.SystemUser;
+import iuh.fit.se.techgalaxy.entities.enumeration.CustomerStatus;
 import iuh.fit.se.techgalaxy.entities.enumeration.SystemUserLevel;
 import iuh.fit.se.techgalaxy.entities.enumeration.SystemUserStatus;
 import iuh.fit.se.techgalaxy.service.AccountService;
 
+import iuh.fit.se.techgalaxy.service.CustomerService;
 import iuh.fit.se.techgalaxy.service.RoleService;
 import iuh.fit.se.techgalaxy.service.SystemUserService;
 import iuh.fit.se.techgalaxy.util.SecurityUtil;
@@ -46,7 +47,7 @@ public class AccountController {
 
     private final RoleService roleService;
 
-    private  final SystemUserService systemUserService;
+    private final CustomerService customerService;
 
     private final SecurityUtil securityUtil;
 
@@ -60,13 +61,13 @@ public class AccountController {
                              PasswordEncoder passwordEncoder,
                              SecurityUtil securityUtil,
                              RoleService roleService,
-                             SystemUserService systemUserService) {
+                             CustomerService customerService) {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.accountService = accountService;
         this.passwordEncoder = passwordEncoder;
         this.securityUtil = securityUtil;
         this.roleService = roleService;
-        this.systemUserService = systemUserService;
+        this.customerService = customerService;
     }
 
     @PostMapping("/auth/login")
@@ -184,24 +185,31 @@ public class AccountController {
         }
         account.setRoles(Collections.singletonList(role));
         Account newAccount = accountService.createAccount(account);
+        System.out.println(newAccount);
 
-        if (newAccount == null) {
+        if (newAccount.getId() == null) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(DataResponse.<UserCreateResponse>builder()
                             .status(500)
                             .message("Account creation failed")
                             .build());
         }
-        SystemUser newUser = new SystemUser();
-        newUser.setName(user.getFullName());
-        newUser.setAccount(newAccount);
-        newUser.setLevel(SystemUserLevel.STAFF);
-        newUser.setSystemUserStatus(SystemUserStatus.ACTIVE);
 
-        SystemUser systemUserAdd= systemUserService.handleCreateSystemUser(newUser);
+        Customer newCustomer = new Customer();
+        newCustomer.setAccount(newAccount);
+        newCustomer.setUserStatus(CustomerStatus.ACTIVE);
+        newCustomer.setName(user.getFullName());
+
+        CustomerRequest customerRequest = new CustomerRequest();
+        customerRequest.setName(user.getFullName());
+        customerRequest.setAccount(newAccount);
+        System.out.println(customerRequest.getAccount().getId());
+        customerRequest.setUserStatus(CustomerStatus.ACTIVE);
+        CustomerResponse customerResponse =  this.customerService.save(customerRequest);
+
 
         UserCreateResponse response = new UserCreateResponse();
-        response.setEmail(newAccount.getEmail());
+        response.setName(newCustomer.getName());
 
         return ResponseEntity.ok(DataResponse.<UserCreateResponse>builder()
                 .status(200)
