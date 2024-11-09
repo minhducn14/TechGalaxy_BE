@@ -36,7 +36,7 @@ public class ProductVariantDetail {
     private Memory memory;
 
     @Column
-    private Integer viewsCount;
+    private Integer viewsCount = 0;
 
     @Column
     private Integer quantity;
