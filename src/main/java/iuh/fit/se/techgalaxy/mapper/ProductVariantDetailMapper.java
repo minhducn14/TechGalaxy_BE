@@ -27,7 +27,7 @@ public interface ProductVariantDetailMapper {
                 .entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().toArray(new String[0])));
     }
-    @Mapping(target = "quantity", source = "detail.quantity")
+
     @Mapping(target = "status", source = "requestDTO.status")
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
