@@ -72,6 +72,7 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.findByEmail(email);
     }
 
+
     @Override
     public void resetPassword(String id, String newPassword) {
         Account account = accountRepository.findById(id)
@@ -85,4 +86,24 @@ public class AccountServiceImpl implements AccountService {
         Optional<Account> accountOpt = accountRepository.findByEmail(email);
         return accountOpt.map(account -> passwordEncoder.matches(password, account.getPassword())).orElse(false);
     }
+
+    @Override
+    public void updateToken(String token, String email) {
+        Account account = accountRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Account not found"));
+        account.setRefreshToken(token);
+        accountRepository.save(account);
+    }
+
+    @Override
+    public Account getAcountByRefreshTokenAndEmail(String token, String email) {
+        return accountRepository.findByRefreshTokenAndEmail(token, email);
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return accountRepository.existsByEmail(email);
+    }
+
+
 }

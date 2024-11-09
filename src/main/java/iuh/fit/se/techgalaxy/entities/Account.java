@@ -45,4 +45,7 @@ public class Account {
 
     @OneToMany(mappedBy = "account")
     private List<Customer> customers;
+
+    @Column(columnDefinition = "text")
+    private String refreshToken;
 }
