@@ -12,9 +12,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ResCreateAccountDTO {
     private String id;
-
     private String email;
-
     private String password;
-
 }

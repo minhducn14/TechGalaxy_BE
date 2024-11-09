@@ -1,5 +1,6 @@
 package iuh.fit.se.techgalaxy.controller;
 
+import iuh.fit.se.techgalaxy.dto.request.ProductVariantDetailRequest;
 import iuh.fit.se.techgalaxy.dto.response.DataResponse;
 import iuh.fit.se.techgalaxy.dto.response.ProductVariantDetailResponse;
 import iuh.fit.se.techgalaxy.service.impl.ProductVariantDetailServiceImpl;
@@ -7,10 +8,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -28,4 +26,12 @@ public class ProductVariantDetailController {
         productVariantDetailResponses.add(productVariantDetailServiceImpl.getProductVariantDetail(variantId));
         return ResponseEntity.ok(DataResponse.<ProductVariantDetailResponse>builder().data(productVariantDetailResponses).build());
     }
+
+
+    @PostMapping
+    public ResponseEntity<DataResponse<Boolean>> createProductVariantDetail(@PathVariable String variantId, @RequestBody ProductVariantDetailRequest productVariantDetailRequest) {
+        productVariantDetailServiceImpl.createProductVariantDetail(variantId, productVariantDetailRequest);
+        return ResponseEntity.ok(DataResponse.<Boolean>builder().message("success").build());
+    }
+
 }
