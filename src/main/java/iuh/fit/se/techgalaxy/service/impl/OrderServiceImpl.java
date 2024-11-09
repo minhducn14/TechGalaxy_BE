@@ -56,8 +56,8 @@ public class OrderServiceImpl implements OrderService {
      * author: PhamVanThanh
      */
     @Override
-    public OrderResponse update(OrderRequest orderRequest) {
-        if (!orderRepository.existsById(orderRequest.getId()))
+    public OrderResponse update(String id, OrderRequest orderRequest) {
+        if (!orderRepository.existsById(id))
             return null;
         Order order = orderRepository.save(OrderMapper.INSTANCE.toOrderFromOrderRequest(orderRequest));
         return OrderMapper.INSTANCE.toOrderResponse(order);
@@ -87,5 +87,13 @@ public class OrderServiceImpl implements OrderService {
                         orderPage.getTotalElements()
                 )
         );
+    }
+
+    @Override
+    public List<OrderResponse> findAll() {
+        return orderRepository.findAll()
+                .stream()
+                .map(OrderMapper.INSTANCE::toOrderResponse)
+                .collect(Collectors.toList());
     }
 }
