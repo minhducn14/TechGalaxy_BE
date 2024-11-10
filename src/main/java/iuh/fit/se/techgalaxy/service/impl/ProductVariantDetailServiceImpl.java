@@ -1,5 +1,6 @@
 package iuh.fit.se.techgalaxy.service.impl;
 
+import iuh.fit.se.techgalaxy.dto.request.ProductDetailUpdateRequest;
 import iuh.fit.se.techgalaxy.dto.request.ProductVariantDetailRequest;
 import iuh.fit.se.techgalaxy.dto.response.ProductVariantDetailResponse;
 import iuh.fit.se.techgalaxy.entities.Color;
@@ -12,6 +13,7 @@ import iuh.fit.se.techgalaxy.repository.MemoryRepository;
 import iuh.fit.se.techgalaxy.repository.ProductVariantDetailRepository;
 import iuh.fit.se.techgalaxy.repository.ProductVariantRepository;
 import iuh.fit.se.techgalaxy.service.ProductVariantDetailService;
+import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -51,25 +53,69 @@ public class ProductVariantDetailServiceImpl implements ProductVariantDetailServ
         Set<String> memoryIds = productVariantDetailRequest.getMemoryColorRequests().stream()
                 .map(ProductVariantDetailRequest.MemoryColorRequest::getMemoryId)
                 .collect(Collectors.toSet());
-
         Map<String, Color> colorMap = colorRepository.findAllById(colorIds)
                 .stream().collect(Collectors.toMap(Color::getId, color -> color));
         Map<String, Memory> memoryMap = memoryRepository.findAllById(memoryIds)
                 .stream().collect(Collectors.toMap(Memory::getId, memory -> memory));
-        List<ProductVariantDetail> productVariantDetails = productVariantDetailRequest.getMemoryColorRequests().stream().map(detail -> {
-            Color color = colorMap.get(detail.getColorId());
-            Memory memory = memoryMap.get(detail.getMemoryId());
-            if (color == null) {
-                throw new RuntimeException("Color not found: " + detail.getColorId());
-            }
-            if (memory == null) {
-                throw new RuntimeException("Memory not found: " + detail.getMemoryId());
-            }
-            return productVariantDetailMapper.toProductVariantDetail(productVariantDetailRequest, detail, color, memory, productVariant);
-        }).toList();
-        productVariantDetailRepository.saveAll(productVariantDetails);
+        List<ProductVariantDetail> existingDetails = productVariantDetailRepository.findAllByProductVariantId(variantId);
+        Set<String> existingCombinations = existingDetails.stream()
+                .map(detail -> detail.getColor().getId() + "-" + detail.getMemory().getId())
+                .collect(Collectors.toSet());
+        List<ProductVariantDetail> newDetails = productVariantDetailRequest.getMemoryColorRequests().stream()
+                .map(detail -> {
+                    Color color = colorMap.get(detail.getColorId());
+                    Memory memory = memoryMap.get(detail.getMemoryId());
+
+                    if (color == null) {
+                        throw new RuntimeException("Color not found: " + detail.getColorId());
+                    }
+                    if (memory == null) {
+                        throw new RuntimeException("Memory not found: " + detail.getMemoryId());
+                    }
+                    String combinationKey = color.getId() + "-" + memory.getId();
+                    if (existingCombinations.contains(combinationKey)) {
+                        throw new RuntimeException("Product variant detail with color " + color.getId() +
+                                " and memory " + memory.getId() + " already exists for this product variant.");
+                    }
+                    existingCombinations.add(combinationKey);
+                    return productVariantDetailMapper.toProductVariantDetail(productVariantDetailRequest, detail, color, memory, productVariant);
+                }).toList();
+        productVariantDetailRepository.saveAll(newDetails);
         return true;
     }
 
+    @Override
+    public Boolean updateProductVariantDetail(String productDetailId, ProductDetailUpdateRequest productDetailUpdateRequest) {
+        boolean state = true;
+        ProductVariantDetail productVariantDetail = productVariantDetailRepository.findById(productDetailId).orElseThrow(() ->
+                new RuntimeException("not found id detail"));
+        productVariantDetailMapper.toUpdate(productVariantDetail, productDetailUpdateRequest);
+        productVariantDetailRepository.save(productVariantDetail).getId();
+        try {
+            productVariantDetailRepository.save(productVariantDetail);
+        } catch (Exception e) {
+            state = false;
+            new RuntimeException("update fail");
+        };
+        return state;
+    }
 
+    @Override
+    @Transactional
+    public Boolean updateProductVariantDetailPrice(String productVariantId, Double price, Double sale) {
+        try {
+            return productVariantDetailRepository.updatePriceByVariantId( price, sale, productVariantId) > 0;
+        } catch (Exception e) {
+            throw new RuntimeException("Update price fail");
+        }
+    }
+
+    @Override
+    public void deleteProductVariantDetail(String productDetailId) {
+        try {
+            productVariantDetailRepository.deleteById(productDetailId);
+        } catch (Exception e) {
+            throw new RuntimeException("Delete fail");
+        }
+    }
 }
