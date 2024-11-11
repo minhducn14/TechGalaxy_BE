@@ -9,4 +9,6 @@ public interface OrderDetailService {
     List<OrderDetailResponse> getOrderDetailsByOrderId(String orderId);
 
     OrderDetailResponse save(OrderDetailRequest orderDetailRequest);
+
+    OrderDetailResponse findById(String id);
 }
