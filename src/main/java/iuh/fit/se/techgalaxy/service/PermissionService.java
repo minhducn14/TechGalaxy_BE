@@ -1,5 +1,7 @@
 package iuh.fit.se.techgalaxy.service;
 
+import iuh.fit.se.techgalaxy.dto.request.PermissionRequest;
+import iuh.fit.se.techgalaxy.dto.response.PermissionResponse;
 import iuh.fit.se.techgalaxy.dto.response.ResultPaginationDTO;
 import iuh.fit.se.techgalaxy.entities.Permission;
 import org.springframework.data.domain.Pageable;
@@ -7,48 +9,49 @@ import org.springframework.data.jpa.domain.Specification;
 
 
 public interface PermissionService {
+
     /**
      * Check if permission exists
      *
-     * @param p
+     * @param request
      * @return boolean
-     * author: Vũ Nguyễn Minh Đức
+     * author: Vu Nguyen Minh Duc
      */
-    public boolean isPermissionExist(Permission p);
+    boolean isPermissionExist(PermissionRequest request);
 
     /**
      * Fetch permission by id
      *
      * @param id
-     * @return Permission
-     * author: Vũ Nguyễn Minh Đức
+     * @return PermissionResponse
+     * author: Vu Nguyen Minh Duc
      */
-    public Permission fetchById(String id);
+    PermissionResponse fetchById(String id);
 
     /**
      * Create new permission
      *
-     * @param p
-     * @return Permission
-     * author: Vũ Nguyễn Minh Đức
+     * @param request
+     * @return PermissionResponse
+     * author: Vu Nguyen Minh Duc
      */
-    public Permission create(Permission p);
+    PermissionResponse create(PermissionRequest request);
 
     /**
      * Update permission
      *
-     * @param p
-     * @return Permission
-     * author: Vũ Nguyễn Minh Đức
+     * @param request
+     * @return PermissionResponse
+     * author: Vu Nguyen Minh Duc
      */
-    public Permission update(Permission p);
+    PermissionResponse update(PermissionRequest request);
 
     /**
      * Delete permission
      *
-     * @param id author: Vũ Nguyễn Minh Đức
+     * @param id
      */
-    public void delete(String id);
+    void delete(String id);
 
     /**
      * Get all permissions
@@ -56,18 +59,16 @@ public interface PermissionService {
      * @param spec
      * @param pageable
      * @return ResultPaginationDTO
-     * author: Vũ Nguyễn Minh Đức
+     * author: Vu Nguyen Minh Duc
      */
-    public ResultPaginationDTO getPermissions(Specification<Permission> spec, Pageable pageable);
+    ResultPaginationDTO getPermissions(Specification<Permission> spec, Pageable pageable);
 
     /**
      * Check if permission has same name
      *
-     * @param p
+     * @param request
      * @return boolean
-     * author: Vũ Nguyễn Minh Đức
+     * author: Vu Nguyen Minh Duc
      */
-    public boolean isSameName(Permission p);
-
-
+    boolean isSameName(PermissionRequest request);
 }

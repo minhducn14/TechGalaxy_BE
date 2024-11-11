@@ -1,6 +1,8 @@
 package iuh.fit.se.techgalaxy.service;
 
+import iuh.fit.se.techgalaxy.dto.request.RoleRequest;
 import iuh.fit.se.techgalaxy.dto.response.ResultPaginationDTO;
+import iuh.fit.se.techgalaxy.dto.response.RoleResponse;
 import iuh.fit.se.techgalaxy.entities.Role;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -19,38 +21,39 @@ public interface RoleService {
      * Find role by name
      *
      * @param name
-     * @return Role
+     * @return RoleResponse
      * author: Vũ Nguyễn Minh Đức
      */
-    Role findByName(String name);
+    RoleResponse findByName(String name);
 
     /**
      * Create new role
      *
-     * @param r
-     * @return Role
+     * @param request
+     * @return RoleResponse
      * author: Vũ Nguyễn Minh Đức
      */
-    public Role create(Role r);
+    RoleResponse create(RoleRequest request);
 
 
     /**
      * Fetch role by id
      *
      * @param id
-     * @return Role
+     * @return RoleResponse
      * author: Vũ Nguyễn Minh Đức
      */
-    public Role fetchById(String id);
+    RoleResponse fetchById(String id);
+
 
     /**
      * Update role
      *
-     * @param r
+     * @param request
      * @return Role
      * author: Vũ Nguyễn Minh Đức
      */
-    public Role update(Role r);
+    RoleResponse update(RoleRequest request);
 
     /**
      * Delete role

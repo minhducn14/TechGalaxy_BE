@@ -1,8 +1,11 @@
 package iuh.fit.se.techgalaxy.service.impl;
 
+import iuh.fit.se.techgalaxy.dto.request.RoleRequest;
 import iuh.fit.se.techgalaxy.dto.response.ResultPaginationDTO;
+import iuh.fit.se.techgalaxy.dto.response.RoleResponse;
 import iuh.fit.se.techgalaxy.entities.Permission;
 import iuh.fit.se.techgalaxy.entities.Role;
+import iuh.fit.se.techgalaxy.mapper.RoleMapper;
 import iuh.fit.se.techgalaxy.repository.PermissionRepository;
 import iuh.fit.se.techgalaxy.repository.RoleRepository;
 import iuh.fit.se.techgalaxy.service.RoleService;
@@ -20,14 +23,14 @@ import java.util.stream.Collectors;
 public class RoleServiceImpl implements RoleService {
 
     private final RoleRepository roleRepository;
-
     private final PermissionRepository permissionRepository;
-
+    private final RoleMapper roleMapper;
 
     @Autowired
-    public RoleServiceImpl(RoleRepository roleRepository, PermissionRepository permissionRepository) {
+    public RoleServiceImpl(RoleRepository roleRepository, PermissionRepository permissionRepository, RoleMapper roleMapper) {
         this.roleRepository = roleRepository;
         this.permissionRepository = permissionRepository;
+        this.roleMapper = roleMapper;
     }
 
     @Override
@@ -36,72 +39,67 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Role findByName(String name) {
-        return roleRepository.findByName(name);
+    public RoleResponse findByName(String name) {
+        Role role = roleRepository.findByName(name);
+        return roleMapper.toResponse(role);
     }
 
     @Override
-    public Role create(Role r) {
-        if (r.getPermissions() != null) {
-            List<String> reqPermissions = r.getPermissions()
-                    .stream().map(x -> x.getId())
-                    .collect(Collectors.toList());
+    public RoleResponse create(RoleRequest request) {
+        Role role = roleMapper.toEntity(request);
 
-            List<Permission> dbPermissions = this.permissionRepository.findByIdIn(reqPermissions);
-            r.setPermissions(dbPermissions);
+        if (request.getPermissionIds() != null) {
+            List<Permission> permissions = permissionRepository.findByIdIn(request.getPermissionIds());
+            role.setPermissions(permissions);
         }
 
-        return this.roleRepository.save(r);
+        Role savedRole = roleRepository.save(role);
+        return roleMapper.toResponse(savedRole);
     }
 
     @Override
-    public Role fetchById(String id) {
-        Optional<Role> roleOptional = this.roleRepository.findById(id);
-        if (roleOptional.isPresent())
-            return roleOptional.get();
-        return null;
+    public RoleResponse fetchById(String id) {
+        Optional<Role> roleOptional = roleRepository.findById(id);
+        return roleOptional.map(roleMapper::toResponse).orElse(null);
     }
 
     @Override
-    public Role update(Role r) {
-        Role roleDB = this.fetchById(r.getId());
+    public RoleResponse update(RoleRequest request) {
+        Role existingRole = roleRepository.findById(request.getId())
+                .orElseThrow(() -> new RuntimeException("Role not found"));
 
-        if (r.getPermissions() != null) {
-            List<String> reqPermissions = r.getPermissions()
-                    .stream().map(x -> x.getId())
-                    .collect(Collectors.toList());
-
-            List<Permission> dbPermissions = this.permissionRepository.findByIdIn(reqPermissions);
-            r.setPermissions(dbPermissions);
+        if (request.getPermissionIds() != null) {
+            List<Permission> permissions = permissionRepository.findByIdIn(request.getPermissionIds());
+            existingRole.setPermissions(permissions);
         }
 
-        roleDB.setName(r.getName());
-        roleDB.setDescription(r.getDescription());
-        roleDB.setActive(r.isActive());
-        roleDB.setPermissions(r.getPermissions());
-        roleDB = this.roleRepository.save(roleDB);
-        return roleDB;
+        existingRole.setName(request.getName());
+        existingRole.setDescription(request.getDescription());
+        existingRole.setActive(request.isActive());
+
+        Role updatedRole = roleRepository.save(existingRole);
+        return roleMapper.toResponse(updatedRole);
     }
 
     @Override
     public void delete(String id) {
-        this.roleRepository.deleteById(id);
+        roleRepository.deleteById(id);
     }
 
     @Override
     public ResultPaginationDTO getRoles(Specification<Role> spec, Pageable pageable) {
-        Page<Role> pRole = this.roleRepository.findAll(spec, pageable);
-        ResultPaginationDTO rs = new ResultPaginationDTO();
-        ResultPaginationDTO.Meta mt = new ResultPaginationDTO.Meta();
+        Page<Role> pageRoles = roleRepository.findAll(spec, pageable);
+        ResultPaginationDTO.Meta meta = new ResultPaginationDTO.Meta();
 
-        mt.setPage(pageable.getPageNumber() + 1);
-        mt.setPageSize(pageable.getPageSize());
+        meta.setPage(pageable.getPageNumber() + 1);
+        meta.setPageSize(pageable.getPageSize());
+        meta.setPages(pageRoles.getTotalPages());
+        meta.setTotal(pageRoles.getTotalElements());
 
-        mt.setPages(pRole.getTotalPages());
-        mt.setTotal(pRole.getTotalElements());
+        ResultPaginationDTO result = new ResultPaginationDTO();
+        result.setMeta(meta);
+        result.setResult(pageRoles.getContent().stream().map(roleMapper::toResponse).collect(Collectors.toList()));
 
-        rs.setMeta(mt);
-        rs.setResult(pRole.getContent());
-        return rs;
+        return result;
     }
 }

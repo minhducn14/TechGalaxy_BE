@@ -8,17 +8,13 @@ import iuh.fit.se.techgalaxy.dto.response.*;
 import iuh.fit.se.techgalaxy.entities.Account;
 import iuh.fit.se.techgalaxy.entities.Customer;
 import iuh.fit.se.techgalaxy.entities.Role;
-import iuh.fit.se.techgalaxy.entities.SystemUser;
 import iuh.fit.se.techgalaxy.entities.enumeration.CustomerStatus;
-import iuh.fit.se.techgalaxy.entities.enumeration.SystemUserLevel;
-import iuh.fit.se.techgalaxy.entities.enumeration.SystemUserStatus;
+import iuh.fit.se.techgalaxy.mapper.RoleMapper;
 import iuh.fit.se.techgalaxy.service.AccountService;
 
 import iuh.fit.se.techgalaxy.service.CustomerService;
 import iuh.fit.se.techgalaxy.service.RoleService;
-import iuh.fit.se.techgalaxy.service.SystemUserService;
 import iuh.fit.se.techgalaxy.util.SecurityUtil;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -35,7 +31,6 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/accounts")
@@ -46,6 +41,8 @@ public class AccountController {
     private final PasswordEncoder passwordEncoder;
 
     private final RoleService roleService;
+
+    private final RoleMapper roleMapper;
 
     private final CustomerService customerService;
 
@@ -61,13 +58,15 @@ public class AccountController {
                              PasswordEncoder passwordEncoder,
                              SecurityUtil securityUtil,
                              RoleService roleService,
-                             CustomerService customerService) {
+                             CustomerService customerService,
+                             RoleMapper roleMapper) {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.accountService = accountService;
         this.passwordEncoder = passwordEncoder;
         this.securityUtil = securityUtil;
         this.roleService = roleService;
         this.customerService = customerService;
+        this.roleMapper = roleMapper;
     }
 
     @PostMapping("/auth/login")
@@ -91,8 +90,10 @@ public class AccountController {
             String accessToken = securityUtil.createAccessToken(authentication.getName(), res);
             res.setAccessToken(accessToken);
 
+            System.out.println("Access token: " + accessToken);
+
             String refreshToken = securityUtil.createRefreshToken(loginDto.getUsername(), res);
-            this.accountService.updateToken(loginDto.getUsername(), refreshToken);
+            this.accountService.updateToken(refreshToken,loginDto.getUsername());
             res.setAccount(null); // Xóa thông tin account khỏi response
 
             ResponseCookie resCookie = ResponseCookie
@@ -121,6 +122,8 @@ public class AccountController {
 
     @GetMapping("/auth/account")
     public ResponseEntity<DataResponse<LoginResponse.AccountGetAccount>> getAccount() {
+        System.out.println("Get account");
+        System.out.println(SecurityUtil.getCurrentUserLogin().orElse(null));
         String email = SecurityUtil.getCurrentUserLogin().orElse(null);
         if (email == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -153,10 +156,10 @@ public class AccountController {
     }
 
     @PostMapping("/auth/register")
-    public ResponseEntity<DataResponse<UserCreateResponse>> register( @RequestBody UserRegisterRequest user) {
+    public ResponseEntity<DataResponse<SystemUserCreateResponse>> register(@RequestBody UserRegisterRequest user) {
         if (user.getEmail() == null || user.getEmail().isEmpty() || user.getPassword() == null || user.getPassword().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(DataResponse.<UserCreateResponse>builder()
+                    .body(DataResponse.<SystemUserCreateResponse>builder()
                             .status(400)
                             .message("Email and password are required")
                             .build());
@@ -165,7 +168,7 @@ public class AccountController {
 
         if (accountService.existsByEmail(user.getEmail())) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(DataResponse.<UserCreateResponse>builder()
+                    .body(DataResponse.<SystemUserCreateResponse>builder()
                             .status(409)
                             .message("Email already exists")
                             .build());
@@ -175,10 +178,11 @@ public class AccountController {
         account.setEmail(user.getEmail());
         account.setRefreshToken("");
 
-        Role role = roleService.findByName("Customer");
+        RoleResponse roleResponse = roleService.findByName("Customer");
+        Role role = roleMapper.toEntity(roleResponse);
         if (role == null) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(DataResponse.<UserCreateResponse>builder()
+                    .body(DataResponse.<SystemUserCreateResponse>builder()
                             .status(500)
                             .message("Role not found")
                             .build());
@@ -189,7 +193,7 @@ public class AccountController {
 
         if (newAccount.getId() == null) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(DataResponse.<UserCreateResponse>builder()
+                    .body(DataResponse.<SystemUserCreateResponse>builder()
                             .status(500)
                             .message("Account creation failed")
                             .build());
@@ -205,13 +209,13 @@ public class AccountController {
         customerRequest.setAccount(newAccount);
         System.out.println(customerRequest.getAccount().getId());
         customerRequest.setUserStatus(CustomerStatus.ACTIVE);
-        CustomerResponse customerResponse =  this.customerService.save(customerRequest);
+        CustomerResponse customerResponse = this.customerService.save(customerRequest);
 
 
-        UserCreateResponse response = new UserCreateResponse();
+        SystemUserCreateResponse response = new SystemUserCreateResponse();
         response.setName(newCustomer.getName());
 
-        return ResponseEntity.ok(DataResponse.<UserCreateResponse>builder()
+        return ResponseEntity.ok(DataResponse.<SystemUserCreateResponse>builder()
                 .status(200)
                 .message("Account created successfully")
                 .data(Collections.singletonList(response))
@@ -228,7 +232,7 @@ public class AccountController {
 
         this.accountService.updateToken(email, "");
         ResponseCookie resCookie = ResponseCookie
-                .from("refresh_token", ""   )
+                .from("refresh_token", "")
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
@@ -247,8 +251,8 @@ public class AccountController {
 
     @PostMapping("/auth/refresh-token")
     public ResponseEntity<DataResponse<LoginResponse>> refreshToken(
-            @CookieValue(name = "refresh_token", defaultValue = "abc") String refresh_token){
-        if (refresh_token == null || refresh_token.isEmpty()|| refresh_token.equals("abc")) {
+            @CookieValue(name = "refresh_token", defaultValue = "abc") String refresh_token) {
+        if (refresh_token == null || refresh_token.isEmpty() || refresh_token.equals("abc")) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(DataResponse.<LoginResponse>builder()
                             .status(401)

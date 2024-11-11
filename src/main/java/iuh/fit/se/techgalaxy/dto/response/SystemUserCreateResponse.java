@@ -2,7 +2,6 @@ package iuh.fit.se.techgalaxy.dto.response;
 
 import iuh.fit.se.techgalaxy.entities.enumeration.Gender;
 import lombok.*;
-import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 
@@ -10,12 +9,13 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserUpdateResponse {
+public class SystemUserCreateResponse {
     private String id;
     private String name;
+    private String email;
     private Gender gender;
     private String address;
     private int age;
-    private LocalDateTime updatedAt;
+    private LocalDateTime createdAt;
 
 }

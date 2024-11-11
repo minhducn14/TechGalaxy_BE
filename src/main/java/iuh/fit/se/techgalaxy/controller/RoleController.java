@@ -1,9 +1,10 @@
 package iuh.fit.se.techgalaxy.controller;
 
 import com.turkraft.springfilter.boot.Filter;
+import iuh.fit.se.techgalaxy.dto.request.RoleRequest;
 import iuh.fit.se.techgalaxy.dto.response.DataResponse;
 import iuh.fit.se.techgalaxy.dto.response.ResultPaginationDTO;
-import iuh.fit.se.techgalaxy.entities.Permission;
+import iuh.fit.se.techgalaxy.dto.response.RoleResponse;
 import iuh.fit.se.techgalaxy.entities.Role;
 import iuh.fit.se.techgalaxy.service.RoleService;
 import jakarta.validation.Valid;
@@ -12,14 +13,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
-@Controller
+@RestController
+@RequestMapping("/roles")
 public class RoleController {
+
     private final RoleService roleService;
 
     @Autowired
@@ -27,60 +28,57 @@ public class RoleController {
         this.roleService = roleService;
     }
 
-
-    @PostMapping("/roles")
-    public ResponseEntity<DataResponse<Role>> create(@Valid @RequestBody Role r) {
-        // check name
-        if (this.roleService.existsByName(r.getName())) {
-            return ResponseEntity.badRequest().body(DataResponse.<Role>builder().message("Role đã tồn tại.").build());
-        }
-        List<Role> roles = new ArrayList<>();
-        roles.add(this.roleService.create(r));
-        return ResponseEntity.status(HttpStatus.CREATED).body(DataResponse.<Role>builder().data(roles).build());
-    }
-
-    @PutMapping("/roles")
-    public ResponseEntity<DataResponse<Role>> update(@Valid @RequestBody Role r) {
-        // check id
-        if (this.roleService.fetchById(r.getId()) == null) {
-            return ResponseEntity.badRequest().body(DataResponse.<Role>builder().message("Role đã tồn tại.").build());
+    @PostMapping
+    public ResponseEntity<DataResponse<RoleResponse>> create(@Valid @RequestBody RoleRequest request) {
+        if (this.roleService.existsByName(request.getName())) {
+            return ResponseEntity.badRequest()
+                    .body(DataResponse.<RoleResponse>builder().message("Role đã tồn tại.").build());
         }
 
-        List<Role> roles = new ArrayList<>();
-        roles.add(this.roleService.update(r));
-        return ResponseEntity.ok().body(DataResponse.<Role>builder().data(roles).build());
+        RoleResponse roleResponse = this.roleService.create(request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(DataResponse.<RoleResponse>builder().data(List.of(roleResponse)).build());
     }
 
-    @DeleteMapping("/roles/{id}")
+    @PutMapping
+    public ResponseEntity<DataResponse<RoleResponse>> update(@Valid @RequestBody RoleRequest request) {
+        if (this.roleService.fetchById(request.getId()) == null) {
+            return ResponseEntity.badRequest()
+                    .body(DataResponse.<RoleResponse>builder().message("Role với id = " + request.getId() + " không tồn tại.").build());
+        }
+
+        RoleResponse roleResponse = this.roleService.update(request);
+        return ResponseEntity.ok(DataResponse.<RoleResponse>builder().data(List.of(roleResponse)).build());
+    }
+
+    @DeleteMapping("/{id}")
     public ResponseEntity<DataResponse<Void>> delete(@PathVariable("id") String id) {
-        // check id
         if (this.roleService.fetchById(id) == null) {
-            return ResponseEntity.badRequest().body(DataResponse.<Void>builder().message("Role với id = " + id + " không tồn tại.").build());
+            return ResponseEntity.badRequest()
+                    .body(DataResponse.<Void>builder().message("Role với id = " + id + " không tồn tại.").build());
         }
+
         this.roleService.delete(id);
-        return ResponseEntity.ok().body(null);
+        return ResponseEntity.ok().body(DataResponse.<Void>builder().message("Xóa thành công").build());
     }
 
-    @GetMapping("/roles")
-    public ResponseEntity<DataResponse<ResultPaginationDTO>> getPermissions(
+    @GetMapping
+    public ResponseEntity<DataResponse<ResultPaginationDTO>> getRoles(
             @Filter Specification<Role> spec, Pageable pageable) {
 
-        List<ResultPaginationDTO> roles = new ArrayList<>();
-        roles.add(this.roleService.getRoles(spec, pageable));
-
-        return ResponseEntity.ok().body(DataResponse.<ResultPaginationDTO>builder().data(roles).build());
+        ResultPaginationDTO resultPagination = this.roleService.getRoles(spec, pageable);
+        return ResponseEntity.ok(DataResponse.<ResultPaginationDTO>builder().data(List.of(resultPagination)).build());
     }
 
-    @GetMapping("/roles/{id}")
-    public ResponseEntity<DataResponse<Role>> getById(@PathVariable("id") String id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<DataResponse<RoleResponse>> getById(@PathVariable("id") String id) {
+        RoleResponse roleResponse = this.roleService.fetchById(id);
 
-        Role role = this.roleService.fetchById(id);
-        if (role == null) {
-            return ResponseEntity.badRequest().body(DataResponse.<Role>builder().message("Role với id = " + id + " không tồn tại.").build());
+        if (roleResponse == null) {
+            return ResponseEntity.badRequest()
+                    .body(DataResponse.<RoleResponse>builder().message("Role với id = " + id + " không tồn tại.").build());
         }
 
-        List<Role> roles = new ArrayList<>();
-        roles.add(role);
-        return ResponseEntity.ok().body(DataResponse.<Role>builder().data(roles).build());
+        return ResponseEntity.ok(DataResponse.<RoleResponse>builder().data(List.of(roleResponse)).build());
     }
 }
