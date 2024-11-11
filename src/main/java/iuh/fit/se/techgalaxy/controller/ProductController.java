@@ -4,6 +4,7 @@ import iuh.fit.se.techgalaxy.dto.request.ProductRequest;
 import iuh.fit.se.techgalaxy.dto.response.DataResponse;
 import iuh.fit.se.techgalaxy.dto.response.ProductResponse;
 import iuh.fit.se.techgalaxy.service.impl.ProductServiceImpl;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -28,7 +29,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<DataResponse<ProductResponse>> createProduct(@RequestBody ProductRequest request) {
+    public ResponseEntity<DataResponse<ProductResponse>> createProduct(@RequestBody @Valid ProductRequest request) {
         Set<ProductResponse> productResponses = new HashSet<>();
         productResponses.add(productServiceImpl.createProduct(request));
         return ResponseEntity.ok(DataResponse.<ProductResponse>builder()
