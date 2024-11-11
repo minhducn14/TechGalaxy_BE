@@ -10,6 +10,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public enum ErrorCode {
     INVALID_KEY(9998, "Invalid key"),
+    JWT_INVALID(9997, "JWT invalid"),
     UNCATEGORIZED_ERROR(9999, "Uncategorized error"),
     PRODUCT_NOTFOUND(1000, "Product not found"),
     ACCOUNT_NOTFOUND(1001, "Account not found"),

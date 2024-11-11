@@ -92,7 +92,7 @@ public class AccountController {
             res.setAccessToken(accessToken);
 
             String refreshToken = securityUtil.createRefreshToken(loginDto.getUsername(), res);
-            this.accountService.updateToken(loginDto.getUsername(), refreshToken);
+            this.accountService.updateToken(refreshToken,loginDto.getUsername());
             res.setAccount(null); // Xóa thông tin account khỏi response
 
             ResponseCookie resCookie = ResponseCookie
