@@ -89,6 +89,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void updateToken(String token, String email) {
+        System.out.println(email + " " + token);
         Account account = accountRepository.findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
         account.setRefreshToken(token);

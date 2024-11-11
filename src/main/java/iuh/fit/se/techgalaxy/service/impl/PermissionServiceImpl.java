@@ -1,7 +1,10 @@
 package iuh.fit.se.techgalaxy.service.impl;
 
+import iuh.fit.se.techgalaxy.dto.request.PermissionRequest;
+import iuh.fit.se.techgalaxy.dto.response.PermissionResponse;
 import iuh.fit.se.techgalaxy.dto.response.ResultPaginationDTO;
 import iuh.fit.se.techgalaxy.entities.Permission;
+import iuh.fit.se.techgalaxy.mapper.PermissionMapper;
 import iuh.fit.se.techgalaxy.repository.PermissionRepository;
 import iuh.fit.se.techgalaxy.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,59 +16,59 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@Service
-public class PermissionServiceImpl implements PermissionService{
 
+@Service
+public class PermissionServiceImpl implements PermissionService {
     private final PermissionRepository permissionRepository;
+    private final PermissionMapper permissionMapper;
 
     @Autowired
-    public PermissionServiceImpl(PermissionRepository permissionRepository) {
+    public PermissionServiceImpl(PermissionRepository permissionRepository, PermissionMapper permissionMapper) {
         this.permissionRepository = permissionRepository;
+        this.permissionMapper = permissionMapper;
     }
 
-
-    public boolean isPermissionExist(Permission p) {
+    @Override
+    public boolean isPermissionExist(PermissionRequest request) {
         return permissionRepository.existsByModuleAndApiPathAndMethod(
-                p.getModule(),
-                p.getApiPath(),
-                p.getMethod());
+                request.getModule(),
+                request.getApiPath(),
+                request.getMethod()
+        );
     }
 
-    public Permission fetchById(String id) {
-        Optional<Permission> permissionOptional = this.permissionRepository.findById(id);
-        if (permissionOptional.isPresent())
-            return permissionOptional.get();
-        return null;
+    @Override
+    public PermissionResponse fetchById(String id) {
+        Permission permission = permissionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Permission not found"));
+        return permissionMapper.toResponse(permission);
     }
 
-    public Permission create(Permission p) {
-        return this.permissionRepository.save(p);
+    @Override
+    public PermissionResponse create(PermissionRequest request) {
+        Permission permission = permissionMapper.toEntity(request);
+        Permission savedPermission = permissionRepository.save(permission);
+        return permissionMapper.toResponse(savedPermission);
     }
 
-    public Permission update(Permission p) {
-        Permission permissionDB = this.fetchById(p.getId());
-        if (permissionDB != null) {
-            permissionDB.setName(p.getName());
-            permissionDB.setApiPath(p.getApiPath());
-            permissionDB.setMethod(p.getMethod());
-            permissionDB.setModule(p.getModule());
+    @Override
+    public PermissionResponse update(PermissionRequest request) {
+        Permission existingPermission = permissionRepository.findById(request.getId())
+                .orElseThrow(() -> new RuntimeException("Permission not found"));
 
-            // update
-            permissionDB = this.permissionRepository.save(permissionDB);
-            return permissionDB;
-        }
-        return null;
+        permissionMapper.updateEntityFromRequest(request, existingPermission);
+        Permission updatedPermission = permissionRepository.save(existingPermission);
+        return permissionMapper.toResponse(updatedPermission);
     }
+
     @Override
     public void delete(String id) {
-        Optional<Permission> permissionOptional = this.permissionRepository.findById(id);
-        Permission currentPermission = permissionOptional.get();
-        currentPermission.getRoles().forEach(role -> role.getPermissions().remove(currentPermission));
+        Permission permission = permissionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Permission not found"));
 
-        this.permissionRepository.delete(currentPermission);
-
+        permission.getRoles().forEach(role -> role.getPermissions().remove(permission));
+        permissionRepository.delete(permission);
     }
-
 
     @Override
     public ResultPaginationDTO getPermissions(Specification<Permission> spec, Pageable pageable) {
@@ -85,12 +88,9 @@ public class PermissionServiceImpl implements PermissionService{
     }
 
     @Override
-    public boolean isSameName(Permission p) {
-        Permission permissionDB = this.fetchById(p.getId());
-        if (permissionDB != null) {
-            if (permissionDB.getName().equals(p.getName()))
-                return true;
-        }
-        return false;
+    public boolean isSameName(PermissionRequest request) {
+        Permission permission = permissionRepository.findByName(request.getName());
+        return permission.getId().equals(request.getId());
     }
 }
+
