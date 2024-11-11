@@ -39,9 +39,6 @@ public class Customer {
     @Column(nullable = false, length = 255)
     private String name;
 
-    @Column(length = 255)
-    private String address;
-
     @Column(length = 50, unique = true)
     private String phone;
 
