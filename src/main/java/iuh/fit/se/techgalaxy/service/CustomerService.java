@@ -6,7 +6,7 @@ import org.springframework.hateoas.PagedModel;
 import java.util.List;
 
 public interface CustomerService {
-    List<CustomerResponse> findByEmail(String email);
+    CustomerResponse findByEmail(String email);
 
     PagedModel<CustomerResponse> findAllCustomers(int page, int size);
 

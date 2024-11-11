@@ -1,7 +1,9 @@
 package iuh.fit.se.techgalaxy.controller;
 
 import com.turkraft.springfilter.boot.Filter;
+import iuh.fit.se.techgalaxy.dto.request.PermissionRequest;
 import iuh.fit.se.techgalaxy.dto.response.DataResponse;
+import iuh.fit.se.techgalaxy.dto.response.PermissionResponse;
 import iuh.fit.se.techgalaxy.dto.response.ResultPaginationDTO;
 import iuh.fit.se.techgalaxy.entities.Permission;
 import iuh.fit.se.techgalaxy.service.PermissionService;
@@ -16,8 +18,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 @RestController
+@RequestMapping("/permissions")
 public class PermissionController {
 
     private final PermissionService permissionService;
@@ -27,58 +29,58 @@ public class PermissionController {
         this.permissionService = permissionService;
     }
 
-
-    @PostMapping("/permissions")
-    public ResponseEntity<DataResponse<Permission>> create(@Valid @RequestBody Permission p) {
-        // check exist
-        if (this.permissionService.isPermissionExist(p)) {
-            return ResponseEntity.badRequest().body(DataResponse.<Permission>builder().message("Permission đã tồn tại.").build());
+    @PostMapping
+    public ResponseEntity<DataResponse<PermissionResponse>> create(@Valid @RequestBody PermissionRequest request) {
+        // Check if permission already exists
+        if (this.permissionService.isPermissionExist(request)) {
+            return ResponseEntity.badRequest()
+                    .body(DataResponse.<PermissionResponse>builder().message("Permission đã tồn tại.").build());
         }
 
-        List<Permission> permissions = new ArrayList<>();
-        permissions.add(this.permissionService.create(p));
-        // create new permission
-        return ResponseEntity.ok().body(DataResponse.<Permission>builder().data(permissions).build());
+        PermissionResponse response = this.permissionService.create(request);
+        return ResponseEntity.status(201).body(DataResponse.<PermissionResponse>builder().data(List.of(response)).build());
     }
 
-    @PutMapping("/permissions")
-    public ResponseEntity<DataResponse<Permission>> update(@Valid @RequestBody Permission p) {
-        // check exist by id
-        if (this.permissionService.fetchById(p.getId()) == null) {
-            return ResponseEntity.badRequest().body(DataResponse.<Permission>builder().message("Permission với id = " + p.getId() + " không tồn tại.").build());
-        }
+    @PutMapping("/{id}")
+    public ResponseEntity<DataResponse<PermissionResponse>> update(
+            @PathVariable("id") String id,
+            @Valid @RequestBody PermissionRequest request) {
+        // Set ID for the request
+        request.setId(id);
 
-        // check exist by module, apiPath and method
-        if (this.permissionService.isPermissionExist(p)) {
-            // check name
-            if (this.permissionService.isSameName(p)) {
-                return ResponseEntity.badRequest().body(DataResponse.<Permission>builder().message("Permission đã tồn tại.").build());
-            }
-        }
-
-        List<Permission> permissions = new ArrayList<>();
-        permissions.add(this.permissionService.update(p));
-        // update permission
-        return ResponseEntity.ok().body(DataResponse.<Permission>builder().data(permissions).build());
-    }
-
-    @DeleteMapping("/permissions/{id}")
-    public ResponseEntity<DataResponse<Void>> delete(@PathVariable("id") String id)  {
-        // check exist by id
+        // Check if permission exists by ID
         if (this.permissionService.fetchById(id) == null) {
-            return ResponseEntity.badRequest().body(DataResponse.<Void>builder().message("Permission với id = " + id + " không tồn tại.").build());
+            return ResponseEntity.badRequest()
+                    .body(DataResponse.<PermissionResponse>builder().message("Permission với id = " + id + " không tồn tại.").build());
         }
+
+        // Check if permission exists by module, apiPath, and method
+        if (this.permissionService.isPermissionExist(request) && !this.permissionService.isSameName(request)) {
+            return ResponseEntity.badRequest()
+                    .body(DataResponse.<PermissionResponse>builder().message("Permission đã tồn tại.").build());
+        }
+
+        PermissionResponse response = this.permissionService.update(request);
+        return ResponseEntity.ok(DataResponse.<PermissionResponse>builder().data(List.of(response)).build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<DataResponse<Void>> delete(@PathVariable("id") String id) {
+        // Check if permission exists by ID
+        if (this.permissionService.fetchById(id) == null) {
+            return ResponseEntity.badRequest()
+                    .body(DataResponse.<Void>builder().message("Permission với id = " + id + " không tồn tại.").build());
+        }
+
         this.permissionService.delete(id);
         return ResponseEntity.ok().body(DataResponse.<Void>builder().message("Xóa permission thành công.").build());
     }
 
-    @GetMapping("/permissions")
+    @GetMapping
     public ResponseEntity<DataResponse<ResultPaginationDTO>> getPermissions(
             @Filter Specification<Permission> spec, Pageable pageable) {
 
-        List<ResultPaginationDTO> resultPaginationDTOS = new ArrayList<>();
-        resultPaginationDTOS.add(this.permissionService.getPermissions(spec, pageable));
-
-        return ResponseEntity.ok().body(DataResponse.<ResultPaginationDTO>builder().data(resultPaginationDTOS).build());
+        ResultPaginationDTO result = this.permissionService.getPermissions(spec, pageable);
+        return ResponseEntity.ok().body(DataResponse.<ResultPaginationDTO>builder().data(List.of(result)).build());
     }
 }

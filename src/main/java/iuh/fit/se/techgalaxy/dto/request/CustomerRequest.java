@@ -6,6 +6,7 @@ import iuh.fit.se.techgalaxy.entities.enumeration.Gender;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -21,6 +22,6 @@ public class CustomerRequest {
     String phone;
     Gender gender;
     String avatar;
-    LocalDateTime dateOfBirth;
+    LocalDate dateOfBirth;
     Account account;
 }

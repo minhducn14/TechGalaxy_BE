@@ -22,7 +22,6 @@ public class UserDetailsCustom implements UserDetailsService {
 
     private final AccountService accountService;
     @Autowired
-    private PasswordEncoder passwordEncoder;
     public UserDetailsCustom(AccountService accountService) {
         this.accountService = accountService;
     }
