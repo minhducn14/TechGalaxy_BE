@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 public class PermissionRequest {
 
-    private String id; // Trường này có thể cần khi cập nhật
+    private String id;
 
     @NotBlank(message = "name không được để trống")
     private String name;

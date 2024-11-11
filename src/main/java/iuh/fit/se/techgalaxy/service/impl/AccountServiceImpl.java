@@ -14,11 +14,14 @@ import java.util.Optional;
 
 @Service
 public class AccountServiceImpl implements AccountService {
-    @Autowired
-    private AccountRepository accountRepository;
-    @Autowired
+    private final AccountRepository accountRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    private PasswordEncoder passwordEncoder;
+    @Autowired
+    public AccountServiceImpl(AccountRepository accountRepository, PasswordEncoder passwordEncoder) {
+        this.accountRepository = accountRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public Account createAccount(Account account) {
@@ -89,7 +92,6 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void updateToken(String token, String email) {
-        System.out.println(email + " " + token);
         Account account = accountRepository.findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
         account.setRefreshToken(token);
@@ -98,7 +100,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account getAcountByRefreshTokenAndEmail(String token, String email) {
-        return accountRepository.findByRefreshTokenAndEmail(token, email);
+        return accountRepository.findByRefreshTokenAndEmail(token, email)
+                .orElseThrow(() -> new EntityNotFoundException("Account not found"));
     }
 
     @Override
