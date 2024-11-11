@@ -34,9 +34,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         ErrorCode errorCode = ErrorCode.JWT_INVALID;
         DataResponse<Object> res = new DataResponse<>();
         res.setStatus(errorCode.getCode());
-
         res.setMessage(errorCode.getMessage());
-
         mapper.writeValue(response.getWriter(), res);
     }
 }

@@ -5,6 +5,8 @@ import iuh.fit.se.techgalaxy.dto.response.CustomerResponse;
 import iuh.fit.se.techgalaxy.dto.response.DataResponse;
 import iuh.fit.se.techgalaxy.entities.Account;
 import iuh.fit.se.techgalaxy.entities.Customer;
+import iuh.fit.se.techgalaxy.exception.AppException;
+import iuh.fit.se.techgalaxy.exception.ErrorCode;
 import iuh.fit.se.techgalaxy.mapper.CustomerMapper;
 import iuh.fit.se.techgalaxy.mapper.CustomerMapperImpl;
 import iuh.fit.se.techgalaxy.repository.AccountRepository;
@@ -80,10 +82,8 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerResponse findById(String id) {
         return customerRepository.findById(id)
-                .map(CustomerMapper.INSTANCE::toCustomerResponse)
-                .orElse(null);
+                .map(CustomerMapper.INSTANCE::toCustomerResponse).orElseThrow(()-> new AppException(ErrorCode.CUSTOMER_NOTFOUND));
     }
-
     /**
      * Save new customer
      * @param customerRequest
