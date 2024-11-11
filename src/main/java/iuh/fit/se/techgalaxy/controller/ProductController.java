@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -27,7 +28,6 @@ public class ProductController {
                 .data(productServiceImpl.getAllProducts())
                 .build());
     }
-
     @PostMapping
     public ResponseEntity<DataResponse<ProductResponse>> createProduct(@RequestBody @Valid ProductRequest request) {
         Set<ProductResponse> productResponses = new HashSet<>();
