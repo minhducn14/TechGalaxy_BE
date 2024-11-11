@@ -39,6 +39,9 @@ public class Order {
     @Column(length = 50)
     private PaymentStatus paymentStatus;
 
+    @Column(length = 255)
+    private String address;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private OrderStatus orderStatus;

@@ -49,4 +49,16 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         OrderDetail orderDetail = orderDetailRepository.save(OrderDetailMapper.INSTANCE.toOrderDetailFromRequest(orderDetailRequest));
         return OrderDetailMapper.INSTANCE.toOrderDetailResponse(orderDetail);
     }
+
+
+    /**
+     * Find order detail by id
+     * @param id
+     * @return OrderDetailResponse
+     * author: PhamVanThanh
+     */
+    @Override
+    public OrderDetailResponse findById(String id) {
+        return OrderDetailMapper.INSTANCE.toOrderDetailResponse(orderDetailRepository.findById(id).orElse(null));
+    }
 }

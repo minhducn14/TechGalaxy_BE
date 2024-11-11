@@ -8,7 +8,6 @@ import iuh.fit.se.techgalaxy.entities.Customer;
 import iuh.fit.se.techgalaxy.exception.AppException;
 import iuh.fit.se.techgalaxy.exception.ErrorCode;
 import iuh.fit.se.techgalaxy.mapper.CustomerMapper;
-import iuh.fit.se.techgalaxy.mapper.CustomerMapperImpl;
 import iuh.fit.se.techgalaxy.repository.AccountRepository;
 import iuh.fit.se.techgalaxy.repository.CustomerRepository;
 import iuh.fit.se.techgalaxy.service.CustomerService;
@@ -26,13 +25,11 @@ import java.util.stream.Collectors;
 public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final AccountRepository accountRepository;
-    private final CustomerMapperImpl customerMapperImpl;
 
     @Autowired
-    public CustomerServiceImpl(CustomerRepository customerRepository, AccountRepository accountRepository, CustomerMapperImpl customerMapperImpl) {
+    public CustomerServiceImpl(CustomerRepository customerRepository, AccountRepository accountRepository) {
         this.customerRepository = customerRepository;
         this.accountRepository = accountRepository;
-        this.customerMapperImpl = customerMapperImpl;
     }
     /**
      * Find all customers with pagination
