@@ -6,6 +6,7 @@ import iuh.fit.se.techgalaxy.dto.response.DataResponse;
 import iuh.fit.se.techgalaxy.entities.Account;
 import iuh.fit.se.techgalaxy.entities.Customer;
 import iuh.fit.se.techgalaxy.mapper.CustomerMapper;
+import iuh.fit.se.techgalaxy.mapper.CustomerMapperImpl;
 import iuh.fit.se.techgalaxy.repository.AccountRepository;
 import iuh.fit.se.techgalaxy.repository.CustomerRepository;
 import iuh.fit.se.techgalaxy.service.CustomerService;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,11 +24,13 @@ import java.util.stream.Collectors;
 public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final AccountRepository accountRepository;
+    private final CustomerMapperImpl customerMapperImpl;
 
     @Autowired
-    public CustomerServiceImpl(CustomerRepository customerRepository, AccountRepository accountRepository) {
+    public CustomerServiceImpl(CustomerRepository customerRepository, AccountRepository accountRepository, CustomerMapperImpl customerMapperImpl) {
         this.customerRepository = customerRepository;
         this.accountRepository = accountRepository;
+        this.customerMapperImpl = customerMapperImpl;
     }
     /**
      * Find all customers with pagination
@@ -114,6 +118,7 @@ public class CustomerServiceImpl implements CustomerService {
      * Delete customer by id
      * @param id
      * @return boolean
+     * author: PhamVanThanh
      */
     @Override
     public boolean delete(String id) {
@@ -127,12 +132,14 @@ public class CustomerServiceImpl implements CustomerService {
      * Find customer by email
      * @param email
      * @return List<CustomerResponse>
+     * author: PhamVanThanh
      */
     @Override
-    public List<CustomerResponse> findByEmail(String email) {
+    public CustomerResponse findByEmail(String email) {
         return customerRepository.findByEmail(email)
                 .stream()
                 .map(CustomerMapper.INSTANCE::toCustomerResponse)
-                .collect(Collectors.toList());
+                .findFirst()
+                .orElse(null);
     }
 }

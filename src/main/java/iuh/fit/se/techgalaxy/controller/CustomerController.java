@@ -3,7 +3,7 @@ package iuh.fit.se.techgalaxy.controller;
 import iuh.fit.se.techgalaxy.dto.request.CustomerRequest;
 import iuh.fit.se.techgalaxy.dto.response.CustomerResponse;
 import iuh.fit.se.techgalaxy.dto.response.DataResponse;
-import iuh.fit.se.techgalaxy.service.impl.CustomerServiceImpl;
+import iuh.fit.se.techgalaxy.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,24 +13,24 @@ import java.util.*;
 @RestController
 @RequestMapping("/customers")
 public class CustomerController {
-    CustomerServiceImpl customerServiceImpl;
+    CustomerService customerService;
 
     @Autowired
-    public CustomerController(CustomerServiceImpl customerServiceImpl) {
-        this.customerServiceImpl = customerServiceImpl;
+    public CustomerController(CustomerService customerService) {
+        this.customerService = customerService;
     }
 
     @GetMapping
     public ResponseEntity<DataResponse<CustomerResponse>> getAllCustomers() {
         return ResponseEntity.ok(DataResponse.<CustomerResponse>builder()
-                .data(customerServiceImpl.findAll())
+                .data(customerService.findAll())
                 .build());
     }
 
     @PostMapping
     public ResponseEntity<DataResponse<CustomerResponse>> createCustomer(@RequestBody CustomerRequest request) {
         List<CustomerResponse> customerResponses = new ArrayList<>();
-        customerResponses.add(customerServiceImpl.save(request));
+        customerResponses.add(customerService.save(request));
         return ResponseEntity.ok(DataResponse.<CustomerResponse>builder()
                 .data(customerResponses)
                 .build());
@@ -39,7 +39,7 @@ public class CustomerController {
     @GetMapping("/{id}")
     public ResponseEntity<DataResponse<CustomerResponse>> getCustomerById(@PathVariable String id) {
         List<CustomerResponse> customerResponses = new ArrayList<>();
-        customerResponses.add(customerServiceImpl.findById(id));
+        customerResponses.add(customerService.findById(id));
         return ResponseEntity.ok(DataResponse.<CustomerResponse>builder()
                 .data(customerResponses)
                 .build());
@@ -48,7 +48,7 @@ public class CustomerController {
     @PutMapping("/{id}")
     public ResponseEntity<DataResponse<CustomerResponse>> updateCustomer(@PathVariable String id, @RequestBody CustomerRequest request) {
         List<CustomerResponse> customerResponses = new ArrayList<>();
-        customerResponses.add(customerServiceImpl.update(id, request));
+        customerResponses.add(customerService.update(id, request));
         return ResponseEntity.ok(DataResponse.<CustomerResponse>builder()
                 .data(customerResponses)
                 .build());
@@ -56,8 +56,16 @@ public class CustomerController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<DataResponse<Object>> deleteCustomer(@PathVariable String id) {
-        customerServiceImpl.delete(id);
+        customerService.delete(id);
         return ResponseEntity.ok(DataResponse.<Object>builder().message("Delete " + id + " success").build());
     }
 
+    @GetMapping("/email/{email}")
+    public ResponseEntity<DataResponse<CustomerResponse>> getCustomerByEmail(@PathVariable String email) {
+        List<CustomerResponse> customerResponses = new ArrayList<>();
+        customerResponses.add(customerService.findByEmail(email));
+        return ResponseEntity.ok(DataResponse.<CustomerResponse>builder()
+                .data(customerResponses)
+                .build());
+    }
 }
