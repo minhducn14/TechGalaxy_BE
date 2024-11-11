@@ -29,7 +29,6 @@ public class ProductServiceImpl implements ProductService {
     ProductMapper productMapper;
     @Override
     public Set<ProductResponse> getAllProducts() {
-
         return productRepository.findAll().stream()
                 .map(productMapper::toProductResponse)
                 .collect(Collectors.toSet());
