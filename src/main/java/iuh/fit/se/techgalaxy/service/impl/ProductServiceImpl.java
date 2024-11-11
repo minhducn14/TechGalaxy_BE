@@ -4,6 +4,8 @@ import iuh.fit.se.techgalaxy.dto.request.ProductRequest;
 import iuh.fit.se.techgalaxy.dto.response.ProductResponse;
 import iuh.fit.se.techgalaxy.entities.Product;
 import iuh.fit.se.techgalaxy.entities.Trademark;
+import iuh.fit.se.techgalaxy.exception.AppException;
+import iuh.fit.se.techgalaxy.exception.ErrorCode;
 import iuh.fit.se.techgalaxy.mapper.ProductMapper;
 import iuh.fit.se.techgalaxy.repository.ProductRepository;
 import iuh.fit.se.techgalaxy.repository.TrademarkRepository;
@@ -48,7 +50,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponse getProductById(String id) {
         return productRepository.findById(id)
                 .map(productMapper::toProductResponse)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOTFOUND));
     }
 
     @Override
