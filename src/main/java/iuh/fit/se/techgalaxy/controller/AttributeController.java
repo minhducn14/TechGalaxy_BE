@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import iuh.fit.se.techgalaxy.dto.request.AttributeRequest;
 import iuh.fit.se.techgalaxy.dto.request.ProductRequest;
-import iuh.fit.se.techgalaxy.dto.response.AttributeRespone;
+import iuh.fit.se.techgalaxy.dto.response.AttributeResponse;
 import iuh.fit.se.techgalaxy.dto.response.DataResponse;
 import iuh.fit.se.techgalaxy.dto.response.ProductResponse;
 import iuh.fit.se.techgalaxy.service.AttributeService;
@@ -32,40 +32,40 @@ public class AttributeController {
 	AttributeServiceImpl attributeServiceImpl;
 	
 	@GetMapping
-	public ResponseEntity<DataResponse<AttributeRespone>> getAllAttribute() {
+	public ResponseEntity<DataResponse<AttributeResponse>> getAllAttribute() {
 
 		return ResponseEntity
-				.ok(DataResponse.<AttributeRespone>builder().data(attributeServiceImpl.getAllAttribute()).build());
+				.ok(DataResponse.<AttributeResponse>builder().data(attributeServiceImpl.getAllAttribute()).build());
 	}
 
 	@GetMapping("/attributes/{id}")
-	public ResponseEntity<DataResponse<AttributeRespone>> getAttributeById(@PathVariable String id) {
-		Set<AttributeRespone> attributeRespone = new HashSet<>();
+	public ResponseEntity<DataResponse<AttributeResponse>> getAttributeById(@PathVariable String id) {
+		Set<AttributeResponse> attributeRespone = new HashSet<>();
 		attributeRespone.add(attributeServiceImpl.getAttributeById(id));
-		return ResponseEntity.ok(DataResponse.<AttributeRespone>builder().data(attributeRespone).build());
+		return ResponseEntity.ok(DataResponse.<AttributeResponse>builder().data(attributeRespone).build());
 	}
 
 	@PostMapping
-	public ResponseEntity<DataResponse<AttributeRespone>> creatAttribute(@RequestBody AttributeRequest request) {
-		Set<AttributeRespone> attributeRespone = new HashSet<>();
+	public ResponseEntity<DataResponse<AttributeResponse>> creatAttribute(@RequestBody AttributeRequest request) {
+		Set<AttributeResponse> attributeRespone = new HashSet<>();
 		attributeRespone.add(attributeServiceImpl.createAttribute(request));
-		return ResponseEntity.ok(DataResponse.<AttributeRespone>builder().data(attributeRespone).build());
+		return ResponseEntity.ok(DataResponse.<AttributeResponse>builder().data(attributeRespone).build());
 	}
 
 	@PutMapping("attributes/{id}")
-	public ResponseEntity<DataResponse<AttributeRespone>> updateAttribute(@PathVariable String id,
+	public ResponseEntity<DataResponse<AttributeResponse>> updateAttribute(@PathVariable String id,
 			@RequestBody AttributeRequest request) {
-		Set<AttributeRespone> attributeRespone = new HashSet<>();
+		Set<AttributeResponse> attributeRespone = new HashSet<>();
 		attributeRespone.add(attributeServiceImpl.updateAttribute(id, request));
-		return ResponseEntity.ok(DataResponse.<AttributeRespone>builder().data(attributeRespone).build());
+		return ResponseEntity.ok(DataResponse.<AttributeResponse>builder().data(attributeRespone).build());
 	}
 
 	@DeleteMapping("attributes/{id}")
-	public ResponseEntity<DataResponse<AttributeRespone>> deleteAttribute(@PathVariable String id,
+	public ResponseEntity<DataResponse<AttributeResponse>> deleteAttribute(@PathVariable String id,
 			@RequestBody AttributeRequest request) {
-		Set<AttributeRespone> attributeRespone = new HashSet<>();
+		Set<AttributeResponse> attributeRespone = new HashSet<>();
 		attributeRespone.add(attributeServiceImpl.updateAttribute(id, request));
-		return ResponseEntity.ok(DataResponse.<AttributeRespone>builder().data(attributeRespone).build());
+		return ResponseEntity.ok(DataResponse.<AttributeResponse>builder().data(attributeRespone).build());
 	}
 
 }

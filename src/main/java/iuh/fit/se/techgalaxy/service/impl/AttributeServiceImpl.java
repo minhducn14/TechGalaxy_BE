@@ -3,10 +3,13 @@ package iuh.fit.se.techgalaxy.service.impl;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import iuh.fit.se.techgalaxy.dto.request.AttributeRequest;
-import iuh.fit.se.techgalaxy.dto.response.AttributeRespone;
+import iuh.fit.se.techgalaxy.dto.response.AttributeResponse;
 import iuh.fit.se.techgalaxy.entities.Attribute;
 import iuh.fit.se.techgalaxy.mapper.AttributeMapper;
 import iuh.fit.se.techgalaxy.repository.AttributeRepository;
@@ -26,40 +29,41 @@ public class AttributeServiceImpl implements AttributeService {
 	AttributeRepository attributeRepository;
 
 	@Override
-	public AttributeRespone createAttribute(AttributeRequest attributeRequest) {
+	public AttributeResponse createAttribute(AttributeRequest attributeRequest) {
 		Attribute attribute = attributeMapper.toAttribute(attributeRequest);
-		return attributeMapper.toAttributeRespone(attributeRepository.save(attribute));
+		return attributeMapper.toAttributeResponse(attributeRepository.save(attribute));
 
 	}
 
+	@Transactional
 	@Override
-	public AttributeRespone updateAttribute(String id, AttributeRequest attributeRequest) {
+	public AttributeResponse updateAttribute(String id, AttributeRequest attributeRequest) {
+	    Attribute attribute = attributeRepository.findById(id)
+	             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Attribute not found"));
+	    attributeMapper.updateAttributeFromRequest(attribute, attributeRequest);
+	    return attributeMapper.toAttributeResponse(attributeRepository.save(attribute));
+	}
+
+
+	@Override
+	public AttributeResponse deleteAttribute(String id, AttributeRequest attributeRequest) {
 		Attribute attribute = attributeRepository.findById(id)
 				.orElseThrow(() -> new RuntimeException("Attribute not found"));
-		attributeMapper.toAttribute(attributeRequest);
-		return attributeMapper.toAttributeRespone(attribute);
+		return attributeMapper.toAttributeResponse(attribute);
 	}
 
 	@Override
-	public AttributeRespone deleteAttribute(String id, AttributeRequest attributeRequest) {
-		Attribute attribute = attributeRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Attribute not found"));
-		attributeMapper.toAttribute(attributeRequest);
-		return attributeMapper.toAttributeRespone(attribute);
-	}
-
-	@Override
-	public AttributeRespone getAttributeById(String id) {
+	public AttributeResponse getAttributeById(String id) {
 		
 		return attributeRepository.findById(id)
-                .map(attributeMapper::toAttributeRespone)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .map(attributeMapper::toAttributeResponse)
+                .orElseThrow(() -> new RuntimeException("Attribute not found"));
 	}
 
 	@Override
-	public Set<AttributeRespone> getAllAttribute() {
+	public Set<AttributeResponse> getAllAttribute() {
 		 return attributeRepository.findAll().stream()
-	                .map(attributeMapper::toAttributeRespone)
+	                .map(attributeMapper::toAttributeResponse)
 	                .collect(Collectors.toSet());
 	}
 
