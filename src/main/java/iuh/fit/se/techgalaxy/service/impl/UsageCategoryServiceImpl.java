@@ -31,7 +31,6 @@ public class UsageCategoryServiceImpl implements UsageCategoryService {
 
 	@Override
 	public UsageCategoryResponse getUsageCategoryById(String id) {
-
 		return usageCategoryRepository.findById(id).map(usageCategoryMapper::toUseCategoryResponse)
 				.orElseThrow(() -> new RuntimeException("UsageCategory not found"));
 	}

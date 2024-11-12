@@ -33,7 +33,6 @@ public class AttributeController {
 	
 	@GetMapping
 	public ResponseEntity<DataResponse<AttributeResponse>> getAllAttribute() {
-
 		return ResponseEntity
 				.ok(DataResponse.<AttributeResponse>builder().data(attributeServiceImpl.getAllAttribute()).build());
 	}
@@ -61,10 +60,10 @@ public class AttributeController {
 	}
 
 	@DeleteMapping("attributes/{id}")
-	public ResponseEntity<DataResponse<AttributeResponse>> deleteAttribute(@PathVariable String id,
-			@RequestBody AttributeRequest request) {
+	public ResponseEntity<DataResponse<AttributeResponse>> deleteAttribute(@PathVariable String id
+			) {
 		Set<AttributeResponse> attributeRespone = new HashSet<>();
-		attributeRespone.add(attributeServiceImpl.updateAttribute(id, request));
+		attributeRespone.add(attributeServiceImpl.deleteAttribute(id));
 		return ResponseEntity.ok(DataResponse.<AttributeResponse>builder().data(attributeRespone).build());
 	}
 

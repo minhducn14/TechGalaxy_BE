@@ -11,7 +11,7 @@ public interface AttributeService {
 
 	AttributeResponse updateAttribute(String id, AttributeRequest attributeRequest);
 
-	AttributeResponse deleteAttribute(String id, AttributeRequest attributeRequest);
+	AttributeResponse deleteAttribute(String id);
 
 	AttributeResponse getAttributeById(String id);
 	
