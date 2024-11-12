@@ -7,6 +7,7 @@ import iuh.fit.se.techgalaxy.dto.response.ResultPaginationDTO;
 import iuh.fit.se.techgalaxy.dto.response.RoleResponse;
 import iuh.fit.se.techgalaxy.entities.Role;
 import iuh.fit.se.techgalaxy.service.RoleService;
+import iuh.fit.se.techgalaxy.service.impl.RoleServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -21,10 +22,10 @@ import java.util.List;
 @RequestMapping("/roles")
 public class RoleController {
 
-    private final RoleService roleService;
+    private final RoleServiceImpl roleService;
 
     @Autowired
-    public RoleController(RoleService roleService) {
+    public RoleController(RoleServiceImpl roleService) {
         this.roleService = roleService;
     }
 

@@ -6,7 +6,7 @@ import iuh.fit.se.techgalaxy.dto.response.DataResponse;
 import iuh.fit.se.techgalaxy.dto.response.PermissionResponse;
 import iuh.fit.se.techgalaxy.dto.response.ResultPaginationDTO;
 import iuh.fit.se.techgalaxy.entities.Permission;
-import iuh.fit.se.techgalaxy.service.PermissionService;
+import iuh.fit.se.techgalaxy.service.impl.PermissionServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -14,18 +14,15 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 @RestController
 @RequestMapping("/permissions")
 public class PermissionController {
 
-    private final PermissionService permissionService;
+    private final PermissionServiceImpl permissionService;
 
     @Autowired
-    public PermissionController(PermissionService permissionService) {
+    public PermissionController(PermissionServiceImpl permissionService) {
         this.permissionService = permissionService;
     }
 
@@ -79,7 +76,6 @@ public class PermissionController {
     @GetMapping
     public ResponseEntity<DataResponse<ResultPaginationDTO>> getPermissions(
             @Filter Specification<Permission> spec, Pageable pageable) {
-
         ResultPaginationDTO result = this.permissionService.getPermissions(spec, pageable);
         return ResponseEntity.ok().body(DataResponse.<ResultPaginationDTO>builder().data(List.of(result)).build());
     }

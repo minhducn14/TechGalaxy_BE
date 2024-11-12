@@ -14,6 +14,8 @@ import iuh.fit.se.techgalaxy.service.AccountService;
 
 import iuh.fit.se.techgalaxy.service.CustomerService;
 import iuh.fit.se.techgalaxy.service.RoleService;
+import iuh.fit.se.techgalaxy.service.impl.AccountServiceImpl;
+import iuh.fit.se.techgalaxy.service.impl.CustomerServiceImpl;
 import iuh.fit.se.techgalaxy.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,14 +39,14 @@ import java.util.Collections;
 public class AccountController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    private final AccountService accountService;
+    private final AccountServiceImpl accountService;
     private final PasswordEncoder passwordEncoder;
 
     private final RoleService roleService;
 
     private final RoleMapper roleMapper;
 
-    private final CustomerService customerService;
+    private final CustomerServiceImpl customerService;
 
     private final SecurityUtil securityUtil;
 
@@ -54,11 +56,11 @@ public class AccountController {
 
     @Autowired
     public AccountController(AuthenticationManagerBuilder authenticationManagerBuilder,
-                             AccountService accountService,
+                             AccountServiceImpl accountService,
                              PasswordEncoder passwordEncoder,
                              SecurityUtil securityUtil,
                              RoleService roleService,
-                             CustomerService customerService,
+                             CustomerServiceImpl customerService,
                              RoleMapper roleMapper) {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.accountService = accountService;
