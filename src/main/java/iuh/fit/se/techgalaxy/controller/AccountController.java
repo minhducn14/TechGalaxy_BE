@@ -10,9 +10,7 @@ import iuh.fit.se.techgalaxy.entities.Customer;
 import iuh.fit.se.techgalaxy.entities.Role;
 import iuh.fit.se.techgalaxy.entities.enumeration.CustomerStatus;
 import iuh.fit.se.techgalaxy.mapper.RoleMapper;
-import iuh.fit.se.techgalaxy.service.AccountService;
 
-import iuh.fit.se.techgalaxy.service.CustomerService;
 import iuh.fit.se.techgalaxy.service.RoleService;
 import iuh.fit.se.techgalaxy.service.impl.AccountServiceImpl;
 import iuh.fit.se.techgalaxy.service.impl.CustomerServiceImpl;
@@ -158,10 +156,10 @@ public class AccountController {
     }
 
     @PostMapping("/auth/register")
-    public ResponseEntity<DataResponse<SystemUserCreateResponse>> register(@RequestBody UserRegisterRequest user) {
+    public ResponseEntity<DataResponse<CustommerCreateResponse>> register(@RequestBody UserRegisterRequest user) {
         if (user.getEmail() == null || user.getEmail().isEmpty() || user.getPassword() == null || user.getPassword().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(DataResponse.<SystemUserCreateResponse>builder()
+                    .body(DataResponse.<CustommerCreateResponse>builder()
                             .status(400)
                             .message("Email and password are required")
                             .build());
@@ -170,7 +168,7 @@ public class AccountController {
 
         if (accountService.existsByEmail(user.getEmail())) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(DataResponse.<SystemUserCreateResponse>builder()
+                    .body(DataResponse.<CustommerCreateResponse>builder()
                             .status(409)
                             .message("Email already exists")
                             .build());
@@ -184,7 +182,7 @@ public class AccountController {
         Role role = roleMapper.toEntity(roleResponse);
         if (role == null) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(DataResponse.<SystemUserCreateResponse>builder()
+                    .body(DataResponse.<CustommerCreateResponse>builder()
                             .status(500)
                             .message("Role not found")
                             .build());
@@ -195,7 +193,7 @@ public class AccountController {
 
         if (newAccount.getId() == null) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(DataResponse.<SystemUserCreateResponse>builder()
+                    .body(DataResponse.<CustommerCreateResponse>builder()
                             .status(500)
                             .message("Account creation failed")
                             .build());
@@ -213,11 +211,10 @@ public class AccountController {
         customerRequest.setUserStatus(CustomerStatus.ACTIVE);
         CustomerResponse customerResponse = this.customerService.save(customerRequest);
 
+        CustommerCreateResponse response = new CustommerCreateResponse();
+        response.setName(customerResponse.getName());
 
-        SystemUserCreateResponse response = new SystemUserCreateResponse();
-        response.setName(newCustomer.getName());
-
-        return ResponseEntity.ok(DataResponse.<SystemUserCreateResponse>builder()
+        return ResponseEntity.ok(DataResponse.<CustommerCreateResponse>builder()
                 .status(200)
                 .message("Account created successfully")
                 .data(Collections.singletonList(response))
@@ -294,7 +291,7 @@ public class AccountController {
 
         String new_refresh_token = securityUtil.createRefreshToken(email, res);
         this.accountService.updateToken(email, new_refresh_token);
-        res.setAccount(null); // Xóa thông tin account khỏi response
+        res.setAccount(null);
         ResponseCookie resCookie = ResponseCookie
                 .from("refresh_token", new_refresh_token)
                 .httpOnly(true)

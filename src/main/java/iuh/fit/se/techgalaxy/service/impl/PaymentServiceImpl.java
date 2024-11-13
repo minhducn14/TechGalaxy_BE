@@ -1,11 +1,9 @@
 package iuh.fit.se.techgalaxy.service.impl;
 
 import iuh.fit.se.techgalaxy.config.VNPAYConfig;
-import iuh.fit.se.techgalaxy.dto.PaymentDTO;
+import iuh.fit.se.techgalaxy.dto.response.PaymentResponse;
 import iuh.fit.se.techgalaxy.util.VNPayUtil;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +18,7 @@ public class PaymentServiceImpl {
         this.vnPayConfig = vnPayConfig;
     }
 
-    public PaymentDTO.VNPayResponse createVnPayPayment(HttpServletRequest request) {
+    public PaymentResponse.VNPayResponse createVnPayPayment(HttpServletRequest request) {
         long amount = Integer.parseInt(request.getParameter("amount")) * 100L;
         String bankCode = request.getParameter("bankCode");
         Map<String, String> vnpParamsMap = vnPayConfig.getVNPayConfig();
@@ -34,7 +32,7 @@ public class PaymentServiceImpl {
         String vnpSecureHash = VNPayUtil.hmacSHA512(vnPayConfig.getSecretKey(), hashData);
         queryUrl += "&vnp_SecureHash=" + vnpSecureHash;
         String paymentUrl = vnPayConfig.getVnp_PayUrl() + "?" + queryUrl;
-        return PaymentDTO.VNPayResponse.builder()
+        return PaymentResponse.VNPayResponse.builder()
                 .code("ok")
                 .message("success")
                 .paymentUrl(paymentUrl).build();

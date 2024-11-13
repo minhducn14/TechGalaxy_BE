@@ -1,4 +1,4 @@
-package iuh.fit.se.techgalaxy.dto;
+package iuh.fit.se.techgalaxy.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 
-public class PaymentDTO {
+public class PaymentResponse {
 
     @Getter
     @Setter
