@@ -1,5 +1,7 @@
 package iuh.fit.se.techgalaxy.dto.request;
 
+import iuh.fit.se.techgalaxy.dto.response.CustomerResponse;
+import iuh.fit.se.techgalaxy.dto.response.SystemUserResponse;
 import iuh.fit.se.techgalaxy.entities.Customer;
 import iuh.fit.se.techgalaxy.entities.SystemUser;
 import iuh.fit.se.techgalaxy.entities.enumeration.OrderStatus;
@@ -14,8 +16,8 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrderRequest {
     String id;
-    Customer customer;
-    SystemUser systemUser;
+    String customerId;
+    SystemUserResponse systemUserId;
     String address;
     PaymentStatus paymentStatus;
     OrderStatus orderStatus;

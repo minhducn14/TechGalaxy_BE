@@ -15,14 +15,14 @@ public interface OrderMapper {
      * @return Order
      * author: PhamVanThanh
      */
-    Order toOrderFromOrderResponse(OrderResponse orderResponse);
+    Order toOrderFromResponse(OrderResponse orderResponse);
 
     /**
      * @param orderRequest
      * @return Order
      * author: PhamVanThanh
      */
-    Order toOrderFromOrderRequest(OrderRequest orderRequest);
+    Order toOrderFromRequest(OrderRequest orderRequest);
 
     /**
      * @param order
@@ -30,4 +30,11 @@ public interface OrderMapper {
      * author: PhamVanThanh
      */
     OrderResponse toOrderResponse(Order order);
+
+    /**
+     * @param order
+     * @return OrderRequest
+     * author: PhamVanThanh
+     */
+    OrderRequest toOrderRequest(Order order);
 }

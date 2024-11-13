@@ -33,7 +33,7 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public OrderResponse save(OrderRequest orderRequest) {
-        Order order = orderRepository.save(OrderMapper.INSTANCE.toOrderFromOrderRequest(orderRequest));
+        Order order = orderRepository.save(OrderMapper.INSTANCE.toOrderFromRequest(orderRequest));
         return OrderMapper.INSTANCE.toOrderResponse(order);
     }
 
@@ -59,7 +59,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponse update(String id, OrderRequest orderRequest) {
         if (!orderRepository.existsById(id))
             return null;
-        Order order = orderRepository.save(OrderMapper.INSTANCE.toOrderFromOrderRequest(orderRequest));
+        Order order = orderRepository.save(OrderMapper.INSTANCE.toOrderFromRequest(orderRequest));
         return OrderMapper.INSTANCE.toOrderResponse(order);
     }
 
