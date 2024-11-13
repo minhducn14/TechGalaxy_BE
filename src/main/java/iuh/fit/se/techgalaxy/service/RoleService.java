@@ -7,6 +7,8 @@ import iuh.fit.se.techgalaxy.entities.Role;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.util.List;
+
 public interface RoleService {
     /**
      * Check if role exists by name
@@ -71,4 +73,15 @@ public interface RoleService {
      * author: Vũ Nguyễn Minh Đức
      */
     public ResultPaginationDTO getRoles(Specification<Role> spec, Pageable pageable);
+
+
+    //findByNameIn
+    /**
+     * Find roles by name in list
+     *
+     * @param names
+     * @return List<Role>
+     * author: Vũ Nguyễn Minh Đức
+     */
+    public List<Role> findByNameIn(List<String> names);
 }

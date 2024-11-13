@@ -1,11 +1,18 @@
 package iuh.fit.se.techgalaxy.service.impl;
 
+import iuh.fit.se.techgalaxy.dto.request.SystemUserRequestDTO;
 import iuh.fit.se.techgalaxy.dto.response.ResultPaginationDTO;
+import iuh.fit.se.techgalaxy.dto.response.SystemUserResponseDTO;
+import iuh.fit.se.techgalaxy.entities.Account;
 import iuh.fit.se.techgalaxy.entities.SystemUser;
+import iuh.fit.se.techgalaxy.entities.enumeration.Gender;
+import iuh.fit.se.techgalaxy.entities.enumeration.SystemUserLevel;
 import iuh.fit.se.techgalaxy.entities.enumeration.SystemUserStatus;
+import iuh.fit.se.techgalaxy.mapper.SystemUserMapper;
 import iuh.fit.se.techgalaxy.repository.AccountRepository;
 import iuh.fit.se.techgalaxy.repository.SystemUserRepository;
 import iuh.fit.se.techgalaxy.service.SystemUserService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,11 +21,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SystemUserServiceImpl implements SystemUserService {
     private final SystemUserRepository systemUserRepository;
     private final AccountRepository accountRepository;
+
 
     @Autowired
     public SystemUserServiceImpl(SystemUserRepository systemUserRepository, AccountRepository accountRepository) {
@@ -26,9 +35,18 @@ public class SystemUserServiceImpl implements SystemUserService {
         this.accountRepository = accountRepository;
     }
 
+
     @Override
-    public SystemUser handleCreateSystemUser(SystemUser user) {
-        return systemUserRepository.save(user);
+    public SystemUserResponseDTO handleCreateSystemUser(SystemUserRequestDTO userRequestDTO) {
+        // Map DTO to entity
+        SystemUserRequestDTO.AccountRequest accountRequest = userRequestDTO.getAccount();
+        Account account = accountRepository.findByEmail(accountRequest.getEmail())
+                .orElseThrow(() -> new EntityNotFoundException("Account not found"));
+
+        SystemUser systemUser = SystemUserMapper.INSTANCE.toEntity(userRequestDTO);
+        systemUser.setAccount(account);
+        SystemUser savedSystemUser = systemUserRepository.save(systemUser);
+        return SystemUserMapper.INSTANCE.toResponseDTO(savedSystemUser);
     }
 
     @Override
@@ -41,9 +59,10 @@ public class SystemUserServiceImpl implements SystemUserService {
     }
 
     @Override
-    public SystemUser fetchUserById(String id) {
-        return systemUserRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy người dùng với id: " + id));
+    public SystemUserResponseDTO fetchUserById(String id) {
+        SystemUser systemUser = systemUserRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("SystemUser not found"));
+        return SystemUserMapper.INSTANCE.toResponseDTO(systemUser);
     }
 
     @Override
@@ -65,28 +84,29 @@ public class SystemUserServiceImpl implements SystemUserService {
     }
 
     @Override
-    public SystemUser handleUpdateSystemUser(SystemUser reqUser) {
-        SystemUser existingUser = fetchUserById(reqUser.getId());
-        existingUser.setName(reqUser.getName());
-        existingUser.setAddress(reqUser.getAddress());
-        existingUser.setPhone(reqUser.getPhone());
-        existingUser.setSystemUserStatus(reqUser.getSystemUserStatus());
-        existingUser.setLevel(reqUser.getLevel());
-        existingUser.setAvatar(reqUser.getAvatar());
-        return systemUserRepository.save(existingUser);
+    public SystemUserResponseDTO handleUpdateSystemUser(SystemUserRequestDTO reqUser) {
+        SystemUser existingUser = systemUserRepository.findById(reqUser.getId())
+                .orElseThrow(() -> new EntityNotFoundException("SystemUser not found"));
+        if (reqUser.getName() != null)
+            existingUser.setName(reqUser.getName());
+        if (reqUser.getPhone() != null)
+            existingUser.setPhone(reqUser.getPhone());
+        if (reqUser.getAddress() != null)
+            existingUser.setAddress(reqUser.getAddress());
+        if (reqUser.getSystemUserStatus() != null)
+            existingUser.setSystemUserStatus(SystemUserStatus.valueOf(reqUser.getSystemUserStatus()));
+        if (reqUser.getLevel() != null)
+            existingUser.setLevel(SystemUserLevel.valueOf(reqUser.getLevel()));
+        if (reqUser.getGender() != null)
+            existingUser.setGender(Gender.valueOf(reqUser.getGender()));
+        if (reqUser.getAvatar() != null)
+            existingUser.setAvatar(reqUser.getAvatar());
+
+        SystemUser updatedUser = systemUserRepository.save(existingUser);
+
+        return SystemUserMapper.INSTANCE.toResponseDTO(updatedUser);
     }
 
-    @Override
-    public SystemUser handleGetSystemUserByUsername(String username) {
-        return systemUserRepository.findSystemUserByEmail(username)
-                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy người dùng với username: " + username));
-    }
-
-    @Override
-    public SystemUser handleGetUserByEmail(String email) {
-        return systemUserRepository.findSystemUserByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy người dùng với email: " + email));
-    }
 
     @Override
     public boolean isEmailExist(String email) {
@@ -94,7 +114,8 @@ public class SystemUserServiceImpl implements SystemUserService {
     }
 
     @Override
-    public List<SystemUser> handleGetSystemUsersByStatus(SystemUserStatus status) {
-        return systemUserRepository.findBySystemUserStatus(status);
+    public List<SystemUserResponseDTO> handleGetSystemUsersByStatus(SystemUserStatus status) {
+        List<SystemUser> users = systemUserRepository.findBySystemUserStatus(status);
+        return users.stream().map(SystemUserMapper.INSTANCE::toResponseDTO).collect(Collectors.toList());
     }
 }

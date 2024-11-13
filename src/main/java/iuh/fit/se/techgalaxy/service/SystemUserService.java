@@ -1,6 +1,8 @@
 package iuh.fit.se.techgalaxy.service;
 
+import iuh.fit.se.techgalaxy.dto.request.SystemUserRequestDTO;
 import iuh.fit.se.techgalaxy.dto.response.ResultPaginationDTO;
+import iuh.fit.se.techgalaxy.dto.response.SystemUserResponseDTO;
 import iuh.fit.se.techgalaxy.entities.SystemUser;
 import iuh.fit.se.techgalaxy.entities.enumeration.SystemUserStatus;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +21,7 @@ public interface SystemUserService {
      * @return User
      * author: Vũ Nguyễn Minh Đức
      */
-    public SystemUser handleCreateSystemUser(SystemUser user);
+    public SystemUserResponseDTO handleCreateSystemUser(SystemUserRequestDTO user);
 
     /**
      * Handle delete user
@@ -36,7 +38,7 @@ public interface SystemUserService {
      * @return User
      * author: Vũ Nguyễn Minh Đức
      */
-    public SystemUser fetchUserById(String id);
+    public SystemUserResponseDTO fetchUserById(String id);
 
     /**
      * Fetch all user
@@ -55,25 +57,7 @@ public interface SystemUserService {
      * @return User
      * author: Vũ Nguyễn Minh Đức
      */
-    public SystemUser handleUpdateSystemUser(SystemUser reqUser);
-
-    /**
-     * Handle get user by username
-     *
-     * @param username
-     * @return User
-     * author: Vũ Nguyễn Minh Đức
-     */
-    public SystemUser handleGetSystemUserByUsername(String username);
-
-    /**
-     * Handle get user by email
-     *
-     * @param email
-     * @return User
-     * author: Vũ Nguyễn Minh Đức
-     */
-    public SystemUser handleGetUserByEmail(String email);
+    public SystemUserResponseDTO handleUpdateSystemUser(SystemUserRequestDTO reqUser);
 
     /**
      * Check if email exist
@@ -91,6 +75,6 @@ public interface SystemUserService {
      * @return List<SystemUser>
      * author: Vũ Nguyễn Minh Đức
      */
-    public List<SystemUser> handleGetSystemUsersByStatus(SystemUserStatus status);
+    public List<SystemUserResponseDTO> handleGetSystemUsersByStatus(SystemUserStatus status);
 
 }

@@ -102,4 +102,11 @@ public class RoleServiceImpl implements RoleService {
 
         return result;
     }
+
+
+    @Override
+    public List<Role> findByNameIn(List<String> names) {
+        List<Role> roles = roleRepository.findByNameIn(names);
+        return roles;
+    }
 }

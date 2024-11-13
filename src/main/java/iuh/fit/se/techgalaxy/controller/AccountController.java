@@ -3,17 +3,20 @@ package iuh.fit.se.techgalaxy.controller;
 
 import iuh.fit.se.techgalaxy.dto.request.CustomerRequest;
 import iuh.fit.se.techgalaxy.dto.request.LoginRequest;
+import iuh.fit.se.techgalaxy.dto.request.SystemUserRequestDTO;
 import iuh.fit.se.techgalaxy.dto.request.UserRegisterRequest;
 import iuh.fit.se.techgalaxy.dto.response.*;
 import iuh.fit.se.techgalaxy.entities.Account;
 import iuh.fit.se.techgalaxy.entities.Customer;
 import iuh.fit.se.techgalaxy.entities.Role;
+import iuh.fit.se.techgalaxy.entities.SystemUser;
 import iuh.fit.se.techgalaxy.entities.enumeration.CustomerStatus;
 import iuh.fit.se.techgalaxy.mapper.RoleMapper;
 
 import iuh.fit.se.techgalaxy.service.RoleService;
 import iuh.fit.se.techgalaxy.service.impl.AccountServiceImpl;
 import iuh.fit.se.techgalaxy.service.impl.CustomerServiceImpl;
+import iuh.fit.se.techgalaxy.service.impl.SystemUserServiceImpl;
 import iuh.fit.se.techgalaxy.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +34,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/accounts")
@@ -46,6 +50,8 @@ public class AccountController {
 
     private final CustomerServiceImpl customerService;
 
+    private final SystemUserServiceImpl systemUserService;
+
     private final SecurityUtil securityUtil;
 
     @Value("${jwt.refresh-token-validity-in-seconds}")
@@ -59,7 +65,8 @@ public class AccountController {
                              SecurityUtil securityUtil,
                              RoleService roleService,
                              CustomerServiceImpl customerService,
-                             RoleMapper roleMapper) {
+                             RoleMapper roleMapper,
+                             SystemUserServiceImpl systemUserService) {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.accountService = accountService;
         this.passwordEncoder = passwordEncoder;
@@ -67,6 +74,7 @@ public class AccountController {
         this.roleService = roleService;
         this.customerService = customerService;
         this.roleMapper = roleMapper;
+        this.systemUserService = systemUserService;
     }
 
     @PostMapping("/auth/login")
@@ -218,6 +226,54 @@ public class AccountController {
                 .status(200)
                 .message("Account created successfully")
                 .data(Collections.singletonList(response))
+                .build());
+    }
+
+
+    @PostMapping("/auth/create-system-user")
+    public ResponseEntity<DataResponse<SystemUserResponseDTO>> register(@RequestBody SystemUserRequestDTO user) {
+        if (user.getAccount().getEmail() == null ||user.getAccount().getEmail().isEmpty() || user.getAccount().getPassword() == null || user.getAccount().getPassword().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(DataResponse.<SystemUserResponseDTO>builder()
+                            .status(400)
+                            .message("Email and password are required")
+                            .build());
+        }
+
+        if (accountService.existsByEmail(user.getAccount().getEmail())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(DataResponse.<SystemUserResponseDTO>builder()
+                            .status(409)
+                            .message("Email already exists")
+                            .build());
+        }
+
+        Account account = new Account();
+        account.setPassword(passwordEncoder.encode(user.getAccount().getPassword()));
+        account.setEmail(user.getAccount().getEmail());
+        account.setRefreshToken("");
+
+        List<Role> roles = user.getAccount().getRoles();
+
+        if (roles == null || roles.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(DataResponse.<SystemUserResponseDTO>builder()
+                            .status(500)
+                            .message("Role not found")
+                            .build());
+        }
+        account.setRoles(roles);
+        Account newAccount = accountService.createAccount(account);
+
+        SystemUserResponseDTO.AccountResponse response = new SystemUserResponseDTO.AccountResponse();
+        response.setEmail(newAccount.getEmail());
+        SystemUserResponseDTO systemUserResponseDTO = systemUserService.handleCreateSystemUser(user);
+//        systemUserResponseDTO.setAccount(response);
+
+        return ResponseEntity.ok(DataResponse.<SystemUserResponseDTO>builder()
+                .status(200)
+                .message("Account created successfully")
+                .data(Collections.singletonList(systemUserResponseDTO))
                 .build());
     }
 
