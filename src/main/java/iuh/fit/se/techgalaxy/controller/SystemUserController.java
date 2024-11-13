@@ -97,4 +97,27 @@ public class SystemUserController {
                         .build()
         );
     }
+
+    @PutMapping
+    public ResponseEntity<DataResponse<SystemUserResponseDTO>> updateSystemUserStatus(@RequestBody SystemUserRequestDTO requestDTO) {
+        SystemUserResponseDTO response = systemUserService.handleUpdateSystemUser(requestDTO);
+        return ResponseEntity.ok(
+                DataResponse.<SystemUserResponseDTO>builder()
+                        .status(200)
+                        .message("System user status updated successfully")
+                        .data(List.of(response))
+                        .build()
+        );
+    }
+
+    @DeleteMapping
+    public ResponseEntity<DataResponse<Void>> deleteSystemUserByIDs(@RequestBody String ids) {
+        systemUserService.handleDeleteSystemUser(ids);
+        return ResponseEntity.ok(
+                DataResponse.<Void>builder()
+                        .status(200)
+                        .message("System users deleted successfully")
+                        .build()
+        );
+    }
 }

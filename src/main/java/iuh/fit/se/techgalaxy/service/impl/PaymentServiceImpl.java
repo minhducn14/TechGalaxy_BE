@@ -18,7 +18,7 @@ public class PaymentServiceImpl {
         this.vnPayConfig = vnPayConfig;
     }
 
-    public PaymentResponse.VNPayResponse createVnPayPayment(HttpServletRequest request) {
+    public PaymentResponse.VNPayResponseCreate createVnPayPayment(HttpServletRequest request) {
         long amount = Integer.parseInt(request.getParameter("amount")) * 100L;
         String bankCode = request.getParameter("bankCode");
         Map<String, String> vnpParamsMap = vnPayConfig.getVNPayConfig();
@@ -32,7 +32,7 @@ public class PaymentServiceImpl {
         String vnpSecureHash = VNPayUtil.hmacSHA512(vnPayConfig.getSecretKey(), hashData);
         queryUrl += "&vnp_SecureHash=" + vnpSecureHash;
         String paymentUrl = vnPayConfig.getVnp_PayUrl() + "?" + queryUrl;
-        return PaymentResponse.VNPayResponse.builder()
+        return PaymentResponse.VNPayResponseCreate.builder()
                 .code("ok")
                 .message("success")
                 .paymentUrl(paymentUrl).build();

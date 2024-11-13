@@ -18,6 +18,7 @@ import iuh.fit.se.techgalaxy.service.impl.AccountServiceImpl;
 import iuh.fit.se.techgalaxy.service.impl.CustomerServiceImpl;
 import iuh.fit.se.techgalaxy.service.impl.SystemUserServiceImpl;
 import iuh.fit.se.techgalaxy.util.SecurityUtil;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -78,7 +79,7 @@ public class AccountController {
     }
 
     @PostMapping("/auth/login")
-    public ResponseEntity<DataResponse<LoginResponse>> login(@RequestBody LoginRequest loginDto) {
+    public ResponseEntity<DataResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest loginDto) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 loginDto.getUsername(), loginDto.getPassword());
         try {
@@ -164,7 +165,7 @@ public class AccountController {
     }
 
     @PostMapping("/auth/register")
-    public ResponseEntity<DataResponse<CustommerCreateResponse>> register(@RequestBody UserRegisterRequest user) {
+    public ResponseEntity<DataResponse<CustommerCreateResponse>> register(@Valid @RequestBody UserRegisterRequest user) {
         if (user.getEmail() == null || user.getEmail().isEmpty() || user.getPassword() == null || user.getPassword().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(DataResponse.<CustommerCreateResponse>builder()
@@ -231,7 +232,7 @@ public class AccountController {
 
 
     @PostMapping("/auth/create-system-user")
-    public ResponseEntity<DataResponse<SystemUserResponseDTO>> register(@RequestBody SystemUserRequestDTO user) {
+    public ResponseEntity<DataResponse<SystemUserResponseDTO>> register(@Valid @RequestBody SystemUserRequestDTO user) {
         if (user.getAccount().getEmail() == null ||user.getAccount().getEmail().isEmpty() || user.getAccount().getPassword() == null || user.getAccount().getPassword().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(DataResponse.<SystemUserResponseDTO>builder()

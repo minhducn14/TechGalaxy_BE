@@ -1,4 +1,5 @@
 package iuh.fit.se.techgalaxy.service.impl;
+import iuh.fit.se.techgalaxy.dto.request.EmailRequest;
 import iuh.fit.se.techgalaxy.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -55,28 +56,20 @@ public class EmailServiceImpl  implements EmailService {
             String to,
             String subject,
             String templateName,
-            String orderCode,
-            String paymentInfo,
-            String shippingAddress,
-            String orderNumber,
-            String symbol,
-            String invoiceDate,
-            String invoiceNumber,
-            String customerName,
-            String taxCode,
-            String searchCode
+            EmailRequest emailRequest
     ) {
         Context context = new Context();
-        context.setVariable("orderCode", orderCode);
-        context.setVariable("paymentInfo", paymentInfo);
-        context.setVariable("shippingAddress", shippingAddress);
-        context.setVariable("orderNumber", orderNumber);
-        context.setVariable("symbol", symbol);
-        context.setVariable("invoiceDate", invoiceDate);
-        context.setVariable("invoiceNumber", invoiceNumber);
-        context.setVariable("customerName", customerName);
-        context.setVariable("taxCode", taxCode);
-        context.setVariable("searchCode", searchCode);
+        context.setVariable("orderCode", emailRequest.getOrderCode());
+        context.setVariable("paymentInfo", emailRequest.getPaymentInfo());
+        context.setVariable("shippingAddress", emailRequest.getShippingAddress());
+        context.setVariable("orderNumber", emailRequest.getOrderNumber());
+        context.setVariable("symbol", emailRequest.getSymbol());
+        context.setVariable("invoiceDate", emailRequest.getInvoiceDate());
+        context.setVariable("invoiceNumber", emailRequest.getInvoiceNumber());
+        context.setVariable("customerName", emailRequest.getCustomerName());
+        context.setVariable("taxCode", emailRequest.getTaxCode());
+        context.setVariable("searchCode", emailRequest.getSearchCode());
+        context.setVariable("productVariantDetails", emailRequest.getProductVariantDetails());
 
         String content = templateEngine.process(templateName, context);
         this.sendEmailSync(to, subject, content, false, true);
