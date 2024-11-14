@@ -1,23 +1,20 @@
 package iuh.fit.se.techgalaxy.controller;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import iuh.fit.se.techgalaxy.dto.request.AttributeValueRequest;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import iuh.fit.se.techgalaxy.dto.request.AttributeRequest;
-import iuh.fit.se.techgalaxy.dto.request.ProductRequest;
+import iuh.fit.se.techgalaxy.dto.request.AttributeValueRequest;
 import iuh.fit.se.techgalaxy.dto.response.AttributeResponse;
 import iuh.fit.se.techgalaxy.dto.response.DataResponse;
 import iuh.fit.se.techgalaxy.dto.response.ProductResponse;
-import iuh.fit.se.techgalaxy.service.AttributeService;
 import iuh.fit.se.techgalaxy.service.impl.AttributeServiceImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
