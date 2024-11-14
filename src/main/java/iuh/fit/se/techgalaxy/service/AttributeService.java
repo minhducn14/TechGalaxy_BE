@@ -17,3 +17,6 @@ public interface AttributeService {
 	
 	Set<AttributeResponse> getAllAttribute();
 }
+//find  variant if true
+// tao vong lap de map tu request sang value phai co mapper de lam
+// sau khi tao xong thi save vao csdl
