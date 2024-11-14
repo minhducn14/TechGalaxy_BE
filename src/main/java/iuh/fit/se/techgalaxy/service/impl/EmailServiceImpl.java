@@ -1,5 +1,7 @@
 package iuh.fit.se.techgalaxy.service.impl;
 import iuh.fit.se.techgalaxy.dto.request.EmailRequest;
+import iuh.fit.se.techgalaxy.exception.AppException;
+import iuh.fit.se.techgalaxy.exception.ErrorCode;
 import iuh.fit.se.techgalaxy.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -49,7 +51,7 @@ public class EmailServiceImpl  implements EmailService {
             message.setText(content, isHtml);
             this.javaMailSender.send(mimeMessage);
         } catch (MailException | MessagingException e) {
-            System.out.println("ERROR SEND EMAIL: " + e);
+            new AppException(ErrorCode.FAILED_SEND_EMAIL);
         }
     }
     public void sendEmailFromTemplateSync(

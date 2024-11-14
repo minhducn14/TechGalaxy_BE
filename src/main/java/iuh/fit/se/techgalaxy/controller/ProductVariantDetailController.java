@@ -5,6 +5,7 @@ import iuh.fit.se.techgalaxy.dto.request.ProductVariantDetailRequest;
 import iuh.fit.se.techgalaxy.dto.response.DataResponse;
 import iuh.fit.se.techgalaxy.dto.response.ProductVariantDetailResponse;
 import iuh.fit.se.techgalaxy.service.impl.ProductVariantDetailServiceImpl;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @RequiredArgsConstructor
@@ -30,23 +32,16 @@ public class ProductVariantDetailController {
 
 
     @PostMapping
-    public ResponseEntity<DataResponse<Boolean>> createProductVariantDetail(@PathVariable String variantId, @RequestBody ProductVariantDetailRequest productVariantDetailRequest) {
+    public ResponseEntity<DataResponse<Boolean>> createProductVariantDetail(@PathVariable String variantId, @RequestBody List<ProductVariantDetailRequest> productVariantDetailRequest) {
         productVariantDetailServiceImpl.createProductVariantDetail(variantId, productVariantDetailRequest);
         return ResponseEntity.ok(DataResponse.<Boolean>builder().message("success").build());
     }
 
     @PutMapping("/{productDetailId}")
-    public ResponseEntity<DataResponse<Boolean>> updateProductVariantDetail(@PathVariable String productDetailId, @RequestBody ProductDetailUpdateRequest productDetailUpdateRequest) {
+    public ResponseEntity<DataResponse<Boolean>> updateProductVariantDetail(@PathVariable String productDetailId,@Valid @RequestBody ProductDetailUpdateRequest productDetailUpdateRequest) {
         productVariantDetailServiceImpl.updateProductVariantDetail(productDetailId, productDetailUpdateRequest);
         return ResponseEntity.ok(DataResponse.<Boolean>builder().message("success").build());
     }
-
-    @PutMapping()
-    public ResponseEntity<DataResponse<Boolean>> updateProductVariantDetailPrice(@PathVariable String variantId, @RequestParam Double price, @RequestParam Double sale) {
-        productVariantDetailServiceImpl.updateProductVariantDetailPrice(variantId, price, sale);
-        return ResponseEntity.ok(DataResponse.<Boolean>builder().message("success").build());
-    }
-
     @DeleteMapping("/{productDetailId}")
     public ResponseEntity<DataResponse<Boolean>> deleteProductVariantDetail(@PathVariable String productDetailId) {
         productVariantDetailServiceImpl.deleteProductVariantDetail(productDetailId);

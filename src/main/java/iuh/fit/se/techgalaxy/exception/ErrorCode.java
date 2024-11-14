@@ -19,12 +19,18 @@ public enum ErrorCode {
     AUTHENTICATION_ERROR(8000, "You no access to method", HttpStatus.FORBIDDEN),
 
     // 1000 - 1999: Business error ( call data from database)
+    DATA_DUPLICATE_PRODUCT_DETAIL(1005, "Data duplicate product detail please check color and memories request", HttpStatus.BAD_REQUEST),
+    PRODUCT_UPDATE_FAILED(1006, "Product update failse", HttpStatus.INTERNAL_SERVER_ERROR),
+    PRODUCT_DELETE_FAILED(1007, "Product delete failse", HttpStatus.INTERNAL_SERVER_ERROR),
+    MEMORY_NOTFOUND(1003, "Memory not found", HttpStatus.NOT_FOUND),
+    COLOR_NOTFOUND(1004, "Color not found", HttpStatus.NOT_FOUND),
     PRODUCT_NOTFOUND(1000, "Product not found", HttpStatus.NOT_FOUND),
     ACCOUNT_NOTFOUND(1001, "Account not found", HttpStatus.NOT_FOUND),
     CUSTOMER_NOTFOUND(1002, "Customer not found", HttpStatus.NOT_FOUND),
 
     // 2000 - 2999: Validation error in request body
-    PRODUCT_NAME_INVALID(2002, "Product name min length is 1 and max length is 20", HttpStatus.BAD_REQUEST),
+    PRODUCT_DISCOUNT_INVALID(2000, "Product discount min value is {min} and max value is {max}", HttpStatus.BAD_REQUEST),
+    PRODUCT_NAME_INVALID(2002, "Product name min length is {min} and max length is {max}", HttpStatus.BAD_REQUEST),
     USERNAME_NOT_EMPTY(2003, "Username is not empty", HttpStatus.BAD_REQUEST),
     PASSWORD_NOT_EMPTY(2004, "Password is not empty", HttpStatus.BAD_REQUEST),
     EMAIL_NOT_EMPTY(2005, "Email is not empty", HttpStatus.BAD_REQUEST),
@@ -39,7 +45,8 @@ public enum ErrorCode {
     GENDER_NOT_EMPTY(2014,"Gender is not empty", HttpStatus.BAD_REQUEST),
     ROLE_NOT_EMPTY(2015, "Role is not empty", HttpStatus.BAD_REQUEST),
 
-
+    //Mail
+    FAILED_SEND_EMAIL(3000, "Failed to send email", HttpStatus.INTERNAL_SERVER_ERROR),
 
     // 4000 - 4999: Storage and file error
     NO_RESOURCE_FOUND(4010, "No resource found", HttpStatus.NOT_FOUND),

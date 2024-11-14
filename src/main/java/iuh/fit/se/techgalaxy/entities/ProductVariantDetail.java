@@ -16,8 +16,11 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor@Entity
-@Table(name = "Product_Variant_Details")
+@AllArgsConstructor
+@Entity
+@Table(name = "Product_Variant_Details",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"product_variant_id", "color_id", "memory_id"})
+)
 public class ProductVariantDetail {
 
     @Id
@@ -49,7 +52,7 @@ public class ProductVariantDetail {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private ProductStatus status;
+    private ProductStatus status = ProductStatus.AVAILABLE;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
