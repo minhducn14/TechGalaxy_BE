@@ -60,10 +60,8 @@ public class AttributeController {
 	}
 
 	@PostMapping()
-	public ResponseEntity<DataResponse<ProductResponse>> createAttributeValueVariant(@RequestParam String provariant, @RequestBody List<AttributeValueRequest> request) {
-//		Set<ProductResponse> productRespone = new HashSet<>();
-//		productRespone.add(attributeServiceImpl.createProduct(request));
-	//	return ResponseEntity.ok(DataResponse.<ProductResponse>builder().data(productRespone).build());
-		return  null;
+	public ResponseEntity<DataResponse<Object>> createAttributeValueVariant(@RequestParam String provariant, @RequestBody List<AttributeValueRequest> request) {
+		attributeServiceImpl.createValueProductVariant(provariant,request);
+		return ResponseEntity.ok(DataResponse.<Object>builder().message("Ok").build());
 	}
 }
