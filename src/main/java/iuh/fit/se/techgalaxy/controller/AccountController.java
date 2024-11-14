@@ -230,7 +230,59 @@ public class AccountController {
                 .build());
     }
 
+    @PostMapping("/auth/creat-account")
+    public ResponseEntity<DataResponse<UserRegisterResponse>> creatAccount(@Valid @RequestBody UserRegisterRequest user) {
+        if (user.getEmail() == null || user.getEmail().isEmpty() || user.getPassword() == null || user.getPassword().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(DataResponse.<UserRegisterResponse>builder()
+                            .status(400)
+                            .message("Email and password are required")
+                            .build());
+        }
 
+
+        if (accountService.existsByEmail(user.getEmail())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(DataResponse.<UserRegisterResponse>builder()
+                            .status(409)
+                            .message("Email already exists")
+                            .build());
+        }
+        Account account = new Account();
+        account.setPassword(passwordEncoder.encode(user.getPassword()));
+        account.setEmail(user.getEmail());
+        account.setRefreshToken("");
+
+        RoleResponse roleResponse = roleService.findByName("Customer");
+        Role role = roleMapper.toEntity(roleResponse);
+        if (role == null) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(DataResponse.<UserRegisterResponse>builder()
+                            .status(500)
+                            .message("Role not found")
+                            .build());
+        }
+        account.setRoles(Collections.singletonList(role));
+        Account newAccount = accountService.createAccount(account);
+        System.out.println(newAccount);
+
+        if (newAccount.getId() == null) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(DataResponse.<UserRegisterResponse>builder()
+                            .status(500)
+                            .message("Account creation failed")
+                            .build());
+        }
+
+        UserRegisterResponse response = new UserRegisterResponse();
+        response.setEmail(newAccount.getEmail());
+
+        return ResponseEntity.ok(DataResponse.<UserRegisterResponse>builder()
+                .status(200)
+                .message("Account created successfully")
+                .data(Collections.singletonList(response))
+                .build());
+    }
     @PostMapping("/auth/create-system-user")
     public ResponseEntity<DataResponse<SystemUserResponseDTO>> register(@Valid @RequestBody SystemUserRequestDTO user) {
         if (user.getAccount().getEmail() == null ||user.getAccount().getEmail().isEmpty() || user.getAccount().getPassword() == null || user.getAccount().getPassword().isEmpty()) {
