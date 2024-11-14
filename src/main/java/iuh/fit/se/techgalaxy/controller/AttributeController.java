@@ -59,7 +59,7 @@ public class AttributeController {
 		return ResponseEntity.ok(DataResponse.<AttributeResponse>builder().data(attributeRespone).build());
 	}
 
-	@PostMapping()
+	@PostMapping("/productvariant")
 	public ResponseEntity<DataResponse<Object>> createAttributeValueVariant(@RequestParam String provariant, @RequestBody List<AttributeValueRequest> request) {
 		attributeServiceImpl.createValueProductVariant(provariant,request);
 		return ResponseEntity.ok(DataResponse.<Object>builder().message("Ok").build());
