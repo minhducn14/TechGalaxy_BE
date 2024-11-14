@@ -5,9 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.List;
 
+@RepositoryRestResource(collectionResourceRel = "productVariantDetails", path = "productVariantDetails", exported = false)
 public interface ProductVariantDetailRepository extends JpaRepository<ProductVariantDetail, String> {
     List<ProductVariantDetail> findAllByProductVariantId(String productVariantId);
 

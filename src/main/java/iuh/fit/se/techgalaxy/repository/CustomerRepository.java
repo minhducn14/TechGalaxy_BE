@@ -3,12 +3,13 @@ package iuh.fit.se.techgalaxy.repository;
 import iuh.fit.se.techgalaxy.entities.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+@RepositoryRestResource(collectionResourceRel = "customers", path = "customers", exported = false)
 public interface CustomerRepository extends JpaRepository<Customer, String> {
 
     @Query("SELECT c FROM  Customer c JOIN c.account a WHERE a.email LIKE :email")

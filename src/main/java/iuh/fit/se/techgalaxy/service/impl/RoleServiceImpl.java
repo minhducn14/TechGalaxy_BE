@@ -9,6 +9,7 @@ import iuh.fit.se.techgalaxy.mapper.RoleMapper;
 import iuh.fit.se.techgalaxy.repository.PermissionRepository;
 import iuh.fit.se.techgalaxy.repository.RoleRepository;
 import iuh.fit.se.techgalaxy.service.RoleService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -83,6 +84,15 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void delete(String id) {
+        if (!roleRepository.existsById(id)) {
+            throw new EntityNotFoundException("Role not found");
+        }
+        if (roleRepository.existsById(id)) {
+            Role role = roleRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Role not found"));
+            role.getPermissions().clear();
+            roleRepository.deleteById(id);
+        }
         roleRepository.deleteById(id);
     }
 

@@ -3,9 +3,11 @@ package iuh.fit.se.techgalaxy.repository;
 import iuh.fit.se.techgalaxy.entities.Permission;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.List;
 
+@RepositoryRestResource(collectionResourceRel = "permissions", path = "permissions", exported = false)
 public interface PermissionRepository extends JpaRepository<Permission, String>,
         JpaSpecificationExecutor<Permission> {
     boolean existsByModuleAndApiPathAndMethod(String module, String apiPath, String method);

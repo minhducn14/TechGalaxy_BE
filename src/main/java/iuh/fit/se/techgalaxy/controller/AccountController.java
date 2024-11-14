@@ -1,10 +1,7 @@
 package iuh.fit.se.techgalaxy.controller;
 
 
-import iuh.fit.se.techgalaxy.dto.request.CustomerRequest;
-import iuh.fit.se.techgalaxy.dto.request.LoginRequest;
-import iuh.fit.se.techgalaxy.dto.request.SystemUserRequestDTO;
-import iuh.fit.se.techgalaxy.dto.request.UserRegisterRequest;
+import iuh.fit.se.techgalaxy.dto.request.*;
 import iuh.fit.se.techgalaxy.dto.response.*;
 import iuh.fit.se.techgalaxy.entities.Account;
 import iuh.fit.se.techgalaxy.entities.Customer;
@@ -13,6 +10,7 @@ import iuh.fit.se.techgalaxy.entities.SystemUser;
 import iuh.fit.se.techgalaxy.entities.enumeration.CustomerStatus;
 import iuh.fit.se.techgalaxy.mapper.RoleMapper;
 
+import iuh.fit.se.techgalaxy.repository.RoleRepository;
 import iuh.fit.se.techgalaxy.service.RoleService;
 import iuh.fit.se.techgalaxy.service.impl.AccountServiceImpl;
 import iuh.fit.se.techgalaxy.service.impl.CustomerServiceImpl;
@@ -54,6 +52,7 @@ public class AccountController {
     private final SystemUserServiceImpl systemUserService;
 
     private final SecurityUtil securityUtil;
+    private  final RoleRepository roleRepository;
 
     @Value("${jwt.refresh-token-validity-in-seconds}")
     private long refreshTokenExpiration;
@@ -67,7 +66,8 @@ public class AccountController {
                              RoleService roleService,
                              CustomerServiceImpl customerService,
                              RoleMapper roleMapper,
-                             SystemUserServiceImpl systemUserService) {
+                             SystemUserServiceImpl systemUserService,
+                             RoleRepository roleRepository) {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.accountService = accountService;
         this.passwordEncoder = passwordEncoder;
@@ -76,6 +76,7 @@ public class AccountController {
         this.customerService = customerService;
         this.roleMapper = roleMapper;
         this.systemUserService = systemUserService;
+        this.roleRepository = roleRepository;
     }
 
     @PostMapping("/auth/login")
@@ -230,7 +231,7 @@ public class AccountController {
                 .build());
     }
 
-    @PostMapping("/auth/creat-account")
+    @PostMapping("/auth/create-account")
     public ResponseEntity<DataResponse<UserRegisterResponse>> creatAccount(@Valid @RequestBody UserRegisterRequest user) {
         if (user.getEmail() == null || user.getEmail().isEmpty() || user.getPassword() == null || user.getPassword().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -416,5 +417,38 @@ public class AccountController {
                         .message("Refresh token successful")
                         .data(Collections.singletonList(res))
                         .build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<DataResponse<Void>> deleteAccount(@PathVariable String id) {
+
+        accountService.deleteAccountById(id);
+        return ResponseEntity.ok(DataResponse.<Void>builder()
+                .status(200)
+                .message("Account deleted successfully")
+                .build());
+    }
+
+    @PutMapping
+    public ResponseEntity<DataResponse<AccountUpdateResponse>> updateAccount(@RequestBody AccountUpdateRequest accountRequest) {
+        Account account = accountService.getAccountById(accountRequest.getId()).orElse(null);
+        if (account == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(DataResponse.<AccountUpdateResponse>builder()
+                            .status(404)
+                            .message("Account not found")
+                            .build());
+        }
+        String hashPass= passwordEncoder.encode(accountRequest.getPassword());
+        accountRequest.setPassword(hashPass);
+
+        AccountUpdateResponse updatedAccount = accountService.updateAccount(accountRequest);
+        updatedAccount.setPassword(null);
+        updatedAccount.setId(null);
+        return ResponseEntity.ok(DataResponse.<AccountUpdateResponse>builder()
+                .status(200)
+                .message("Account updated successfully")
+                .data(Collections.singletonList(updatedAccount))
+                .build());
     }
 }

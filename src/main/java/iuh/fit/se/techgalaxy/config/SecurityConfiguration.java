@@ -43,10 +43,20 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
                                                    CustomAuthenticationEntryPoint customAuthenticationEntryPoint) throws Exception {
+
+        String[] whiteList = {
+                "/",
+                "/api/accounts/auth/register", "/api/accounts/auth/login",
+                "/storage/**",
+                "/v3/api-docs/**",
+                "/swagger-ui/**",
+                "/swagger-ui.html"
+        };
+
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/accounts/auth/register", "/api/accounts/auth/login").permitAll()
+                        .requestMatchers(whiteList).permitAll()
                         .anyRequest().permitAll()
                 )
                 .httpBasic(Customizer.withDefaults())
@@ -62,7 +72,6 @@ public class SecurityConfiguration {
 
         return http.build();
     }
-
 
 
     @Bean
