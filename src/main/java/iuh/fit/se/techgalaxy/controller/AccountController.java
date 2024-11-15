@@ -232,7 +232,7 @@ public class AccountController {
     }
 
     @PostMapping("/auth/create-account")
-    public ResponseEntity<DataResponse<UserRegisterResponse>> creatAccount(@Valid @RequestBody UserRegisterRequest user) {
+    public ResponseEntity<DataResponse<UserRegisterResponse>> createAccount(@Valid @RequestBody UserRegisterRequest user) {
         if (user.getEmail() == null || user.getEmail().isEmpty() || user.getPassword() == null || user.getPassword().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(DataResponse.<UserRegisterResponse>builder()
@@ -240,7 +240,6 @@ public class AccountController {
                             .message("Email and password are required")
                             .build());
         }
-
 
         if (accountService.existsByEmail(user.getEmail())) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
@@ -277,6 +276,7 @@ public class AccountController {
 
         UserRegisterResponse response = new UserRegisterResponse();
         response.setEmail(newAccount.getEmail());
+        response.setId(newAccount.getId());
 
         return ResponseEntity.ok(DataResponse.<UserRegisterResponse>builder()
                 .status(200)
@@ -284,6 +284,7 @@ public class AccountController {
                 .data(Collections.singletonList(response))
                 .build());
     }
+
     @PostMapping("/auth/create-system-user")
     public ResponseEntity<DataResponse<SystemUserResponseDTO>> register(@Valid @RequestBody SystemUserRequestDTO user) {
         if (user.getAccount().getEmail() == null ||user.getAccount().getEmail().isEmpty() || user.getAccount().getPassword() == null || user.getAccount().getPassword().isEmpty()) {

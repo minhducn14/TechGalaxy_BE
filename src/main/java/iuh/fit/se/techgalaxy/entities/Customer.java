@@ -1,5 +1,6 @@
 package iuh.fit.se.techgalaxy.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import iuh.fit.se.techgalaxy.entities.enumeration.CustomerStatus;
 import iuh.fit.se.techgalaxy.entities.enumeration.Gender;
 import jakarta.persistence.*;
@@ -32,8 +33,9 @@ public class Customer {
     @Column(nullable = false)
     private CustomerStatus userStatus;
 
-    @ManyToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "account_id", unique = true, nullable = false)
+    @JsonManagedReference(value = "account-customer")
     private Account account;
 
     @Column(nullable = false, length = 255)

@@ -89,10 +89,9 @@ public class CustomerServiceImpl implements CustomerService {
      */
     @Override
     public CustomerResponse save(CustomerRequest customerRequest) {
-        System.out.println(customerRequest.getAccount().getId());
-        Account account = accountRepository.findById(customerRequest.getAccount().getId()).orElse(null);
+        Account account = accountRepository.findById(customerRequest.getAccount().getId()).orElseThrow(()-> new AppException(ErrorCode.ACCOUNT_NOTFOUND));
+        customerRequest.setAccount(account);
         Customer customer = CustomerMapper.INSTANCE.toCustomerFromRequest(customerRequest);
-        customer.setAccount(account);
         Customer customerAdd = customerRepository.save(customer);
         return CustomerMapper.INSTANCE.toCustomerResponse(customerAdd);
     }

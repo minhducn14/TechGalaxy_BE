@@ -1,5 +1,8 @@
 package iuh.fit.se.techgalaxy.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,11 +43,13 @@ public class Account {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "account")
-    private List<SystemUser> systemUsers;
+    @OneToOne(mappedBy = "account")
+    @JsonBackReference(value = "account-systemUser")
+    private SystemUser systemUsers;
 
-    @OneToMany(mappedBy = "account")
-    private List<Customer> customers;
+    @OneToOne(mappedBy = "account")
+    @JsonBackReference(value = "account-customer")
+    private Customer customers;
 
     @Column(columnDefinition = "text")
     private String refreshToken;

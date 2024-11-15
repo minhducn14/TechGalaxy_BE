@@ -22,4 +22,5 @@ public class CustomerResponse {
     Gender gender;
     String avatar;
     LocalDate dateOfBirth;
+    Account account;
 }

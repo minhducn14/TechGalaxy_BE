@@ -1,5 +1,6 @@
 package iuh.fit.se.techgalaxy.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import iuh.fit.se.techgalaxy.entities.enumeration.Gender;
 import iuh.fit.se.techgalaxy.entities.enumeration.SystemUserLevel;
 import iuh.fit.se.techgalaxy.entities.enumeration.SystemUserStatus;
@@ -36,8 +37,9 @@ public class SystemUser {
     @Column(nullable = false)
     private SystemUserLevel level;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "account_id", unique = true, nullable = false)
+    @JsonManagedReference(value = "account-systemUser")
     private Account account;
 
     @Column(nullable = false, length = 255)

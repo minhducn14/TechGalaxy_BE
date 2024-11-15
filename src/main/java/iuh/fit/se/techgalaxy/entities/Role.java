@@ -1,5 +1,7 @@
 package iuh.fit.se.techgalaxy.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -42,6 +44,7 @@ public class Role {
     private LocalDateTime updatedAt;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles")
+    @JsonIgnore
     private List<Account> accounts;
 
     @ManyToMany(fetch = FetchType.LAZY)
