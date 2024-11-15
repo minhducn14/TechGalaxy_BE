@@ -20,8 +20,8 @@ public enum ErrorCode {
 
     // 1000 - 1999: Business error ( call data from database)
     DATA_DUPLICATE_PRODUCT_DETAIL(1005, "Data duplicate product detail please check color and memories request", HttpStatus.BAD_REQUEST),
-    PRODUCT_UPDATE_FAILED(1006, "Product update failse", HttpStatus.INTERNAL_SERVER_ERROR),
-    PRODUCT_DELETE_FAILED(1007, "Product delete failse", HttpStatus.INTERNAL_SERVER_ERROR),
+    PRODUCT_UPDATE_FAILED(1006, "Product update failed", HttpStatus.INTERNAL_SERVER_ERROR),
+    PRODUCT_DELETE_FAILED(1007, "Product delete failed", HttpStatus.INTERNAL_SERVER_ERROR),
     MEMORY_NOTFOUND(1003, "Memory not found", HttpStatus.NOT_FOUND),
     COLOR_NOTFOUND(1004, "Color not found", HttpStatus.NOT_FOUND),
     PRODUCT_NOTFOUND(1000, "Product not found", HttpStatus.NOT_FOUND),
