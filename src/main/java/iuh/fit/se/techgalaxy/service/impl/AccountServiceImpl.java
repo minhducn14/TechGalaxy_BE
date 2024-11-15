@@ -1,13 +1,19 @@
 package iuh.fit.se.techgalaxy.service.impl;
 
+import iuh.fit.se.techgalaxy.dto.request.AccountUpdateRequest;
+import iuh.fit.se.techgalaxy.dto.response.AccountUpdateResponse;
 import iuh.fit.se.techgalaxy.entities.Account;
+import iuh.fit.se.techgalaxy.entities.Role;
+import iuh.fit.se.techgalaxy.mapper.AccountMapper;
 import iuh.fit.se.techgalaxy.repository.AccountRepository;
+import iuh.fit.se.techgalaxy.repository.RoleRepository;
 import iuh.fit.se.techgalaxy.service.AccountService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,12 +21,18 @@ import java.util.Optional;
 @Service
 public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
+
+    public final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
+    private final AccountMapper accountMapper;
+
     @Autowired
-    public AccountServiceImpl(AccountRepository accountRepository, PasswordEncoder passwordEncoder) {
+    public AccountServiceImpl(AccountRepository accountRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository, AccountMapper accountMapper) {
         this.accountRepository = accountRepository;
         this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
+        this.accountMapper = accountMapper;
     }
 
     @Override
@@ -34,18 +46,35 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account updateAccount(Account account) {
+    public AccountUpdateResponse updateAccount(AccountUpdateRequest account) {
         Account existingAccount = accountRepository.findById(account.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
 
-        if (account.getPassword() != null && !account.getPassword().isEmpty()) {
-            existingAccount.setPassword(account.getPassword());
+
+        if (account.getEmail() != null && !account.getEmail().isEmpty()){
+            if (existingAccount.getEmail().equals(account.getEmail())) {
+
+            } else if(accountRepository.existsByEmail(account.getEmail())) {
+                throw new IllegalArgumentException("Email already exists");
+            }
+        }
+        existingAccount.setEmail(account.getEmail());
+
+        List<String> rolesIds = existingAccount.getRoles().stream().map(Role::getId).toList();
+        rolesIds.forEach(roleId -> {
+            System.out.println(roleId);
+        });
+        if (account.getRolesIds() != null) {
+            List<Role> newRoles = roleRepository.findAllById(account.getRolesIds());
+            newRoles.forEach(role -> {
+                System.out.println(role.getName());
+            });
+            existingAccount.getRoles().clear();
+            existingAccount.getRoles().addAll(newRoles);
         }
 
-        existingAccount.setEmail(account.getEmail());
-        existingAccount.setRoles(account.getRoles());
-
-        return accountRepository.save(existingAccount);
+        Account updatedAccount = accountRepository.save(existingAccount);
+        return accountMapper.toAccountResponse(updatedAccount);
     }
 
     @Override
@@ -54,6 +83,9 @@ public class AccountServiceImpl implements AccountService {
             return false;
         }
         if (accountRepository.existsById(id)) {
+            Account account = accountRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Account not found"));
+            account.getRoles().clear();
             accountRepository.deleteById(id);
             return true;
         }

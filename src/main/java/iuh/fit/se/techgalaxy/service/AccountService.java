@@ -1,5 +1,7 @@
 package iuh.fit.se.techgalaxy.service;
 
+import iuh.fit.se.techgalaxy.dto.request.AccountUpdateRequest;
+import iuh.fit.se.techgalaxy.dto.response.AccountUpdateResponse;
 import iuh.fit.se.techgalaxy.entities.Account;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -32,7 +34,7 @@ public interface AccountService {
      * @return Account đã được cập nhật
      * author: Vũ Nguyễn Minh Đức
      */
-    Account updateAccount(Account account);
+    AccountUpdateResponse updateAccount(AccountUpdateRequest account);
 
     /**
      * Xóa tài khoản theo ID.

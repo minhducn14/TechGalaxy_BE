@@ -19,17 +19,37 @@ public enum ErrorCode {
     AUTHENTICATION_ERROR(8000, "You no access to method", HttpStatus.FORBIDDEN),
 
     // 1000 - 1999: Business error ( call data from database)
+    DATA_DUPLICATE_PRODUCT_DETAIL(1005, "Data duplicate product detail please check color and memories request", HttpStatus.BAD_REQUEST),
+    PRODUCT_UPDATE_FAILED(1006, "Product update failse", HttpStatus.INTERNAL_SERVER_ERROR),
+    PRODUCT_DELETE_FAILED(1007, "Product delete failse", HttpStatus.INTERNAL_SERVER_ERROR),
+    MEMORY_NOTFOUND(1003, "Memory not found", HttpStatus.NOT_FOUND),
+    COLOR_NOTFOUND(1004, "Color not found", HttpStatus.NOT_FOUND),
     PRODUCT_NOTFOUND(1000, "Product not found", HttpStatus.NOT_FOUND),
     ACCOUNT_NOTFOUND(1001, "Account not found", HttpStatus.NOT_FOUND),
     CUSTOMER_NOTFOUND(1002, "Customer not found", HttpStatus.NOT_FOUND),
 
     // 2000 - 2999: Validation error in request body
-    PRODUCT_NAME_INVALID(2002, "Product name min length is 1 and max length is 20", HttpStatus.BAD_REQUEST),
-    NO_RESOURCE_FOUND(4000, "No resource found", HttpStatus.NOT_FOUND),
+    PRODUCT_DISCOUNT_INVALID(2000, "Product discount min value is {min} and max value is {max}", HttpStatus.BAD_REQUEST),
+    PRODUCT_NAME_INVALID(2002, "Product name min length is {min} and max length is {max}", HttpStatus.BAD_REQUEST),
+    USERNAME_NOT_EMPTY(2003, "Username is not empty", HttpStatus.BAD_REQUEST),
+    PASSWORD_NOT_EMPTY(2004, "Password is not empty", HttpStatus.BAD_REQUEST),
+    EMAIL_NOT_EMPTY(2005, "Email is not empty", HttpStatus.BAD_REQUEST),
+    FULL_NAME_NOT_EMPTY(2006, "Full name is not empty", HttpStatus.BAD_REQUEST),
+    NAME_NOT_EMPTY(2007, "Name is not empty", HttpStatus.BAD_REQUEST),
+    PHONE_NOT_EMPTY(2008, "Phone is not empty", HttpStatus.BAD_REQUEST),
+    PHONE_INVALID(2009, "Phone is invalid", HttpStatus.BAD_REQUEST),
+    ADDRESS_NOT_EMPTY(2010, "Address is not empty", HttpStatus.BAD_REQUEST),
+    ADDRESS_INVALID(2011, "Address is invalid", HttpStatus.BAD_REQUEST),
+    SYSTEM_USER_STATUS_NOT_EMPTY(2012, "System user status is not empty", HttpStatus.BAD_REQUEST),
+    LEVEL_NOT_EMPTY(2013, "Level is not empty", HttpStatus.BAD_REQUEST),
+    GENDER_NOT_EMPTY(2014,"Gender is not empty", HttpStatus.BAD_REQUEST),
+    ROLE_NOT_EMPTY(2015, "Role is not empty", HttpStatus.BAD_REQUEST),
 
-
+    //Mail
+    FAILED_SEND_EMAIL(3000, "Failed to send email", HttpStatus.INTERNAL_SERVER_ERROR),
 
     // 4000 - 4999: Storage and file error
+    NO_RESOURCE_FOUND(4010, "No resource found", HttpStatus.NOT_FOUND),
     FILE_EMPTY(4000, "File is empty. Please upload a file.", HttpStatus.BAD_REQUEST),
     INVALID_FILE_EXTENSION(4001, "Invalid file extension. only allows pdf, jpg, jpeg, png, doc, docx", HttpStatus.BAD_REQUEST),
     FILE_NOT_FOUND(4002, "File not found", HttpStatus.NOT_FOUND),

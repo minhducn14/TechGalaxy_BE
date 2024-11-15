@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Hóa đơn điện tử</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .email-container {
+            max-width: 700px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+        }
+
+        .header {
+            /*background-color: #c30000;*/
+            padding: 10px;
+            text-align: center;
+            color: white;
+        }
+
+        .header img {
+            max-height: 60px;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        h3 {
+            color: #333333;
+        }
+
+        p {
+            font-size: 14px;
+            color: #666666;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f8f8f8;
+        }
+
+        .highlight {
+            color: red;
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            text-align: center;
+            color: #888888;
+        }
+    </style>
+</head>
+
+<body>
+<div class="email-container">
+    <div class="header">
+        <img src="https://lh3.googleusercontent.com/d/1yCaYCoN1e-DB1fVPkmSE07SVn53Ww4pd" alt="Logo" style="width: 100%; height: 100%;" />
+    </div>
+
+    <div class="content">
+        <h3>Kính chào quý khách,</h3>
+        <p>Tech Galaxy gửi đến quý khách hóa đơn điện tử cho đơn hàng <span th:text="${orderCode}">SP...</span>. Quý khách vui lòng kiểm tra thông tin hóa đơn như bên dưới.</p>
+
+        <h4 class="highlight">Thông tin đơn hàng <span th:text="${orderCode}">SP...</span></h4>
+        <table>
+            <tr>
+                <td>Thông tin thanh toán:</td>
+                <td th:text="${paymentInfo}">...</td>
+            </tr>
+            <tr>
+                <td>Địa chỉ giao hàng:</td>
+                <td th:text="${shippingAddress}">...</td>
+            </tr>
+            <tr>
+                <td>Số đơn hàng:</td>
+                <td th:text="${orderNumber}">...</td>
+            </tr>
+        </table>
+
+        <h4>Thông tin giao hàng</h4>
+        <table>
+            <tr>
+                <td>Ký hiệu:</td>
+                <td th:text="${symbol}">...</td>
+            </tr>
+            <tr>
+                <td>Ngày hóa đơn:</td>
+                <td th:text="${invoiceDate}">...</td>
+            </tr>
+            <tr>
+                <td>Số hóa đơn:</td>
+                <td th:text="${invoiceNumber}">...</td>
+            </tr>
+            <tr>
+                <td>Tên khách hàng:</td>
+                <td th:text="${customerName}">...</td>
+            </tr>
+            <tr>
+                <td>Mã số thuế:</td>
+                <td th:text="${taxCode}">...</td>
+            </tr>
+        </table>
+
+        <p>Mã tra cứu hóa đơn: <span th:text="${searchCode}">...</span></p>
+
+        <div class="footer">
+            <p>Hệ thống bán lẻ điện thoại toàn quốc</p>
+            <p>Tổng đài hỗ trợ miễn phí: 1800 2097</p>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

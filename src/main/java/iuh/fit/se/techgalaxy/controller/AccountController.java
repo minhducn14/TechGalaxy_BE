@@ -1,22 +1,22 @@
 package iuh.fit.se.techgalaxy.controller;
 
 
-import iuh.fit.se.techgalaxy.dto.request.CustomerRequest;
-import iuh.fit.se.techgalaxy.dto.request.LoginRequest;
-import iuh.fit.se.techgalaxy.dto.request.UserRegisterRequest;
+import iuh.fit.se.techgalaxy.dto.request.*;
 import iuh.fit.se.techgalaxy.dto.response.*;
 import iuh.fit.se.techgalaxy.entities.Account;
 import iuh.fit.se.techgalaxy.entities.Customer;
 import iuh.fit.se.techgalaxy.entities.Role;
+import iuh.fit.se.techgalaxy.entities.SystemUser;
 import iuh.fit.se.techgalaxy.entities.enumeration.CustomerStatus;
 import iuh.fit.se.techgalaxy.mapper.RoleMapper;
-import iuh.fit.se.techgalaxy.service.AccountService;
 
-import iuh.fit.se.techgalaxy.service.CustomerService;
+import iuh.fit.se.techgalaxy.repository.RoleRepository;
 import iuh.fit.se.techgalaxy.service.RoleService;
 import iuh.fit.se.techgalaxy.service.impl.AccountServiceImpl;
 import iuh.fit.se.techgalaxy.service.impl.CustomerServiceImpl;
+import iuh.fit.se.techgalaxy.service.impl.SystemUserServiceImpl;
 import iuh.fit.se.techgalaxy.util.SecurityUtil;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -33,6 +33,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/accounts")
@@ -48,7 +49,10 @@ public class AccountController {
 
     private final CustomerServiceImpl customerService;
 
+    private final SystemUserServiceImpl systemUserService;
+
     private final SecurityUtil securityUtil;
+    private  final RoleRepository roleRepository;
 
     @Value("${jwt.refresh-token-validity-in-seconds}")
     private long refreshTokenExpiration;
@@ -61,7 +65,9 @@ public class AccountController {
                              SecurityUtil securityUtil,
                              RoleService roleService,
                              CustomerServiceImpl customerService,
-                             RoleMapper roleMapper) {
+                             RoleMapper roleMapper,
+                             SystemUserServiceImpl systemUserService,
+                             RoleRepository roleRepository) {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.accountService = accountService;
         this.passwordEncoder = passwordEncoder;
@@ -69,10 +75,12 @@ public class AccountController {
         this.roleService = roleService;
         this.customerService = customerService;
         this.roleMapper = roleMapper;
+        this.systemUserService = systemUserService;
+        this.roleRepository = roleRepository;
     }
 
     @PostMapping("/auth/login")
-    public ResponseEntity<DataResponse<LoginResponse>> login(@RequestBody LoginRequest loginDto) {
+    public ResponseEntity<DataResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest loginDto) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 loginDto.getUsername(), loginDto.getPassword());
         try {
@@ -158,10 +166,10 @@ public class AccountController {
     }
 
     @PostMapping("/auth/register")
-    public ResponseEntity<DataResponse<SystemUserCreateResponse>> register(@RequestBody UserRegisterRequest user) {
+    public ResponseEntity<DataResponse<CustommerCreateResponse>> register(@Valid @RequestBody UserRegisterRequest user) {
         if (user.getEmail() == null || user.getEmail().isEmpty() || user.getPassword() == null || user.getPassword().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(DataResponse.<SystemUserCreateResponse>builder()
+                    .body(DataResponse.<CustommerCreateResponse>builder()
                             .status(400)
                             .message("Email and password are required")
                             .build());
@@ -170,7 +178,7 @@ public class AccountController {
 
         if (accountService.existsByEmail(user.getEmail())) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(DataResponse.<SystemUserCreateResponse>builder()
+                    .body(DataResponse.<CustommerCreateResponse>builder()
                             .status(409)
                             .message("Email already exists")
                             .build());
@@ -184,7 +192,7 @@ public class AccountController {
         Role role = roleMapper.toEntity(roleResponse);
         if (role == null) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(DataResponse.<SystemUserCreateResponse>builder()
+                    .body(DataResponse.<CustommerCreateResponse>builder()
                             .status(500)
                             .message("Role not found")
                             .build());
@@ -195,7 +203,7 @@ public class AccountController {
 
         if (newAccount.getId() == null) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(DataResponse.<SystemUserCreateResponse>builder()
+                    .body(DataResponse.<CustommerCreateResponse>builder()
                             .status(500)
                             .message("Account creation failed")
                             .build());
@@ -213,14 +221,113 @@ public class AccountController {
         customerRequest.setUserStatus(CustomerStatus.ACTIVE);
         CustomerResponse customerResponse = this.customerService.save(customerRequest);
 
+        CustommerCreateResponse response = new CustommerCreateResponse();
+        response.setName(customerResponse.getName());
 
-        SystemUserCreateResponse response = new SystemUserCreateResponse();
-        response.setName(newCustomer.getName());
-
-        return ResponseEntity.ok(DataResponse.<SystemUserCreateResponse>builder()
+        return ResponseEntity.ok(DataResponse.<CustommerCreateResponse>builder()
                 .status(200)
                 .message("Account created successfully")
                 .data(Collections.singletonList(response))
+                .build());
+    }
+
+    @PostMapping("/auth/create-account")
+    public ResponseEntity<DataResponse<UserRegisterResponse>> creatAccount(@Valid @RequestBody UserRegisterRequest user) {
+        if (user.getEmail() == null || user.getEmail().isEmpty() || user.getPassword() == null || user.getPassword().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(DataResponse.<UserRegisterResponse>builder()
+                            .status(400)
+                            .message("Email and password are required")
+                            .build());
+        }
+
+
+        if (accountService.existsByEmail(user.getEmail())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(DataResponse.<UserRegisterResponse>builder()
+                            .status(409)
+                            .message("Email already exists")
+                            .build());
+        }
+        Account account = new Account();
+        account.setPassword(passwordEncoder.encode(user.getPassword()));
+        account.setEmail(user.getEmail());
+        account.setRefreshToken("");
+
+        RoleResponse roleResponse = roleService.findByName("Customer");
+        Role role = roleMapper.toEntity(roleResponse);
+        if (role == null) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(DataResponse.<UserRegisterResponse>builder()
+                            .status(500)
+                            .message("Role not found")
+                            .build());
+        }
+        account.setRoles(Collections.singletonList(role));
+        Account newAccount = accountService.createAccount(account);
+        System.out.println(newAccount);
+
+        if (newAccount.getId() == null) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(DataResponse.<UserRegisterResponse>builder()
+                            .status(500)
+                            .message("Account creation failed")
+                            .build());
+        }
+
+        UserRegisterResponse response = new UserRegisterResponse();
+        response.setEmail(newAccount.getEmail());
+
+        return ResponseEntity.ok(DataResponse.<UserRegisterResponse>builder()
+                .status(200)
+                .message("Account created successfully")
+                .data(Collections.singletonList(response))
+                .build());
+    }
+    @PostMapping("/auth/create-system-user")
+    public ResponseEntity<DataResponse<SystemUserResponseDTO>> register(@Valid @RequestBody SystemUserRequestDTO user) {
+        if (user.getAccount().getEmail() == null ||user.getAccount().getEmail().isEmpty() || user.getAccount().getPassword() == null || user.getAccount().getPassword().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(DataResponse.<SystemUserResponseDTO>builder()
+                            .status(400)
+                            .message("Email and password are required")
+                            .build());
+        }
+
+        if (accountService.existsByEmail(user.getAccount().getEmail())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(DataResponse.<SystemUserResponseDTO>builder()
+                            .status(409)
+                            .message("Email already exists")
+                            .build());
+        }
+
+        Account account = new Account();
+        account.setPassword(passwordEncoder.encode(user.getAccount().getPassword()));
+        account.setEmail(user.getAccount().getEmail());
+        account.setRefreshToken("");
+
+        List<Role> roles = user.getAccount().getRoles();
+
+        if (roles == null || roles.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(DataResponse.<SystemUserResponseDTO>builder()
+                            .status(500)
+                            .message("Role not found")
+                            .build());
+        }
+        account.setRoles(roles);
+        Account newAccount = accountService.createAccount(account);
+
+        SystemUserResponseDTO.AccountResponse response = new SystemUserResponseDTO.AccountResponse();
+        response.setEmail(newAccount.getEmail());
+        SystemUserResponseDTO systemUserResponseDTO = systemUserService.handleCreateSystemUser(user);
+//        systemUserResponseDTO.setAccount(response);
+
+        return ResponseEntity.ok(DataResponse.<SystemUserResponseDTO>builder()
+                .status(200)
+                .message("Account created successfully")
+                .data(Collections.singletonList(systemUserResponseDTO))
                 .build());
     }
 
@@ -294,7 +401,7 @@ public class AccountController {
 
         String new_refresh_token = securityUtil.createRefreshToken(email, res);
         this.accountService.updateToken(email, new_refresh_token);
-        res.setAccount(null); // Xóa thông tin account khỏi response
+        res.setAccount(null);
         ResponseCookie resCookie = ResponseCookie
                 .from("refresh_token", new_refresh_token)
                 .httpOnly(true)
@@ -310,5 +417,38 @@ public class AccountController {
                         .message("Refresh token successful")
                         .data(Collections.singletonList(res))
                         .build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<DataResponse<Void>> deleteAccount(@PathVariable String id) {
+
+        accountService.deleteAccountById(id);
+        return ResponseEntity.ok(DataResponse.<Void>builder()
+                .status(200)
+                .message("Account deleted successfully")
+                .build());
+    }
+
+    @PutMapping
+    public ResponseEntity<DataResponse<AccountUpdateResponse>> updateAccount(@RequestBody AccountUpdateRequest accountRequest) {
+        Account account = accountService.getAccountById(accountRequest.getId()).orElse(null);
+        if (account == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(DataResponse.<AccountUpdateResponse>builder()
+                            .status(404)
+                            .message("Account not found")
+                            .build());
+        }
+        String hashPass= passwordEncoder.encode(accountRequest.getPassword());
+        accountRequest.setPassword(hashPass);
+
+        AccountUpdateResponse updatedAccount = accountService.updateAccount(accountRequest);
+        updatedAccount.setPassword(null);
+        updatedAccount.setId(null);
+        return ResponseEntity.ok(DataResponse.<AccountUpdateResponse>builder()
+                .status(200)
+                .message("Account updated successfully")
+                .data(Collections.singletonList(updatedAccount))
+                .build());
     }
 }

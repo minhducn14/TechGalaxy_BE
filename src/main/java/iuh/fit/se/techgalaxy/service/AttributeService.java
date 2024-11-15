@@ -1,8 +1,10 @@
 package iuh.fit.se.techgalaxy.service;
 
+import java.util.List;
 import java.util.Set;
 
 import iuh.fit.se.techgalaxy.dto.request.AttributeRequest;
+import iuh.fit.se.techgalaxy.dto.request.AttributeValueRequest;
 import iuh.fit.se.techgalaxy.dto.response.AttributeResponse;
 
 public interface AttributeService {
@@ -16,4 +18,11 @@ public interface AttributeService {
 	AttributeResponse getAttributeById(String id);
 	
 	Set<AttributeResponse> getAllAttribute();
+	
+	 boolean createValueProductVariant(String variantId, List<AttributeValueRequest> attributeValueRequest);
+
+	
 }
+//find  variant if true
+// tao vong lap de map tu request sang value phai co mapper de lam
+// sau khi tao xong thi save vao csdl

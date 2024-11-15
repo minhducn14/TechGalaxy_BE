@@ -26,6 +26,9 @@ public interface ProductVariantDetailMapper {
                         detail -> detail.getMemory().getId(),
                         Collectors.mapping(detail ->
                                         new ProductVariantDetailResponse.ColorQuantity(
+                                                detail.getViewsCount(),
+                                                detail.getPrice(),
+                                                detail.getSale(),
                                                 detail.getQuantity(),
                                                 detail.getColor().getId()
                                         ),
@@ -39,11 +42,18 @@ public interface ProductVariantDetailMapper {
                 ));
     }
 
-    @Mapping(target = "status", source = "requestDTO.status")
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "status", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
-    ProductVariantDetail toProductVariantDetail(ProductVariantDetailRequest requestDTO, ProductVariantDetailRequest.MemoryColorRequest detail, Color color, Memory memory, ProductVariant productVariant);
-
+    @Mapping(target = "quantity", source = "detail.quantity")
+    @Mapping(target = "price", source = "requestDTO.price")
+    @Mapping(target = "sale", source = "requestDTO.sale")
+    @Mapping(target = "productVariant", source = "productVariant")
+    ProductVariantDetail toProductVariantDetail(ProductVariantDetailRequest requestDTO,
+                                                ProductVariantDetailRequest.ColorRequest detail,
+                                                Color color,
+                                                Memory memory,
+                                                ProductVariant productVariant);
     void  toUpdate(@MappingTarget ProductVariantDetail productVariantDetail, ProductDetailUpdateRequest productDetailUpdateRequest);
 }
