@@ -4,6 +4,7 @@ import iuh.fit.se.techgalaxy.dto.request.CustomerRequest;
 import iuh.fit.se.techgalaxy.dto.response.CustomerResponse;
 import iuh.fit.se.techgalaxy.entities.Customer;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")

@@ -6,6 +6,5 @@ public enum PaymentStatus {
     PAID,
     FAILED,
     REFUNDED,
-    PARTIAL_PAYMENT,
     CANCELLED
 }
