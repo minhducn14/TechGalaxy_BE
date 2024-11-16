@@ -14,6 +14,8 @@ public enum ErrorCode {
     INVALID_KEY(9998, "Invalid key", HttpStatus.UNAUTHORIZED),
     JWT_INVALID(9997, "JWT invalid",  HttpStatus.UNAUTHORIZED),
     UNCATEGORIZED_ERROR(9999, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
+    NO_LOGIN(9996, "No login", HttpStatus.UNAUTHORIZED),
+    NOT_IN_REQUEST(9995, "Not in request", HttpStatus.BAD_REQUEST),
 
     //8000 - 8999: error with authentication
     AUTHENTICATION_ERROR(8000, "You no access to method", HttpStatus.FORBIDDEN),

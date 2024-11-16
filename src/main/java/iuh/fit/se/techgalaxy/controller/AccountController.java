@@ -1,12 +1,14 @@
 package iuh.fit.se.techgalaxy.controller;
 
 
+import iuh.fit.se.techgalaxy.exception.AppException;
+import iuh.fit.se.techgalaxy.exception.ErrorCode;
+import iuh.fit.se.techgalaxy.provider.TokenProvider;
 import iuh.fit.se.techgalaxy.dto.request.*;
 import iuh.fit.se.techgalaxy.dto.response.*;
 import iuh.fit.se.techgalaxy.entities.Account;
 import iuh.fit.se.techgalaxy.entities.Customer;
 import iuh.fit.se.techgalaxy.entities.Role;
-import iuh.fit.se.techgalaxy.entities.SystemUser;
 import iuh.fit.se.techgalaxy.entities.enumeration.CustomerStatus;
 import iuh.fit.se.techgalaxy.mapper.RoleMapper;
 
@@ -15,7 +17,9 @@ import iuh.fit.se.techgalaxy.service.RoleService;
 import iuh.fit.se.techgalaxy.service.impl.AccountServiceImpl;
 import iuh.fit.se.techgalaxy.service.impl.CustomerServiceImpl;
 import iuh.fit.se.techgalaxy.service.impl.SystemUserServiceImpl;
+import iuh.fit.se.techgalaxy.service.impl.TokenServiceImpl;
 import iuh.fit.se.techgalaxy.util.SecurityUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,6 +58,11 @@ public class AccountController {
     private final SecurityUtil securityUtil;
     private  final RoleRepository roleRepository;
 
+    private final TokenServiceImpl tokenService;
+    private final TokenProvider.TokenExtractor tokenExtractor;
+
+
+
     @Value("${jwt.refresh-token-validity-in-seconds}")
     private long refreshTokenExpiration;
 
@@ -67,7 +76,9 @@ public class AccountController {
                              CustomerServiceImpl customerService,
                              RoleMapper roleMapper,
                              SystemUserServiceImpl systemUserService,
-                             RoleRepository roleRepository) {
+                             RoleRepository roleRepository,
+                             TokenServiceImpl tokenService,
+                             TokenProvider.TokenExtractor tokenExtractor) {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.accountService = accountService;
         this.passwordEncoder = passwordEncoder;
@@ -77,6 +88,8 @@ public class AccountController {
         this.roleMapper = roleMapper;
         this.systemUserService = systemUserService;
         this.roleRepository = roleRepository;
+        this.tokenService = tokenService;
+        this.tokenExtractor = tokenExtractor;
     }
 
     @PostMapping("/auth/login")
@@ -333,14 +346,29 @@ public class AccountController {
     }
 
     @PostMapping("/auth/logout")
-    public ResponseEntity<DataResponse<String>> logout() {
-        String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
+    public ResponseEntity<DataResponse<String>> logout(HttpServletRequest request) {
+        String email = SecurityUtil.getCurrentUserLogin().orElse("");
 
-        if (email.equals("")) {
-            throw new RuntimeException("No user logged in");
+        if (email.isEmpty()) {
+            throw new AppException(ErrorCode.NO_LOGIN);
         }
 
-        this.accountService.updateToken(email, "");
+        System.out.println("Email: " + email);
+
+        String token = tokenExtractor.extract(request);
+        if (token == null) {
+            throw new AppException(ErrorCode.NOT_IN_REQUEST);
+        }
+
+        System.out.println("Token: " + token);
+
+        // Blacklist token
+        tokenService.blacklistToken(token);
+
+        // Update token in account
+        this.accountService.updateToken("", email);
+
+        // Clear refresh token cookie
         ResponseCookie resCookie = ResponseCookie
                 .from("refresh_token", "")
                 .httpOnly(true)
@@ -349,6 +377,10 @@ public class AccountController {
                 .maxAge(0)
                 .build();
 
+        // Clear security context
+        SecurityContextHolder.clearContext();
+
+        // Return response
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, resCookie.toString())
                 .body(DataResponse.<String>builder()
