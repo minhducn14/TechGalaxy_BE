@@ -1,4 +1,4 @@
-package iuh.fit.se.techgalaxy.config;//package iuh.fit.se.techgalaxy.config;
+//package iuh.fit.se.techgalaxy.config;
 //
 //import org.springframework.context.annotation.Bean;
 //import org.springframework.context.annotation.Configuration;
