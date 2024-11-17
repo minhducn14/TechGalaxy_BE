@@ -50,6 +50,15 @@ public class TrademarkController {
                 .build());
     }
 
+	@GetMapping("/{name}")
+	public ResponseEntity<DataResponse<TrademarkResponse>> getTrademarkByName(@PathVariable String name){
+		TrademarkResponse trademark = trademarkServiceImpl.getTrademarkByName(name);
+
+		return ResponseEntity.ok(DataResponse.<TrademarkResponse>builder()
+				.data(List.of(trademark))
+				.build());
+	}
+
 	@PutMapping
     public ResponseEntity<DataResponse<TrademarkResponse>>update(@RequestBody TrademarkRequest trademarkRequest){
 		TrademarkResponse trademark = trademarkServiceImpl.updateTrademark(trademarkRequest.getId(),trademarkRequest.getName());
