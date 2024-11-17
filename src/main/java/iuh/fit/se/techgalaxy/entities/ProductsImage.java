@@ -26,6 +26,9 @@ public class ProductsImage {
     @Column(length = 255)
     private String path;
 
+    @Column
+    private Boolean avatar;
+
     @ManyToOne
     @JoinColumn(name = "product_variant_detail_id")
     private ProductVariantDetail productVariantDetail;
