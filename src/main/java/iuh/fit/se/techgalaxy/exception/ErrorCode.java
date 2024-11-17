@@ -14,6 +14,8 @@ public enum ErrorCode {
     INVALID_KEY(9998, "Invalid key", HttpStatus.UNAUTHORIZED),
     JWT_INVALID(9997, "JWT invalid",  HttpStatus.UNAUTHORIZED),
     UNCATEGORIZED_ERROR(9999, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
+    NO_LOGIN(9996, "No login", HttpStatus.UNAUTHORIZED),
+    NOT_IN_REQUEST(9995, "Not in request", HttpStatus.BAD_REQUEST),
 
     //8000 - 8999: error with authentication
     AUTHENTICATION_ERROR(8000, "You no access to method", HttpStatus.FORBIDDEN),
@@ -27,6 +29,7 @@ public enum ErrorCode {
     PRODUCT_NOTFOUND(1000, "Product not found", HttpStatus.NOT_FOUND),
     ACCOUNT_NOTFOUND(1001, "Account not found", HttpStatus.NOT_FOUND),
     CUSTOMER_NOTFOUND(1002, "Customer not found", HttpStatus.NOT_FOUND),
+    TRADEMARK_NOTFOUND(1003, "Trademark not found", HttpStatus.NOT_FOUND),
 
     // 2000 - 2999: Validation error in request body
     PRODUCT_DISCOUNT_INVALID(2000, "Product discount min value is {min} and max value is {max}", HttpStatus.BAD_REQUEST),
