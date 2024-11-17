@@ -36,6 +36,16 @@ public class SystemUserController {
 
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<DataResponse<SystemUserResponseDTO>> getAllSystemUsers() {
+        return ResponseEntity.ok(DataResponse.<SystemUserResponseDTO>builder()
+                .status(200)
+                .message("Fetch all system users successfully")
+                .data(systemUserService.fetchAllSystemUser())
+                .build());
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<DataResponse<SystemUserResponseDTO>> getSystemUserById(@PathVariable String id) {
         SystemUserResponseDTO user = systemUserService.fetchUserById(id);

@@ -1,10 +1,14 @@
 package iuh.fit.se.techgalaxy.dto.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ResultPaginationDTO {
     private Meta meta;
     private Object result;

@@ -40,6 +40,8 @@ public interface SystemUserService {
      */
     public SystemUserResponseDTO fetchUserById(String id);
 
+    public List<SystemUserResponseDTO> fetchAllSystemUser();
+
     /**
      * Fetch all user
      *

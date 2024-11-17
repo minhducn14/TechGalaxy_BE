@@ -66,6 +66,14 @@ public class SystemUserServiceImpl implements SystemUserService {
     }
 
     @Override
+    public List<SystemUserResponseDTO> fetchAllSystemUser() {
+        List<SystemUser> users = systemUserRepository.findAll();
+        return users.stream()
+                .map(SystemUserMapper.INSTANCE::toResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public ResultPaginationDTO fetchAllSystemUser(Specification<SystemUser> spec, Pageable pageable) {
         Page<SystemUser> page = systemUserRepository.findAll(spec, pageable);
         ResultPaginationDTO rs = new ResultPaginationDTO();
