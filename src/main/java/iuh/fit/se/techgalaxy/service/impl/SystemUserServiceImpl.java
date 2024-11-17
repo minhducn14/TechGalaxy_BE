@@ -94,11 +94,11 @@ public class SystemUserServiceImpl implements SystemUserService {
         if (reqUser.getAddress() != null)
             existingUser.setAddress(reqUser.getAddress());
         if (reqUser.getSystemUserStatus() != null)
-            existingUser.setSystemUserStatus(SystemUserStatus.valueOf(reqUser.getSystemUserStatus()));
+            existingUser.setSystemUserStatus(reqUser.getSystemUserStatus());
         if (reqUser.getLevel() != null)
-            existingUser.setLevel(SystemUserLevel.valueOf(reqUser.getLevel()));
+            existingUser.setLevel(reqUser.getLevel());
         if (reqUser.getGender() != null)
-            existingUser.setGender(Gender.valueOf(reqUser.getGender()));
+            existingUser.setGender(reqUser.getGender());
         if (reqUser.getAvatar() != null)
             existingUser.setAvatar(reqUser.getAvatar());
 

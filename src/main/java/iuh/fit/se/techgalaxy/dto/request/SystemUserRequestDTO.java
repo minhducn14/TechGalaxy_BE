@@ -1,6 +1,9 @@
 package iuh.fit.se.techgalaxy.dto.request;
 
 import iuh.fit.se.techgalaxy.entities.Role;
+import iuh.fit.se.techgalaxy.entities.enumeration.Gender;
+import iuh.fit.se.techgalaxy.entities.enumeration.SystemUserLevel;
+import iuh.fit.se.techgalaxy.entities.enumeration.SystemUserStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
@@ -24,13 +27,13 @@ public class SystemUserRequestDTO {
     private String address;
 
     @NotBlank(message = "SYSTEM_USER_STATUS_NOT_EMPTY")
-    private String systemUserStatus;
+    private SystemUserStatus systemUserStatus;
 
     @NotBlank(message = "LEVEL_NOT_EMPTY")
-    private String level;
+    private SystemUserLevel level;
 
     @NotBlank(message = "GENDER_NOT_EMPTY")
-    private String gender;
+    private Gender gender;
 
     private String avatar;
 
