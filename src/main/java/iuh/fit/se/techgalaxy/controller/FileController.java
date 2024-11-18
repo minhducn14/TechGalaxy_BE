@@ -83,31 +83,35 @@ public class FileController {
     // Upload multiple files
     @PostMapping("/files")
     public ResponseEntity<DataResponse<List<UploadFileResponse>>> uploadMultiple(
-            @RequestParam(name = "files", required = false) List<MultipartFile> files,
+            @RequestParam(name = "files", required = false) MultipartFile[] files,
             @RequestParam("folder") String folder
     ) throws URISyntaxException, IOException {
-        if (files == null || files.isEmpty()) {
+        if (files == null || files.length == 0) {
             throw new AppException(ErrorCode.FILE_EMPTY);
         }
 
         List<String> allowedExtensions = Arrays.asList("jpg", "jpeg", "png", "svg");
         List<UploadFileResponse> responses = new ArrayList<>();
+        List<String> errors = new ArrayList<>();
         this.fileService.createNestedDirectory(baseURI + folder);
-
 
         for (MultipartFile file : files) {
             if (file.isEmpty()) {
-                throw new AppException(ErrorCode.FILE_EMPTY);
+                errors.add("File is empty: " + file.getOriginalFilename());
+                continue;
             }
 
             String fileName = file.getOriginalFilename();
             boolean isValid = allowedExtensions.stream().anyMatch(item -> fileName.toLowerCase().endsWith(item));
 
             if (!isValid) {
-                throw new AppException(ErrorCode.INVALID_FILE_EXTENSION);
+                errors.add("Invalid file extension: " + fileName);
+                continue;
             }
+
             if (file.getSize() > 50 * 1024 * 1024) {
-                throw new AppException(ErrorCode.FILE_SIZE_EXCEEDED);
+                errors.add("File size exceeded for: " + fileName);
+                continue;
             }
 
             String uploadFile = this.fileService.store(file, folder);
