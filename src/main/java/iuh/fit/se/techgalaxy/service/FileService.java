@@ -16,6 +16,8 @@ public interface FileService {
 
     public long getFileLength(String fileName, String folder) throws URISyntaxException;
 
+    public String createNestedDirectory(String folder) throws IOException, URISyntaxException;
+
     public InputStreamResource getResource(String fileName, String folder)
             throws URISyntaxException, FileNotFoundException;
 }

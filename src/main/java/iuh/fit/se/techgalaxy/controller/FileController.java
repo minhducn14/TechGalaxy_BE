@@ -20,6 +20,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class FileController {
 
 
     //Upload single file
-    @PostMapping("/files")
+    @PostMapping("/file")
     public ResponseEntity<DataResponse<UploadFileResponse>> upload(
             @RequestParam(name = "file", required = false) MultipartFile file,
             @RequestParam("folder") String folder
@@ -57,7 +58,7 @@ public class FileController {
             throw new AppException(ErrorCode.FILE_EMPTY);
         }
         String fileName = file.getOriginalFilename();
-        List<String> allowedExtensions = Arrays.asList("pdf", "jpg", "jpeg", "png", "doc", "docx");
+        List<String> allowedExtensions = Arrays.asList("jpg", "jpeg", "png", "svg");
         boolean isValid = allowedExtensions.stream().anyMatch(item -> fileName.toLowerCase().endsWith(item));
 
         if (!isValid) {
@@ -67,7 +68,7 @@ public class FileController {
             throw new AppException(ErrorCode.FILE_SIZE_EXCEEDED);
         }
         // create a directory if not exist
-        this.fileService.createDirectory(baseURI + folder);
+        this.fileService.createNestedDirectory(baseURI + folder);
 
         // store file
         String uploadFile = this.fileService.store(file, folder);
@@ -76,6 +77,50 @@ public class FileController {
 
         return ResponseEntity.ok(DataResponse.<UploadFileResponse>builder()
                 .data(List.of(res))
+                .build());
+    }
+
+    // Upload multiple files
+    @PostMapping("/files")
+    public ResponseEntity<DataResponse<List<UploadFileResponse>>> uploadMultiple(
+            @RequestParam(name = "files", required = false) MultipartFile[] files,
+            @RequestParam("folder") String folder
+    ) throws URISyntaxException, IOException {
+        if (files == null || files.length == 0) {
+            throw new AppException(ErrorCode.FILE_EMPTY);
+        }
+
+        List<String> allowedExtensions = Arrays.asList("jpg", "jpeg", "png", "svg");
+        List<UploadFileResponse> responses = new ArrayList<>();
+        List<String> errors = new ArrayList<>();
+        this.fileService.createNestedDirectory(baseURI + folder);
+
+        for (MultipartFile file : files) {
+            if (file.isEmpty()) {
+                errors.add("File is empty: " + file.getOriginalFilename());
+                continue;
+            }
+
+            String fileName = file.getOriginalFilename();
+            boolean isValid = allowedExtensions.stream().anyMatch(item -> fileName.toLowerCase().endsWith(item));
+
+            if (!isValid) {
+                errors.add("Invalid file extension: " + fileName);
+                continue;
+            }
+
+            if (file.getSize() > 50 * 1024 * 1024) {
+                errors.add("File size exceeded for: " + fileName);
+                continue;
+            }
+
+            String uploadFile = this.fileService.store(file, folder);
+            UploadFileResponse res = new UploadFileResponse(uploadFile, Instant.now());
+            responses.add(res);
+        }
+
+        return ResponseEntity.ok(DataResponse.<List<UploadFileResponse>>builder()
+                .data(List.of(responses))
                 .build());
     }
 
