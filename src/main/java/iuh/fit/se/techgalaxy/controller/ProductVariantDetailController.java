@@ -5,7 +5,7 @@ import iuh.fit.se.techgalaxy.dto.request.ProductVariantDetailRequest;
 import iuh.fit.se.techgalaxy.dto.response.DataResponse;
 import iuh.fit.se.techgalaxy.dto.response.ProductPageResponse;
 import iuh.fit.se.techgalaxy.dto.response.ProductVariantDetailResponse;
-import iuh.fit.se.techgalaxy.service.impl.ProductVariantDetailServiceImpl;
+import iuh.fit.se.techgalaxy.service.ProductVariantDetailService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ import java.util.Set;
 @RequestMapping({"/variants/{variantId}/details", "/variants/details"})
 public class ProductVariantDetailController {
     static String successMessage = "success";
-    ProductVariantDetailServiceImpl productVariantDetailServiceImpl;
+    ProductVariantDetailService productVariantDetailServiceImpl;
     PagedResourcesAssembler<ProductPageResponse> pagedResourcesAssembler;
 
     @GetMapping

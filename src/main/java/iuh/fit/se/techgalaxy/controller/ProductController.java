@@ -3,7 +3,7 @@ package iuh.fit.se.techgalaxy.controller;
 import iuh.fit.se.techgalaxy.dto.request.ProductRequest;
 import iuh.fit.se.techgalaxy.dto.response.DataResponse;
 import iuh.fit.se.techgalaxy.dto.response.ProductResponse;
-import iuh.fit.se.techgalaxy.service.impl.ProductServiceImpl;
+import iuh.fit.se.techgalaxy.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ import java.util.Set;
 @RestController
 @RequestMapping("/products")
 public class ProductController {
-    ProductServiceImpl productServiceImpl;
+    ProductService productServiceImpl;
 
     @GetMapping
     ResponseEntity<DataResponse<ProductResponse>> getAllProducts() {
