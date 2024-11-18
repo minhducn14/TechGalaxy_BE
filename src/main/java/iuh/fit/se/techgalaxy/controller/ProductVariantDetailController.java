@@ -3,12 +3,17 @@ package iuh.fit.se.techgalaxy.controller;
 import iuh.fit.se.techgalaxy.dto.request.ProductDetailUpdateRequest;
 import iuh.fit.se.techgalaxy.dto.request.ProductVariantDetailRequest;
 import iuh.fit.se.techgalaxy.dto.response.DataResponse;
+import iuh.fit.se.techgalaxy.dto.response.ProductPageResponse;
 import iuh.fit.se.techgalaxy.dto.response.ProductVariantDetailResponse;
 import iuh.fit.se.techgalaxy.service.impl.ProductVariantDetailServiceImpl;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +27,7 @@ import java.util.Set;
 @RequestMapping({"/variants/{variantId}/details", "/variants/details"})
 public class ProductVariantDetailController {
     ProductVariantDetailServiceImpl productVariantDetailServiceImpl;
-
+    PagedResourcesAssembler<ProductPageResponse> pagedResourcesAssembler;
     @GetMapping
     public ResponseEntity<DataResponse<ProductVariantDetailResponse>> getAllProductVariantDetails(@PathVariable String variantId) {
         Set<ProductVariantDetailResponse> productVariantDetailResponses = new HashSet<>();
@@ -48,4 +53,19 @@ public class ProductVariantDetailController {
         return ResponseEntity.ok(DataResponse.<Boolean>builder().message("success").build());
     }
 
+    @GetMapping("/filter")
+    public ResponseEntity<PagedModel<EntityModel<ProductPageResponse>>> getFilteredProductDetails(
+            @RequestParam(required = false) List<String> trademark,
+            @RequestParam(required = false) Double minPrice,
+            @RequestParam(required = false) Double maxPrice,
+            @RequestParam(required = false) List<String> memory,
+            @RequestParam(required = false) List<String> usageCategoryId,
+            @RequestParam(required = false) List<String> values,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size) {
+        Page<ProductPageResponse> response = productVariantDetailServiceImpl.getFilteredProductDetails(
+                trademark, minPrice, maxPrice, memory, usageCategoryId, values, page, size);
+        PagedModel<EntityModel<ProductPageResponse>> pagedModel = pagedResourcesAssembler.toModel(response);
+        return ResponseEntity.ok(pagedModel);
+    }
 }

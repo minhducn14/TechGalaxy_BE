@@ -2,6 +2,7 @@ package iuh.fit.se.techgalaxy.service.impl;
 
 import iuh.fit.se.techgalaxy.dto.request.ProductDetailUpdateRequest;
 import iuh.fit.se.techgalaxy.dto.request.ProductVariantDetailRequest;
+import iuh.fit.se.techgalaxy.dto.response.ProductPageResponse;
 import iuh.fit.se.techgalaxy.dto.response.ProductVariantDetailResponse;
 import iuh.fit.se.techgalaxy.entities.Color;
 import iuh.fit.se.techgalaxy.entities.Memory;
@@ -20,6 +21,9 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -88,5 +92,12 @@ public class ProductVariantDetailServiceImpl implements ProductVariantDetailServ
         } catch (Exception e) {
            throw  new AppException(ErrorCode.PRODUCT_DELETE_FAILED);
         }
+    }
+
+    @Override
+    public Page<ProductPageResponse> getFilteredProductDetails(List<String> trademark, Double minPrice, Double maxPrice, List<String> memory, List<String> usageCategoryId, List<String> values, Integer page, Integer size) {
+        Pageable pageable  = PageRequest.of(page, size);
+        Page<ProductVariantDetail> productVariantDetails = productVariantDetailRepository.findFilteredProductDetails(trademark, minPrice, maxPrice, memory, usageCategoryId, values, pageable );
+        return productVariantDetails.map(productVariantDetailMapper::toResponsePage);
     }
 }
