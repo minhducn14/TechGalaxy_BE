@@ -21,6 +21,7 @@ public interface ProductVariantDetailService {
                                                         List<String> memory,
                                                         List<String> usageCategoryId,
                                                         List<String> values,
+                                                        String sort,
                                                         Integer page,
                                                         Integer size);
 

@@ -21,23 +21,23 @@ public interface ProductVariantDetailRepository extends JpaRepository<ProductVar
     int updatePriceByVariantId(@Param("price") Double price, @Param("sale") Double sale, @Param("variantId") String variantId);
 
     @Query(value = """
-            SELECT pvd
+            SELECT DISTINCT pvd
             FROM ProductVariantDetail pvd
-            JOIN pvd.productVariant pv
-            JOIN pv.values vl 
+            JOIN pvd.productVariant pv 
             JOIN pv.product p
             JOIN p.trademark t
             JOIN pvd.memory m
+            JOIN pv.values vl 
             WHERE (:trademark IS NULL OR t.id IN :trademark)
               AND (pvd.price BETWEEN COALESCE(:minPrice, 0) AND COALESCE(:maxPrice, 999999999))
               AND (:memory IS NULL OR m.id IN :memory)
               AND (:usageCategoryId IS NULL OR pv.usageCategory.id IN :usageCategoryId)
               AND (:values IS NULL OR vl.value IN :values)
               AND pvd.id IN (
-                    SELECT MIN(pvd2.id)
-                    FROM ProductVariantDetail pvd2
-                    GROUP BY pvd2.productVariant.id
-              )
+                           SELECT MIN(pvd2.id)
+                           FROM ProductVariantDetail pvd2
+                           GROUP BY pvd2.productVariant.id
+                       )
             """)
     Page<ProductVariantDetail> findFilteredProductDetails(
             @Param("trademark") List<String> trademark,
