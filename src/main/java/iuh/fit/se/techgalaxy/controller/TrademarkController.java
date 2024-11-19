@@ -36,21 +36,19 @@ public class TrademarkController {
 
 	@PostMapping
 	public ResponseEntity<DataResponse<TrademarkResponse>> createTrademark(@RequestParam String name) {
-
 		return ResponseEntity.ok(DataResponse.<TrademarkResponse>builder()
 				.data(new HashSet<>(Set.of(trademarkServiceImpl.createTrademark(name)))).build());
 	}
 
-	@GetMapping("/{id}")
-    public ResponseEntity<DataResponse<TrademarkResponse>> getTrademarkBuID(@PathVariable String id){
+	@GetMapping("/id/{id}")
+    public ResponseEntity<DataResponse<TrademarkResponse>> getTrademarkByID(@PathVariable String id){
     	TrademarkResponse trademark = trademarkServiceImpl.getByID(id);
-    	
     	return ResponseEntity.ok(DataResponse.<TrademarkResponse>builder()
                 .data(List.of(trademark))
                 .build());
     }
 
-	@GetMapping("/{name}")
+	@GetMapping("/name/{name}")
 	public ResponseEntity<DataResponse<TrademarkResponse>> getTrademarkByName(@PathVariable String name){
 		TrademarkResponse trademark = trademarkServiceImpl.getTrademarkByName(name);
 

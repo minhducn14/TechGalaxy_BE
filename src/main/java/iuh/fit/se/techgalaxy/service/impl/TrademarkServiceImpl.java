@@ -23,13 +23,12 @@ import org.springframework.stereotype.Service;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class TrademarkServiceImpl implements TrademarkService {
 	TrademarkRepository trademarkRepository;
-	TrademarkMapper trademarkMapper;
 
 	@Override
 	public TrademarkResponse createTrademark(String name) {
 		Trademark trademark = new Trademark();
 		trademark.setName(name);
-		return trademarkMapper.toTrademarkResponse(trademarkRepository.save(trademark));
+		return TrademarkMapper.INSTANCE.toTrademarkResponse(trademarkRepository.save(trademark));
 	}
 
 	@Override
@@ -50,7 +49,7 @@ public class TrademarkServiceImpl implements TrademarkService {
 				.orElseThrow(() -> new AppException(ErrorCode.TRADEMARK_NOTFOUND));
 		if (trademark != null) {
 			trademark.setName(newName);
-			return trademarkMapper.toTrademarkResponse(trademarkRepository.save(trademark));
+			return TrademarkMapper.INSTANCE.toTrademarkResponse(trademarkRepository.save(trademark));
 		}
 		return null;
 
@@ -59,22 +58,21 @@ public class TrademarkServiceImpl implements TrademarkService {
 	@Override
 	public TrademarkResponse getTrademarkByName(String name) {
 		Trademark trademark = trademarkRepository.findTrademarkByName(name);
-		return trademarkMapper.toTrademarkResponse(trademark);
+		return TrademarkMapper.INSTANCE.toTrademarkResponse(trademark);
 
 	}
 
 	@Override
 	public List<TrademarkResponse> getAllTrademarks() {
 		List<Trademark> trademarks = trademarkRepository.findAll();
-		return trademarks.stream().map(trademarkMapper::toTrademarkResponse).collect(Collectors.toList());
+		return trademarks.stream().map(TrademarkMapper.INSTANCE::toTrademarkResponse).collect(Collectors.toList());
 	}
 
 	@Override
 	public TrademarkResponse getByID(String id) {
-		// TODO Auto-generated method stub
 		Trademark trademark = trademarkRepository.findById(id)
 				.orElseThrow(() -> new AppException(ErrorCode.TRADEMARK_NOTFOUND));
-		return trademarkMapper.toTrademarkResponse(trademark);
+		return TrademarkMapper.INSTANCE.toTrademarkResponse(trademark);
 	}
 
 }

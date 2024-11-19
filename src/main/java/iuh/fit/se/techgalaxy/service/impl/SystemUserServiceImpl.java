@@ -5,8 +5,6 @@ import iuh.fit.se.techgalaxy.dto.response.ResultPaginationDTO;
 import iuh.fit.se.techgalaxy.dto.response.SystemUserResponseDTO;
 import iuh.fit.se.techgalaxy.entities.Account;
 import iuh.fit.se.techgalaxy.entities.SystemUser;
-import iuh.fit.se.techgalaxy.entities.enumeration.Gender;
-import iuh.fit.se.techgalaxy.entities.enumeration.SystemUserLevel;
 import iuh.fit.se.techgalaxy.entities.enumeration.SystemUserStatus;
 import iuh.fit.se.techgalaxy.mapper.SystemUserMapper;
 import iuh.fit.se.techgalaxy.repository.AccountRepository;

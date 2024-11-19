@@ -15,5 +15,4 @@ import lombok.experimental.FieldDefaults;
 public class TrademarkRequest {
 	String id;
 	String name;
-
 }
