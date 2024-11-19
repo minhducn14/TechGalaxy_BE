@@ -30,6 +30,8 @@ public enum ErrorCode {
     ACCOUNT_NOTFOUND(1001, "Account not found", HttpStatus.NOT_FOUND),
     CUSTOMER_NOTFOUND(1002, "Customer not found", HttpStatus.NOT_FOUND),
     TRADEMARK_NOTFOUND(1003, "Trademark not found", HttpStatus.NOT_FOUND),
+    FEEDBACK_NOTFOUND(1004, "Feedback not found", HttpStatus.NOT_FOUND),
+    IMAGE_FEEDBACK_NOTFOUND(1005, "Image Feedback not found", HttpStatus.NOT_FOUND),
 
     // 2000 - 2999: Validation error in request body
     PRODUCT_DISCOUNT_INVALID(2000, "Product discount min value is {min} and max value is {max}", HttpStatus.BAD_REQUEST),
