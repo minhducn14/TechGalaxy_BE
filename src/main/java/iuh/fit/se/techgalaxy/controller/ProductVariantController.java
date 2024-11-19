@@ -3,7 +3,7 @@ package iuh.fit.se.techgalaxy.controller;
 import iuh.fit.se.techgalaxy.dto.request.ProductVariantRequest;
 import iuh.fit.se.techgalaxy.dto.response.DataResponse;
 import iuh.fit.se.techgalaxy.dto.response.ProductVariantResponse;
-import iuh.fit.se.techgalaxy.service.impl.ProductVariantServiceImpl;
+import iuh.fit.se.techgalaxy.service.ProductVariantService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -18,7 +18,7 @@ import java.util.Set;
 @RestController
 @RequestMapping({"/products/{productId}/variants", "/products/variants"})
 public class ProductVariantController {
-    ProductVariantServiceImpl productVariantServiceImpl;
+    ProductVariantService productVariantServiceImpl;
     @GetMapping
     public ResponseEntity<DataResponse<ProductVariantResponse>> getAllProductVariants(@PathVariable String productId) {
         return ResponseEntity.ok(DataResponse.<ProductVariantResponse>builder().data(productVariantServiceImpl.getAllProductVariantsByProductId(productId)).build());

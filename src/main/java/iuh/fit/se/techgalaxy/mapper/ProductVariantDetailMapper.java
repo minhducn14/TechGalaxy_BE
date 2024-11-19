@@ -2,6 +2,7 @@ package iuh.fit.se.techgalaxy.mapper;
 
 import iuh.fit.se.techgalaxy.dto.request.ProductDetailUpdateRequest;
 import iuh.fit.se.techgalaxy.dto.request.ProductVariantDetailRequest;
+import iuh.fit.se.techgalaxy.dto.response.ProductPageResponse;
 import iuh.fit.se.techgalaxy.dto.response.ProductVariantDetailResponse;
 import iuh.fit.se.techgalaxy.entities.Color;
 import iuh.fit.se.techgalaxy.entities.Memory;
@@ -55,5 +56,14 @@ public interface ProductVariantDetailMapper {
                                                 Color color,
                                                 Memory memory,
                                                 ProductVariant productVariant);
-    void  toUpdate(@MappingTarget ProductVariantDetail productVariantDetail, ProductDetailUpdateRequest productDetailUpdateRequest);
+
+    void toUpdate(@MappingTarget ProductVariantDetail productVariantDetail, ProductDetailUpdateRequest productDetailUpdateRequest);
+
+
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "productVariant.id", target = "variantId")
+    @Mapping(source = "productVariant.name", target = "name")
+    @Mapping(source = "productVariant.avatar", target = "avatar")
+    ProductPageResponse toResponsePage(ProductVariantDetail detail);
+
 }

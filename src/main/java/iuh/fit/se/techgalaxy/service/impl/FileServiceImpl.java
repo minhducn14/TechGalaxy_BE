@@ -51,6 +51,22 @@ public class FileServiceImpl implements FileService {
         }
     }
 
+    public String createNestedDirectory(String folder) throws IOException, URISyntaxException {
+//        Xóa đi phần đầu chuỗi là base URI
+        folder = folder.substring(baseURI.length());
+        String[] folders = folder.split("/");
+        StringBuilder currentPath = new StringBuilder(baseURI);
+
+        for (String subFolder : folders) {
+            currentPath.append(subFolder).append("/");
+            createDirectory(currentPath.toString());
+        }
+
+        return currentPath.toString();
+    }
+
+
+
     @Override
     public String store(MultipartFile file, String folder) throws URISyntaxException, IOException {
         String finalName = System.currentTimeMillis() + "-" + file.getOriginalFilename();

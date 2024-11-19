@@ -2,6 +2,7 @@ package iuh.fit.se.techgalaxy.service.impl;
 
 import iuh.fit.se.techgalaxy.dto.request.ProductDetailUpdateRequest;
 import iuh.fit.se.techgalaxy.dto.request.ProductVariantDetailRequest;
+import iuh.fit.se.techgalaxy.dto.response.ProductPageResponse;
 import iuh.fit.se.techgalaxy.dto.response.ProductVariantDetailResponse;
 import iuh.fit.se.techgalaxy.entities.Color;
 import iuh.fit.se.techgalaxy.entities.Memory;
@@ -15,18 +16,18 @@ import iuh.fit.se.techgalaxy.repository.MemoryRepository;
 import iuh.fit.se.techgalaxy.repository.ProductVariantDetailRepository;
 import iuh.fit.se.techgalaxy.repository.ProductVariantRepository;
 import iuh.fit.se.techgalaxy.service.ProductVariantDetailService;
-import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -59,15 +60,15 @@ public class ProductVariantDetailServiceImpl implements ProductVariantDetailServ
 
             for (ProductVariantDetailRequest.ColorRequest colorRequest : requestDTO.getColors()) {
                 Color color = colorRepository.findById(colorRequest.getColorId())
-                        .orElseThrow(() ->new AppException(ErrorCode.COLOR_NOTFOUND));
+                        .orElseThrow(() -> new AppException(ErrorCode.COLOR_NOTFOUND));
                 ProductVariantDetail detail = productVariantDetailMapper.toProductVariantDetail(requestDTO, colorRequest, color, memory, productVariant);
-               log.info(detail.getStatus().toString());
                 detailsToSave.add(detail);
             }
         }
         productVariantDetailRepository.saveAll(detailsToSave);
         return true;
     }
+
     @Override
     public Boolean updateProductVariantDetail(String productDetailId, ProductDetailUpdateRequest productDetailUpdateRequest) {
         boolean state = true;
@@ -77,16 +78,25 @@ public class ProductVariantDetailServiceImpl implements ProductVariantDetailServ
         try {
             productVariantDetailRepository.save(productVariantDetail);
         } catch (Exception e) {
-           throw new AppException(ErrorCode.PRODUCT_UPDATE_FAILED);
+            throw new AppException(ErrorCode.PRODUCT_UPDATE_FAILED);
         }
         return state;
     }
+
     @Override
     public void deleteProductVariantDetail(String productDetailId) {
         try {
             productVariantDetailRepository.deleteById(productDetailId);
         } catch (Exception e) {
-           throw  new AppException(ErrorCode.PRODUCT_DELETE_FAILED);
+            throw new AppException(ErrorCode.PRODUCT_DELETE_FAILED);
         }
+    }
+
+    @Override
+    public Page<ProductPageResponse> getFilteredProductDetails(List<String> trademark, Double minPrice, Double maxPrice, List<String> memory, List<String> usageCategoryId, List<String> values, String sort, Integer page, Integer size) {
+        Sort sortOrder = sort.equalsIgnoreCase("asc") ? Sort.by("price").ascending() : Sort.by("price").descending();
+        Pageable pageable = PageRequest.of(page, size, sortOrder);
+        Page<ProductVariantDetail> productVariantDetails = productVariantDetailRepository.findFilteredProductDetails(trademark, minPrice, maxPrice, memory, usageCategoryId, values, pageable);
+        return productVariantDetails.map(productVariantDetailMapper::toResponsePage);
     }
 }
