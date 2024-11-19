@@ -484,4 +484,31 @@ public class AccountController {
                 .data(Collections.singletonList(updatedAccount))
                 .build());
     }
+
+    @GetMapping
+    public ResponseEntity<DataResponse<List<Account>>> getAllAccounts() {
+        List<Account> accounts = accountService.findAllAccounts();
+        return ResponseEntity.ok(DataResponse.<List<Account>>builder()
+                .status(200)
+                .message("Accounts retrieved successfully")
+                .data(List.of(accounts))
+                .build());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DataResponse<Account>> getAccountById(@PathVariable String id) {
+        Account account = accountService.getAccountById(id).orElse(null);
+        if (account == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(DataResponse.<Account>builder()
+                            .status(404)
+                            .message("Account not found")
+                            .build());
+        }
+        return ResponseEntity.ok(DataResponse.<Account>builder()
+                .status(200)
+                .message("Account retrieved successfully")
+                .data(Collections.singletonList(account))
+                .build());
+    }
 }
