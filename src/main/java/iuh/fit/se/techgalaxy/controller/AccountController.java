@@ -55,7 +55,7 @@ public class AccountController {
     private final SystemUserServiceImpl systemUserService;
 
     private final SecurityUtil securityUtil;
-    private  final RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
     private final TokenServiceImpl tokenService;
     private final TokenProvider.TokenExtractor tokenExtractor;
