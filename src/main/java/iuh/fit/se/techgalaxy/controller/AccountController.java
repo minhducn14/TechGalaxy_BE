@@ -487,7 +487,7 @@ public class AccountController {
 
     @GetMapping
     public ResponseEntity<DataResponse<List<Account>>> getAllAccounts() {
-        List<Account> accounts = accountService.findAllAccounts();
+        List<Account> accounts = accountService.findAllSystemUserAccounts();
         return ResponseEntity.ok(DataResponse.<List<Account>>builder()
                 .status(200)
                 .message("Accounts retrieved successfully")

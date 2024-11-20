@@ -93,8 +93,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<Account> findAllAccounts() {
-        return accountRepository.findAll();
+    public List<Account> findAllSystemUserAccounts() {
+        return accountRepository.findAllSystemUserAccounts();
     }
 
     @Override

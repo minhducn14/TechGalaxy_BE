@@ -50,7 +50,7 @@ public interface AccountService {
      * @return List<Account> danh sách tất cả tài khoản
      * author: Vũ Nguyễn Minh Đức
      */
-    List<Account> findAllAccounts();
+    List<Account> findAllSystemUserAccounts();
 
     /**
      * Tìm kiếm tài khoản dựa trên các tiêu chí lọc.
