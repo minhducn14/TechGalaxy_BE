@@ -33,10 +33,12 @@ public class FileServiceImpl implements FileService {
         this.baseURI = uploadPath.toString();
         this.baseURI =  this.baseURI.replace("\\", "/");
         this.baseURI = "file:///"+ this.baseURI+ "/";
+        this.baseURI = this.baseURI.replace(" ", "%20");
         
     }
     @Override
     public void createDirectory(String folder) throws URISyntaxException {
+        folder = folder.replace(" ", "%20");
         URI uri = new URI(folder);
         Path path = Paths.get(uri);
         File tmpDir = new File(path.toString());
@@ -53,6 +55,7 @@ public class FileServiceImpl implements FileService {
 
     public String createNestedDirectory(String folder) throws IOException, URISyntaxException {
 //        Xóa đi phần đầu chuỗi là base URI
+        folder = folder.replace(" ", "%20");
         folder = folder.substring(baseURI.length());
         String[] folders = folder.split("/");
         StringBuilder currentPath = new StringBuilder(baseURI);

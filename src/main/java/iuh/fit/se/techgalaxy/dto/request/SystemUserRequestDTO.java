@@ -26,13 +26,10 @@ public class SystemUserRequestDTO {
     @Pattern(regexp = "^[a-zA-Z0-9\\s,.'-]{1,100}$", message = "ADDRESS_INVALID")
     private String address;
 
-    @NotBlank(message = "SYSTEM_USER_STATUS_NOT_EMPTY")
     private SystemUserStatus systemUserStatus;
 
-    @NotBlank(message = "LEVEL_NOT_EMPTY")
     private SystemUserLevel level;
 
-    @NotBlank(message = "GENDER_NOT_EMPTY")
     private Gender gender;
 
     private String avatar;

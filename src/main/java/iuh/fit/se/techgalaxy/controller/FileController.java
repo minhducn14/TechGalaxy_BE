@@ -44,6 +44,7 @@ public class FileController {
         this.baseURI = uploadPath.toString();
         this.baseURI =  this.baseURI.replace("\\", "/");
         this.baseURI = "file:///"+ this.baseURI+ "/";
+        this.baseURI = this.baseURI.replace(" ", "%20");
     }
 
 
@@ -68,6 +69,7 @@ public class FileController {
             throw new AppException(ErrorCode.FILE_SIZE_EXCEEDED);
         }
         // create a directory if not exist
+        folder= folder.replace(" ", "%20");
         this.fileService.createNestedDirectory(baseURI + folder);
 
         // store file
@@ -93,6 +95,8 @@ public class FileController {
         List<String> allowedExtensions = Arrays.asList("jpg", "jpeg", "png", "svg");
         List<UploadFileResponse> responses = new ArrayList<>();
         List<String> errors = new ArrayList<>();
+        folder= folder.replace(" ", "%20");
+
         this.fileService.createNestedDirectory(baseURI + folder);
 
         for (MultipartFile file : files) {
