@@ -485,12 +485,12 @@ public class AccountController {
     }
 
     @GetMapping
-    public ResponseEntity<DataResponse<List<AccountResponse>>> getAllAccounts() {
+    public ResponseEntity<DataResponse<AccountResponse>> getAllAccounts() {
         List<AccountResponse> accounts = accountService.findAllSystemUserAccounts();
-        return ResponseEntity.ok(DataResponse.<List<AccountResponse>>builder()
+        return ResponseEntity.ok(DataResponse.<AccountResponse>builder()
                 .status(200)
                 .message("Accounts retrieved successfully")
-                .data(List.of(accounts))
+                .data(accounts)
                 .build());
     }
 
