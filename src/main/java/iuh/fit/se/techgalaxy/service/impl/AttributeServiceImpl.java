@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import iuh.fit.se.techgalaxy.dto.response.ValueResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -90,4 +91,9 @@ public class AttributeServiceImpl implements AttributeService {
 		return true;
 	}
 
+	@Override
+	public List<ValueResponse> getValueByNameAtri(String name) {
+		List<Value> values = valueRepository.findDistinctValuesByNameAndAttributeName(name);
+		return values.stream().map(valueMapper::toValueResponse).toList();
+	}
 }

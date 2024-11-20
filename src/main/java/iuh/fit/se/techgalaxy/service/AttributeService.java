@@ -6,6 +6,7 @@ import java.util.Set;
 import iuh.fit.se.techgalaxy.dto.request.AttributeRequest;
 import iuh.fit.se.techgalaxy.dto.request.AttributeValueRequest;
 import iuh.fit.se.techgalaxy.dto.response.AttributeResponse;
+import iuh.fit.se.techgalaxy.dto.response.ValueResponse;
 
 public interface AttributeService {
 
@@ -20,6 +21,8 @@ public interface AttributeService {
 	Set<AttributeResponse> getAllAttribute();
 	
 	 boolean createValueProductVariant(String variantId, List<AttributeValueRequest> attributeValueRequest);
+
+	 List<ValueResponse> getValueByNameAtri(String name);
 
 	
 }

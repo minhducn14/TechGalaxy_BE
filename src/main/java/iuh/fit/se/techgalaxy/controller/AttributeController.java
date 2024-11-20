@@ -5,6 +5,7 @@ import iuh.fit.se.techgalaxy.dto.request.AttributeValueRequest;
 import iuh.fit.se.techgalaxy.dto.response.AttributeResponse;
 import iuh.fit.se.techgalaxy.dto.response.DataResponse;
 import iuh.fit.se.techgalaxy.dto.response.ProductResponse;
+import iuh.fit.se.techgalaxy.dto.response.ValueResponse;
 import iuh.fit.se.techgalaxy.service.impl.AttributeServiceImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -12,9 +13,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -63,5 +62,12 @@ public class AttributeController {
 	public ResponseEntity<DataResponse<Object>> createAttributeValueVariant(@RequestParam String provariant, @RequestBody List<AttributeValueRequest> request) {
 		attributeServiceImpl.createValueProductVariant(provariant,request);
 		return ResponseEntity.ok(DataResponse.<Object>builder().message("Ok").build());
+	}
+
+	@GetMapping("/atributevalue/{name}")
+	public ResponseEntity<DataResponse<List<ValueResponse>>> getValueByNameAtri(@PathVariable String name){
+		Collection<List<ValueResponse>> result = new ArrayList<>();
+		result.add(attributeServiceImpl.getValueByNameAtri(name));
+		return ResponseEntity.ok(DataResponse.<List<ValueResponse>>builder().data(result).build());
 	}
 }

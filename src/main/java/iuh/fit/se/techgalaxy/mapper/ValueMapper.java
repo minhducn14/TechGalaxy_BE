@@ -1,5 +1,6 @@
 package iuh.fit.se.techgalaxy.mapper;
 
+import iuh.fit.se.techgalaxy.dto.response.ValueResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -14,4 +15,7 @@ public interface ValueMapper {
 	@Mapping(target = "createdAt", ignore = true)
 	@Mapping(target = "updatedAt", ignore = true)
 	Value toValue(AttributeValueRequest valueRequest, Attribute attribute, ProductVariant productVariant);
+
+
+	ValueResponse toValueResponse(Value value);
 }
