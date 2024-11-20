@@ -124,4 +124,9 @@ public class SystemUserServiceImpl implements SystemUserService {
         List<SystemUser> users = systemUserRepository.findBySystemUserStatus(status);
         return users.stream().map(SystemUserMapper.INSTANCE::toResponseDTO).collect(Collectors.toList());
     }
+
+    @Override
+    public SystemUser findSystemUserByEmail(String email) {
+        return systemUserRepository.findSystemUserByEmail(email);
+    }
 }

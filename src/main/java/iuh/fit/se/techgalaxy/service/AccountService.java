@@ -1,6 +1,7 @@
 package iuh.fit.se.techgalaxy.service;
 
 import iuh.fit.se.techgalaxy.dto.request.AccountUpdateRequest;
+import iuh.fit.se.techgalaxy.dto.response.AccountResponse;
 import iuh.fit.se.techgalaxy.dto.response.AccountUpdateResponse;
 import iuh.fit.se.techgalaxy.entities.Account;
 import org.springframework.data.jpa.domain.Specification;
@@ -47,10 +48,10 @@ public interface AccountService {
     /**
      * Lấy danh sách tất cả tài khoản.
      *
-     * @return List<Account> danh sách tất cả tài khoản
+     * @return List<AccountResponse> danh sách tất cả tài khoản của system user
      * author: Vũ Nguyễn Minh Đức
      */
-    List<Account> findAllAccounts();
+    List<AccountResponse> findAllSystemUserAccounts();
 
     /**
      * Tìm kiếm tài khoản dựa trên các tiêu chí lọc.

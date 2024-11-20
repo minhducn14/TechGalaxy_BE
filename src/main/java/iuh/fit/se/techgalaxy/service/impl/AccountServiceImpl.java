@@ -1,19 +1,21 @@
 package iuh.fit.se.techgalaxy.service.impl;
 
 import iuh.fit.se.techgalaxy.dto.request.AccountUpdateRequest;
+import iuh.fit.se.techgalaxy.dto.response.AccountResponse;
 import iuh.fit.se.techgalaxy.dto.response.AccountUpdateResponse;
 import iuh.fit.se.techgalaxy.entities.Account;
 import iuh.fit.se.techgalaxy.entities.Role;
+import iuh.fit.se.techgalaxy.entities.SystemUser;
 import iuh.fit.se.techgalaxy.mapper.AccountMapper;
 import iuh.fit.se.techgalaxy.repository.AccountRepository;
 import iuh.fit.se.techgalaxy.repository.RoleRepository;
+import iuh.fit.se.techgalaxy.repository.SystemUserRepository;
 import iuh.fit.se.techgalaxy.service.AccountService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,15 +23,15 @@ import java.util.Optional;
 @Service
 public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
-
-    public final RoleRepository roleRepository;
+    private final SystemUserRepository systemUserRepository;
     private final PasswordEncoder passwordEncoder;
-
     private final AccountMapper accountMapper;
+    public final RoleRepository roleRepository;
 
     @Autowired
-    public AccountServiceImpl(AccountRepository accountRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository, AccountMapper accountMapper) {
+    public AccountServiceImpl(AccountRepository accountRepository, SystemUserRepository systemUserRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository, AccountMapper accountMapper) {
         this.accountRepository = accountRepository;
+        this.systemUserRepository = systemUserRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.accountMapper = accountMapper;
@@ -93,8 +95,19 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<Account> findAllAccounts() {
-        return accountRepository.findAll();
+    public List<AccountResponse> findAllSystemUserAccounts() {
+        List<AccountResponse> list = accountRepository.findAllSystemUserAccounts().stream().map(account -> {
+            AccountResponse response = new AccountResponse();
+            SystemUser systemUser = systemUserRepository.findSystemUserByEmail(account.getEmail());
+            response.setId(account.getId());
+            response.setEmail(account.getEmail());
+            response.setPassword(account.getPassword());
+            response.setRolesIds(account.getRoles().stream().map(Role::getId).toList());
+            response.setPhone(systemUser.getPhone());
+            response.setName(systemUser.getName());
+            return response;
+        }).toList();
+        return list;
     }
 
     @Override

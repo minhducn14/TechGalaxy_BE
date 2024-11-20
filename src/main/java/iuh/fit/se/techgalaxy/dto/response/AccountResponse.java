@@ -15,5 +15,7 @@ public class AccountResponse {
     private String id;
     private String email;
     private String password;
+    private String phone;
+    private String name;
     private List<String> rolesIds;
 }

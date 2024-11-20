@@ -7,7 +7,6 @@ import iuh.fit.se.techgalaxy.entities.SystemUser;
 import iuh.fit.se.techgalaxy.entities.enumeration.SystemUserStatus;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.core.userdetails.User;
 
 import java.util.List;
 
@@ -79,4 +78,5 @@ public interface SystemUserService {
      */
     public List<SystemUserResponseDTO> handleGetSystemUsersByStatus(SystemUserStatus status);
 
+    public SystemUser findSystemUserByEmail(String email);
 }
