@@ -1,17 +1,16 @@
 package iuh.fit.se.techgalaxy.controller;
 
 
-import iuh.fit.se.techgalaxy.exception.AppException;
-import iuh.fit.se.techgalaxy.exception.ErrorCode;
-import iuh.fit.se.techgalaxy.provider.TokenProvider;
 import iuh.fit.se.techgalaxy.dto.request.*;
 import iuh.fit.se.techgalaxy.dto.response.*;
 import iuh.fit.se.techgalaxy.entities.Account;
 import iuh.fit.se.techgalaxy.entities.Customer;
 import iuh.fit.se.techgalaxy.entities.Role;
 import iuh.fit.se.techgalaxy.entities.enumeration.CustomerStatus;
+import iuh.fit.se.techgalaxy.exception.AppException;
+import iuh.fit.se.techgalaxy.exception.ErrorCode;
 import iuh.fit.se.techgalaxy.mapper.RoleMapper;
-
+import iuh.fit.se.techgalaxy.provider.TokenProvider;
 import iuh.fit.se.techgalaxy.repository.RoleRepository;
 import iuh.fit.se.techgalaxy.service.RoleService;
 import iuh.fit.se.techgalaxy.service.impl.AccountServiceImpl;
@@ -486,9 +485,9 @@ public class AccountController {
     }
 
     @GetMapping
-    public ResponseEntity<DataResponse<List<Account>>> getAllAccounts() {
-        List<Account> accounts = accountService.findAllSystemUserAccounts();
-        return ResponseEntity.ok(DataResponse.<List<Account>>builder()
+    public ResponseEntity<DataResponse<List<AccountResponse>>> getAllAccounts() {
+        List<AccountResponse> accounts = accountService.findAllSystemUserAccounts();
+        return ResponseEntity.ok(DataResponse.<List<AccountResponse>>builder()
                 .status(200)
                 .message("Accounts retrieved successfully")
                 .data(List.of(accounts))
