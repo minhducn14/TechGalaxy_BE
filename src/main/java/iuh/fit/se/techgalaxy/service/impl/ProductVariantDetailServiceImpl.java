@@ -94,8 +94,14 @@ public class ProductVariantDetailServiceImpl implements ProductVariantDetailServ
 
     @Override
     public Page<ProductPageResponse> getFilteredProductDetails(List<String> trademark, Double minPrice, Double maxPrice, List<String> memory, List<String> usageCategoryId, List<String> values, String sort, Integer page, Integer size) {
-        Sort sortOrder = sort.equalsIgnoreCase("asc") ? Sort.by("price").ascending() : Sort.by("price").descending();
-        Pageable pageable = PageRequest.of(page, size, sortOrder);
+        Pageable pageable;
+        page = page > 0 ? page - 1 : 0;
+        if (sort != null && !sort.isEmpty()) {
+            Sort sortOrder = sort.equalsIgnoreCase("asc") ? Sort.by("price").ascending() : Sort.by("price").descending();
+            pageable = PageRequest.of(page, size, sortOrder);
+        } else {
+            pageable = PageRequest.of(page, size);
+        }
         Page<ProductVariantDetail> productVariantDetails = productVariantDetailRepository.findFilteredProductDetails(trademark, minPrice, maxPrice, memory, usageCategoryId, values, pageable);
         return productVariantDetails.map(productVariantDetailMapper::toResponsePage);
     }

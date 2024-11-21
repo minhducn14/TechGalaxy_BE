@@ -96,4 +96,13 @@ public class AttributeServiceImpl implements AttributeService {
 		List<Value> values = valueRepository.findDistinctValuesByNameAndAttributeName(name);
 		return values.stream().map(valueMapper::toValueResponse).toList();
 	}
+
+	@Override
+	public List<ValueResponse> getAttributeByVariantId(String variantId) {
+	    List<Value> values = valueRepository.findAllByProductVariantId(variantId);
+	    List<ValueResponse> valueResponse = values.stream()
+	            .map(value -> valueMapper.toAttributeName(value, value.getAttribute().getName()))
+	            .collect(Collectors.toList());
+	    return valueResponse;
+	}
 }
