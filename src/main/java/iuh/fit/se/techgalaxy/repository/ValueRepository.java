@@ -22,4 +22,8 @@ public interface ValueRepository extends JpaRepository<Value, String> {
                 )
             """)
     List<Value> findDistinctValuesByNameAndAttributeName(@Param("attributeName") String attributeName);
+    
+    
+    List<Value> findAllByProductVariantId(String variantId);
+    
 }

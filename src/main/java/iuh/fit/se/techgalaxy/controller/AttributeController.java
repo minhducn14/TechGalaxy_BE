@@ -70,4 +70,12 @@ public class AttributeController {
         List<ValueResponse> valueResponses = attributeServiceImpl.getValueByNameAtri(name);
         return ResponseEntity.ok(DataResponse.<ValueResponse>builder().data(valueResponses).build());
     }
+    
+    @GetMapping("/atributevalue/{variantId}")
+    public ResponseEntity<DataResponse<ValueResponse>> getAttributeByVariantId(@PathVariable String variantId){
+    	List<ValueResponse> valueResponses = attributeServiceImpl.getAttributeByVariantId(variantId);
+		return ResponseEntity.ok(DataResponse.<ValueResponse>builder().data(valueResponses).build());
+    }
+    
+    
 }

@@ -23,9 +23,6 @@ public interface AttributeService {
 	 boolean createValueProductVariant(String variantId, List<AttributeValueRequest> attributeValueRequest);
 
 	 List<ValueResponse> getValueByNameAtri(String name);
-
-	
+	 
+	 List<ValueResponse> getAttributeByVariantId(String variantId);
 }
-//find  variant if true
-// tao vong lap de map tu request sang value phai co mapper de lam
-// sau khi tao xong thi save vao csdl
