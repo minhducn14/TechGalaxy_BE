@@ -66,7 +66,7 @@ public class ProductVariantDetailController {
             @RequestParam(required = false) List<String> memory,
             @RequestParam(required = false) List<String> usageCategoryId,
             @RequestParam(required = false) List<String> values,
-            @RequestParam(defaultValue = "asc") String sort,
+            @RequestParam(required = false) String sort,
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "10") Integer size) {
         Page<ProductPageResponse> response = productVariantDetailServiceImpl.getFilteredProductDetails(
