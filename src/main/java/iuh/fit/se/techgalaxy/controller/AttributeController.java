@@ -43,7 +43,7 @@ public class AttributeController {
         return ResponseEntity.ok(DataResponse.<AttributeResponse>builder().data(attributeRespone).build());
     }
 
-    @PutMapping("attributes/{id}")
+    @PutMapping("/attributes/{id}")
     public ResponseEntity<DataResponse<AttributeResponse>> updateAttribute(@PathVariable String id,
                                                                            @RequestBody AttributeRequest request) {
         Set<AttributeResponse> attributeRespone = new HashSet<>();
@@ -51,7 +51,7 @@ public class AttributeController {
         return ResponseEntity.ok(DataResponse.<AttributeResponse>builder().data(attributeRespone).build());
     }
 
-    @DeleteMapping("attributes/{id}")
+    @DeleteMapping("/attributes/{id}")
     public ResponseEntity<DataResponse<AttributeResponse>> deleteAttribute(@PathVariable String id
     ) {
         Set<AttributeResponse> attributeRespone = new HashSet<>();
@@ -71,11 +71,10 @@ public class AttributeController {
         return ResponseEntity.ok(DataResponse.<ValueResponse>builder().data(valueResponses).build());
     }
     
-    @GetMapping("/atributevalue/{variantId}")
+    @GetMapping("/attributeByVariantId/{variantId}")
     public ResponseEntity<DataResponse<ValueResponse>> getAttributeByVariantId(@PathVariable String variantId){
     	List<ValueResponse> valueResponses = attributeServiceImpl.getAttributeByVariantId(variantId);
 		return ResponseEntity.ok(DataResponse.<ValueResponse>builder().data(valueResponses).build());
     }
-    
     
 }

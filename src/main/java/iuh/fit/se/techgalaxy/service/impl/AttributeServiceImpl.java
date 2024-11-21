@@ -99,10 +99,10 @@ public class AttributeServiceImpl implements AttributeService {
 
 	@Override
 	public List<ValueResponse> getAttributeByVariantId(String variantId) {
-		List<Value> values = valueRepository.findAllByProductVariantId(variantId);
-		List<ValueResponse> valueResponse = (List<ValueResponse>) values.stream().map(value->
-			valueMapper.toAttributeName(value,value.getAttribute().getName())
-		);
-		return  valueResponse;
+	    List<Value> values = valueRepository.findAllByProductVariantId(variantId);
+	    List<ValueResponse> valueResponse = values.stream()
+	            .map(value -> valueMapper.toAttributeName(value, value.getAttribute().getName()))
+	            .collect(Collectors.toList());
+	    return valueResponse;
 	}
 }
