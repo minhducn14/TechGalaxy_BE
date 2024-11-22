@@ -21,4 +21,5 @@ public class ProductVariantResponse {
     ProductStatus status;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
+    UsageCategoryResponse usageCategory;
 }
