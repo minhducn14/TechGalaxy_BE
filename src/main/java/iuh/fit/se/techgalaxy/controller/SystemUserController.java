@@ -70,6 +70,17 @@ public class SystemUserController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/email/{email}")
+    public ResponseEntity<DataResponse<SystemUserResponseDTO>> getSystemUserByEmail(@PathVariable String email) {
+        SystemUserResponseDTO user = systemUserService.findSystemUserByEmail(email);
+        return ResponseEntity.ok(
+                DataResponse.<SystemUserResponseDTO>builder()
+                        .status(200)
+                        .message("System user fetched successfully")
+                        .data(List.of(user))
+                        .build()
+        );
+    }
 
     @PostMapping
     public ResponseEntity<DataResponse<SystemUserResponseDTO>> addSystemUser(@RequestBody SystemUserRequestDTO requestDTO) {

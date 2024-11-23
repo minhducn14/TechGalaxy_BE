@@ -126,7 +126,7 @@ public class SystemUserServiceImpl implements SystemUserService {
     }
 
     @Override
-    public SystemUser findSystemUserByEmail(String email) {
-        return systemUserRepository.findSystemUserByEmail(email);
+    public SystemUserResponseDTO findSystemUserByEmail(String email) {
+        return SystemUserMapper.INSTANCE.toResponseDTO(systemUserRepository.findSystemUserByEmail(email));
     }
 }

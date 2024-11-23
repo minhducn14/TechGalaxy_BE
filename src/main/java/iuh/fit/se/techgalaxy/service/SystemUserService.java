@@ -78,5 +78,5 @@ public interface SystemUserService {
      */
     public List<SystemUserResponseDTO> handleGetSystemUsersByStatus(SystemUserStatus status);
 
-    public SystemUser findSystemUserByEmail(String email);
+    public SystemUserResponseDTO findSystemUserByEmail(String email);
 }
