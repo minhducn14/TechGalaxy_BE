@@ -2,6 +2,7 @@ package iuh.fit.se.techgalaxy.service;
 
 import iuh.fit.se.techgalaxy.dto.request.ProductDetailUpdateRequest;
 import iuh.fit.se.techgalaxy.dto.request.ProductVariantDetailRequest;
+import iuh.fit.se.techgalaxy.dto.response.ProductDetailResponse;
 import iuh.fit.se.techgalaxy.dto.response.ProductPageResponse;
 import iuh.fit.se.techgalaxy.dto.response.ProductVariantDetailResponse;
 import org.springframework.data.domain.Page;
@@ -11,6 +12,8 @@ import java.util.List;
 public interface ProductVariantDetailService {
 
     ProductVariantDetailResponse getProductVariantDetail(String variantId);
+
+    ProductDetailResponse getProductDetail(String productDetailId);
 
     Boolean createProductVariantDetail(String variantId, List<ProductVariantDetailRequest> productVariantDetailRequest);
     Boolean updateProductVariantDetail(String productDetailId, ProductDetailUpdateRequest productDetailUpdateRequest);

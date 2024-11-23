@@ -2,6 +2,7 @@ package iuh.fit.se.techgalaxy.service.impl;
 
 import iuh.fit.se.techgalaxy.dto.request.ProductDetailUpdateRequest;
 import iuh.fit.se.techgalaxy.dto.request.ProductVariantDetailRequest;
+import iuh.fit.se.techgalaxy.dto.response.ProductDetailResponse;
 import iuh.fit.se.techgalaxy.dto.response.ProductPageResponse;
 import iuh.fit.se.techgalaxy.dto.response.ProductVariantDetailResponse;
 import iuh.fit.se.techgalaxy.entities.Color;
@@ -47,6 +48,13 @@ public class ProductVariantDetailServiceImpl implements ProductVariantDetailServ
             throw new AppException(ErrorCode.PRODUCT_NOTFOUND);
         }
         return productVariantDetailMapper.toProductVariantDetailResponse(details.get(0), details);
+    }
+
+    @Override
+    public ProductDetailResponse getProductDetail(String productDetailId) {
+        ProductVariantDetail productVariantDetail = productVariantDetailRepository.findById(productDetailId)
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOTFOUND));
+        return productVariantDetailMapper.toResponse(productVariantDetail);
     }
 
     @Override

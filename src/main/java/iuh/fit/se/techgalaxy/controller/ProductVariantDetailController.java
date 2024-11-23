@@ -3,6 +3,7 @@ package iuh.fit.se.techgalaxy.controller;
 import iuh.fit.se.techgalaxy.dto.request.ProductDetailUpdateRequest;
 import iuh.fit.se.techgalaxy.dto.request.ProductVariantDetailRequest;
 import iuh.fit.se.techgalaxy.dto.response.DataResponse;
+import iuh.fit.se.techgalaxy.dto.response.ProductDetailResponse;
 import iuh.fit.se.techgalaxy.dto.response.ProductPageResponse;
 import iuh.fit.se.techgalaxy.dto.response.ProductVariantDetailResponse;
 import iuh.fit.se.techgalaxy.service.ProductVariantDetailService;
@@ -38,7 +39,12 @@ public class ProductVariantDetailController {
         productVariantDetailResponses.add(productVariantDetailServiceImpl.getProductVariantDetail(variantId));
         return ResponseEntity.ok(DataResponse.<ProductVariantDetailResponse>builder().data(productVariantDetailResponses).build());
     }
-
+    @GetMapping("/{productDetailId}")
+    public ResponseEntity<DataResponse<ProductDetailResponse>> getProductDetail(@PathVariable String productDetailId) {
+        Set<ProductDetailResponse> productDetailResponses = new HashSet<>();
+       productDetailResponses.add(productVariantDetailServiceImpl.getProductDetail(productDetailId));
+        return  ResponseEntity.ok(DataResponse.<ProductDetailResponse>builder().data(productDetailResponses).build());
+    }
 
     @PostMapping
     public ResponseEntity<DataResponse<Boolean>> createProductVariantDetail(@PathVariable String variantId, @RequestBody List<ProductVariantDetailRequest> productVariantDetailRequest) {

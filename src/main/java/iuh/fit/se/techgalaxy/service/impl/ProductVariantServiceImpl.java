@@ -5,6 +5,8 @@ import iuh.fit.se.techgalaxy.dto.response.ProductVariantResponse;
 import iuh.fit.se.techgalaxy.entities.Product;
 import iuh.fit.se.techgalaxy.entities.ProductVariant;
 import iuh.fit.se.techgalaxy.entities.UsageCategory;
+import iuh.fit.se.techgalaxy.exception.AppException;
+import iuh.fit.se.techgalaxy.exception.ErrorCode;
 import iuh.fit.se.techgalaxy.mapper.ProductVariantMapper;
 import iuh.fit.se.techgalaxy.repository.ProductRepository;
 import iuh.fit.se.techgalaxy.repository.ProductVariantRepository;
@@ -58,7 +60,11 @@ public class ProductVariantServiceImpl implements ProductVariantService {
     @Override
     public ProductVariantResponse updateVariant(String id, ProductVariantRequest request) {
         ProductVariant productVariant = productVariantRepository.findById(id).orElseThrow(()->
-                new RuntimeException("Product variant not found"));
+                new AppException(ErrorCode.PRODUCT_NOTFOUND));
+        UsageCategory usageCategory = usageCategoryRepository.findById(request.getUsageCategoryId()).orElseThrow(
+                () -> new AppException(ErrorCode.USAGE_CATEGORY_NOTFOUND)
+        );
+        productVariant.setUsageCategory(usageCategory);
         productVariantMapper.updateProductVariantFromRequest(productVariant, request);
         return productVariantMapper.toProductVariantResponse(productVariantRepository.save(productVariant));
     }

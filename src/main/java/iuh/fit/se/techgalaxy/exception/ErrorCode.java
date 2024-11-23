@@ -21,17 +21,18 @@ public enum ErrorCode {
     AUTHENTICATION_ERROR(8000, "You no access to method", HttpStatus.FORBIDDEN),
 
     // 1000 - 1999: Business error ( call data from database)
-    DATA_DUPLICATE_PRODUCT_DETAIL(1005, "Data duplicate product detail please check color and memories request", HttpStatus.BAD_REQUEST),
-    PRODUCT_UPDATE_FAILED(1006, "Product update failed", HttpStatus.INTERNAL_SERVER_ERROR),
-    PRODUCT_DELETE_FAILED(1007, "Product delete failed", HttpStatus.INTERNAL_SERVER_ERROR),
+    DATA_DUPLICATE_PRODUCT_DETAIL(1000, "Data duplicate product detail please check color and memories request", HttpStatus.BAD_REQUEST),
+    PRODUCT_UPDATE_FAILED(1001, "Product update failed", HttpStatus.INTERNAL_SERVER_ERROR),
+    PRODUCT_DELETE_FAILED(1002, "Product delete failed", HttpStatus.INTERNAL_SERVER_ERROR),
     MEMORY_NOTFOUND(1003, "Memory not found", HttpStatus.NOT_FOUND),
     COLOR_NOTFOUND(1004, "Color not found", HttpStatus.NOT_FOUND),
-    PRODUCT_NOTFOUND(1000, "Product not found", HttpStatus.NOT_FOUND),
-    ACCOUNT_NOTFOUND(1001, "Account not found", HttpStatus.NOT_FOUND),
-    CUSTOMER_NOTFOUND(1002, "Customer not found", HttpStatus.NOT_FOUND),
-    TRADEMARK_NOTFOUND(1003, "Trademark not found", HttpStatus.NOT_FOUND),
-    FEEDBACK_NOTFOUND(1004, "Feedback not found", HttpStatus.NOT_FOUND),
-    IMAGE_FEEDBACK_NOTFOUND(1005, "Image Feedback not found", HttpStatus.NOT_FOUND),
+    USAGE_CATEGORY_NOTFOUND(1005, "Usage category not found", HttpStatus.NOT_FOUND),
+    PRODUCT_NOTFOUND(1006, "Product not found", HttpStatus.NOT_FOUND),
+    ACCOUNT_NOTFOUND(1007, "Account not found", HttpStatus.NOT_FOUND),
+    CUSTOMER_NOTFOUND(1008, "Customer not found", HttpStatus.NOT_FOUND),
+    TRADEMARK_NOTFOUND(1009, "Trademark not found", HttpStatus.NOT_FOUND),
+    FEEDBACK_NOTFOUND(1010, "Feedback not found", HttpStatus.NOT_FOUND),
+    IMAGE_FEEDBACK_NOTFOUND(1011, "Image Feedback not found", HttpStatus.NOT_FOUND),
 
     // 2000 - 2999: Validation error in request body
     PRODUCT_DISCOUNT_INVALID(2000, "Product discount min value is {min} and max value is {max}", HttpStatus.BAD_REQUEST),
