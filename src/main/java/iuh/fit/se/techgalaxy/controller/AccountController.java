@@ -9,6 +9,7 @@ import iuh.fit.se.techgalaxy.entities.Role;
 import iuh.fit.se.techgalaxy.entities.enumeration.CustomerStatus;
 import iuh.fit.se.techgalaxy.exception.AppException;
 import iuh.fit.se.techgalaxy.exception.ErrorCode;
+import iuh.fit.se.techgalaxy.mapper.AccountMapper;
 import iuh.fit.se.techgalaxy.mapper.RoleMapper;
 import iuh.fit.se.techgalaxy.provider.TokenProvider;
 import iuh.fit.se.techgalaxy.repository.RoleRepository;
@@ -59,7 +60,7 @@ public class AccountController {
 
     private final TokenServiceImpl tokenService;
     private final TokenProvider.TokenExtractor tokenExtractor;
-
+    private final AccountMapper accountMapper;
 
 
     @Value("${jwt.refresh-token-validity-in-seconds}")
@@ -77,7 +78,7 @@ public class AccountController {
                              SystemUserServiceImpl systemUserService,
                              RoleRepository roleRepository,
                              TokenServiceImpl tokenService,
-                             TokenProvider.TokenExtractor tokenExtractor) {
+                             TokenProvider.TokenExtractor tokenExtractor, AccountMapper accountMapper) {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.accountService = accountService;
         this.passwordEncoder = passwordEncoder;
@@ -89,6 +90,7 @@ public class AccountController {
         this.roleRepository = roleRepository;
         this.tokenService = tokenService;
         this.tokenExtractor = tokenExtractor;
+        this.accountMapper = accountMapper;
     }
 
     @PostMapping("/auth/login")
@@ -517,7 +519,7 @@ public class AccountController {
 
     @PutMapping
     public ResponseEntity<DataResponse<AccountUpdateResponse>> updateAccount(@RequestBody AccountUpdateRequest accountRequest) {
-        Account account = accountService.getAccountById(accountRequest.getId()).orElse(null);
+        Account account = accountService.getAccountById(accountRequest.getId()).orElseThrow(()-> new AppException(ErrorCode.ACCOUNT_NOTFOUND));
         if (account == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(DataResponse.<AccountUpdateResponse>builder()
@@ -538,8 +540,31 @@ public class AccountController {
                 .build());
     }
 
+    @PutMapping("/update-account-without-password")
+    public ResponseEntity<DataResponse<AccountUpdateResponse>> updateAccountWithoutPassword(@RequestBody AccountUpdateRequest accountRequest) {
+        Account account = accountService.getAccountById(accountRequest.getId()).orElseThrow(()-> new AppException(ErrorCode.ACCOUNT_NOTFOUND));
+        if (account == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(DataResponse.<AccountUpdateResponse>builder()
+                            .status(404)
+                            .message("Account not found")
+                            .build());
+        }
+        String hashPass= passwordEncoder.encode(accountRequest.getPassword());
+        accountRequest.setPassword(hashPass);
+
+        AccountUpdateResponse updatedAccount = accountService.updateAccountWithoutPassword(accountRequest);
+        updatedAccount.setPassword(null);
+        updatedAccount.setId(null);
+        return ResponseEntity.ok(DataResponse.<AccountUpdateResponse>builder()
+                .status(200)
+                .message("Account updated successfully")
+                .data(Collections.singletonList(updatedAccount))
+                .build());
+    }
+
     @GetMapping
-    public ResponseEntity<DataResponse<AccountResponse>> getAllAccounts() {
+    public ResponseEntity<DataResponse<AccountResponse>> getAllSystemUserAccounts() {
         List<AccountResponse> accounts = accountService.findAllSystemUserAccounts();
         return ResponseEntity.ok(DataResponse.<AccountResponse>builder()
                 .status(200)
@@ -549,19 +574,21 @@ public class AccountController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DataResponse<Account>> getAccountById(@PathVariable String id) {
-        Account account = accountService.getAccountById(id).orElse(null);
+    public ResponseEntity<DataResponse<AccountResponse>> getAccountById(@PathVariable String id) {
+        Account account = accountService.getAccountById(id).orElseThrow(()-> new AppException(ErrorCode.ACCOUNT_NOTFOUND));
+        AccountResponse accountResponse = accountMapper.toAccountResponseToClient(account);
+        accountResponse.setRolesIds(account.getRoles().stream().map(Role::getId).toList());
         if (account == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(DataResponse.<Account>builder()
+                    .body(DataResponse.<AccountResponse>builder()
                             .status(404)
                             .message("Account not found")
                             .build());
         }
-        return ResponseEntity.ok(DataResponse.<Account>builder()
+        return ResponseEntity.ok(DataResponse.<AccountResponse>builder()
                 .status(200)
                 .message("Account retrieved successfully")
-                .data(Collections.singletonList(account))
+                .data(Collections.singletonList(accountResponse))
                 .build());
     }
 }

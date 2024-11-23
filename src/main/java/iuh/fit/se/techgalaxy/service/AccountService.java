@@ -37,6 +37,8 @@ public interface AccountService {
      */
     AccountUpdateResponse updateAccount(AccountUpdateRequest account);
 
+    AccountUpdateResponse updateAccountWithoutPassword(AccountUpdateRequest account);
+
     /**
      * Xóa tài khoản theo ID.
      *

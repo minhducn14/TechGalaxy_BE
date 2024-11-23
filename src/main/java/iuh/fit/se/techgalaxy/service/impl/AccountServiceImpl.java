@@ -61,6 +61,39 @@ public class AccountServiceImpl implements AccountService {
             }
         }
         existingAccount.setEmail(account.getEmail());
+        existingAccount.setPassword(account.getPassword());
+
+        List<String> rolesIds = existingAccount.getRoles().stream().map(Role::getId).toList();
+        rolesIds.forEach(roleId -> {
+            System.out.println(roleId);
+        });
+        if (account.getRolesIds() != null) {
+            List<Role> newRoles = roleRepository.findAllById(account.getRolesIds());
+            newRoles.forEach(role -> {
+                System.out.println(role.getName());
+            });
+            existingAccount.getRoles().clear();
+            existingAccount.getRoles().addAll(newRoles);
+        }
+
+        Account updatedAccount = accountRepository.save(existingAccount);
+        return accountMapper.toAccountResponse(updatedAccount);
+    }
+
+    @Override
+    public AccountUpdateResponse updateAccountWithoutPassword(AccountUpdateRequest account) {
+        Account existingAccount = accountRepository.findById(account.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Account not found"));
+
+
+        if (account.getEmail() != null && !account.getEmail().isEmpty()){
+            if (existingAccount.getEmail().equals(account.getEmail())) {
+
+            } else if(accountRepository.existsByEmail(account.getEmail())) {
+                throw new IllegalArgumentException("Email already exists");
+            }
+        }
+        existingAccount.setEmail(account.getEmail());
 
         List<String> rolesIds = existingAccount.getRoles().stream().map(Role::getId).toList();
         rolesIds.forEach(roleId -> {
