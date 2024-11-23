@@ -84,4 +84,6 @@ public interface RoleService {
      * author: Vũ Nguyễn Minh Đức
      */
     public List<Role> findByNameIn(List<String> names);
+
+    public List<RoleResponse> findAll();
 }

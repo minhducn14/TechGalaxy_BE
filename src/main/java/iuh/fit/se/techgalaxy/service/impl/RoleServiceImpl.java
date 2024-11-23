@@ -119,4 +119,11 @@ public class RoleServiceImpl implements RoleService {
         List<Role> roles = roleRepository.findByNameIn(names);
         return roles;
     }
+
+    @Override
+    public List<RoleResponse> findAll() {
+        return roleRepository.findAll().stream()
+                .map(roleMapper::toResponse)
+                .collect(Collectors.toList());
+    }
 }

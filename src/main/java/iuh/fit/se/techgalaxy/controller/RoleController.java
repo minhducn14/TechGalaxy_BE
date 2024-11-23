@@ -82,4 +82,9 @@ public class RoleController {
 
         return ResponseEntity.ok(DataResponse.<RoleResponse>builder().data(List.of(roleResponse)).build());
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<DataResponse<RoleResponse>> getAll() {
+        return ResponseEntity.ok(DataResponse.<RoleResponse>builder().data(this.roleService.findAll()).build());
+    }
 }
