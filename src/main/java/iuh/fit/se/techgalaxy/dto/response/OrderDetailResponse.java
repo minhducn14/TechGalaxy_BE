@@ -1,7 +1,5 @@
 package iuh.fit.se.techgalaxy.dto.response;
 
-import iuh.fit.se.techgalaxy.entities.Order;
-import iuh.fit.se.techgalaxy.entities.ProductVariantDetail;
 import iuh.fit.se.techgalaxy.entities.enumeration.DetailStatus;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
