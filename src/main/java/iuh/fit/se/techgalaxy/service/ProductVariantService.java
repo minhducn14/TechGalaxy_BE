@@ -4,6 +4,7 @@ import iuh.fit.se.techgalaxy.dto.request.ProductVariantRequest;
 import iuh.fit.se.techgalaxy.dto.response.ProductVariantResponse;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Set;
 
 @Component
@@ -19,4 +20,6 @@ public interface ProductVariantService {
     void deleteVariant(String id);
 
     ProductVariantResponse findProductVariantByProductVariantDetailId(String id);
+
+    List<ProductVariantResponse> getAll();
 }

@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -81,5 +82,12 @@ public class ProductVariantServiceImpl implements ProductVariantService {
     public ProductVariantResponse findProductVariantByProductVariantDetailId(String id) {
         ProductVariant productVariant = productVariantRepository.findProductVariantByProductVariantDetailId(id);
         return productVariantMapper.toProductVariantResponse(productVariant);
+    }
+
+    @Override
+    public List<ProductVariantResponse> getAll() {
+        return productVariantRepository.findAll().stream()
+                .map(productVariantMapper::toProductVariantResponse)
+                .collect(Collectors.toList());
     }
 }

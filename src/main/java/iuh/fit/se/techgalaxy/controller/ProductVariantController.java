@@ -51,6 +51,12 @@ public class ProductVariantController {
         return ResponseEntity.ok(DataResponse.<Object>builder().message("Delete "+ id + " success").build());
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<DataResponse<ProductVariantResponse>> getAll() {
+        System.out.println("Get all product variant");
+        return ResponseEntity.ok(DataResponse.<ProductVariantResponse>builder().data(productVariantServiceImpl.getAll()).build());
+    }
+
     @GetMapping("/productVariantDetail/{id}")
     public ResponseEntity<DataResponse<ProductVariantResponse>> findProductVariantByProductVariantDetailId(@PathVariable String id) {
         Set<ProductVariantResponse> createdVariant = new HashSet<>();
