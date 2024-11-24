@@ -33,6 +33,8 @@ public enum ErrorCode {
     TRADEMARK_NOTFOUND(1009, "Trademark not found", HttpStatus.NOT_FOUND),
     FEEDBACK_NOTFOUND(1010, "Feedback not found", HttpStatus.NOT_FOUND),
     IMAGE_FEEDBACK_NOTFOUND(1011, "Image Feedback not found", HttpStatus.NOT_FOUND),
+    ORDER_NOTFOUND(1006, "Order not found", HttpStatus.NOT_FOUND),
+    ORDER_DETAIL_NOTFOUND(1007, "Order detail not found", HttpStatus.NOT_FOUND),
 
     // 2000 - 2999: Validation error in request body
     PRODUCT_DISCOUNT_INVALID(2000, "Product discount min value is {min} and max value is {max}", HttpStatus.BAD_REQUEST),
