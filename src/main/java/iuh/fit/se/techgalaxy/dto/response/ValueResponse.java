@@ -8,10 +8,12 @@ import lombok.experimental.FieldDefaults;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ValueResponse {
     String id;
     String attributeName;
+    String attributeId;
     String value;
 }

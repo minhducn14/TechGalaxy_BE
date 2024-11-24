@@ -25,5 +25,5 @@ public interface ValueRepository extends JpaRepository<Value, String> {
     
     
     List<Value> findAllByProductVariantId(String variantId);
-    
+
 }

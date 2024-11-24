@@ -20,5 +20,7 @@ public interface ValueMapper {
 	ValueResponse toValueResponse(Value value);
 	
 	ValueResponse toAttributeName(Value value, String attributeName);
+
+	ValueResponse toAttributeId(Value value, String attributeId);
 	
 }

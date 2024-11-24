@@ -9,5 +9,4 @@ import iuh.fit.se.techgalaxy.entities.Attribute;
 
 @RepositoryRestResource(collectionResourceRel = "attributes", path = "attributes", exported = false)
 public interface AttributeRepository extends JpaRepository<Attribute, String>{
-
 }
