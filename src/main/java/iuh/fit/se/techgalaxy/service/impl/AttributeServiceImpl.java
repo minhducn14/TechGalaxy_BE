@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import iuh.fit.se.techgalaxy.dto.request.AttributeValueUpdateRequest;
 import iuh.fit.se.techgalaxy.dto.response.ValueResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -89,6 +90,31 @@ public class AttributeServiceImpl implements AttributeService {
 		}
 		valueRepository.saveAll(values);
 		return true;
+	}
+
+	@Override
+	public boolean deleteValue(String valueId) {
+		Value value = valueRepository.findById(valueId)
+				.orElseThrow(() -> new RuntimeException("Value not found"));
+		valueRepository.delete(value);
+		return true;
+	}
+
+	@Override
+	public ValueResponse getValueById(String valueId) {
+		Value value = valueRepository.findById(valueId)
+				.orElseThrow(() -> new RuntimeException("Value not found"));
+		return valueMapper.toAttributeId(value, value.getAttribute().getId());
+	}
+
+	@Override
+	public ValueResponse updateValueProductVariant(String variantId, AttributeValueUpdateRequest attributeValueRequest) {
+		Value value = valueRepository.findById(attributeValueRequest.getId())
+				.orElseThrow(() -> new RuntimeException("Value not found"));
+
+		value.setValue(attributeValueRequest.getValue());
+		valueRepository.save(value);
+		return valueMapper.toValueResponse(value);
 	}
 
 	@Override
