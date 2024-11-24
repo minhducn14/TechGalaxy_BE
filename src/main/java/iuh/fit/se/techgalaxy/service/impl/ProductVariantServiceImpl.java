@@ -76,4 +76,10 @@ public class ProductVariantServiceImpl implements ProductVariantService {
                 new RuntimeException("Product variant not found"));
         productVariantRepository.delete(productVariant);
     }
+
+    @Override
+    public ProductVariantResponse findProductVariantByProductVariantDetailId(String id) {
+        ProductVariant productVariant = productVariantRepository.findProductVariantByProductVariantDetailId(id);
+        return productVariantMapper.toProductVariantResponse(productVariant);
+    }
 }

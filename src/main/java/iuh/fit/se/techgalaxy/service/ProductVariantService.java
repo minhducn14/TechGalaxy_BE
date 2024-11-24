@@ -17,4 +17,6 @@ public interface ProductVariantService {
     ProductVariantResponse updateVariant(String id, ProductVariantRequest request);
 
     void deleteVariant(String id);
+
+    ProductVariantResponse findProductVariantByProductVariantDetailId(String id);
 }
