@@ -3,6 +3,8 @@ package iuh.fit.se.techgalaxy.service.impl;
 import iuh.fit.se.techgalaxy.dto.request.OrderDetailRequest;
 import iuh.fit.se.techgalaxy.dto.response.OrderDetailResponse;
 import iuh.fit.se.techgalaxy.entities.OrderDetail;
+import iuh.fit.se.techgalaxy.exception.AppException;
+import iuh.fit.se.techgalaxy.exception.ErrorCode;
 import iuh.fit.se.techgalaxy.mapper.OrderDetailMapper;
 import iuh.fit.se.techgalaxy.repository.OrderDetailRepository;
 import iuh.fit.se.techgalaxy.service.OrderDetailService;
@@ -44,8 +46,6 @@ public class OrderDetailServiceImpl implements OrderDetailService {
      */
     @Override
     public OrderDetailResponse save(OrderDetailRequest orderDetailRequest) {
-        if (orderDetailRequest.getId() == null || orderDetailRequest.getOrder().getId() == null || orderDetailRequest.getProductVariantDetail().getId() == null)
-            return null;
         OrderDetail orderDetail = orderDetailRepository.save(OrderDetailMapper.INSTANCE.toOrderDetailFromRequest(orderDetailRequest));
         return OrderDetailMapper.INSTANCE.toOrderDetailResponse(orderDetail);
     }
@@ -59,6 +59,6 @@ public class OrderDetailServiceImpl implements OrderDetailService {
      */
     @Override
     public OrderDetailResponse findById(String id) {
-        return OrderDetailMapper.INSTANCE.toOrderDetailResponse(orderDetailRepository.findById(id).orElse(null));
+        return OrderDetailMapper.INSTANCE.toOrderDetailResponse(orderDetailRepository.findById(id).orElseThrow(()->new AppException(ErrorCode.ORDER_DETAIL_NOTFOUND)));
     }
 }

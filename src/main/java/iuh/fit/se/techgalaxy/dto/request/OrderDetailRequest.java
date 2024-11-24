@@ -1,7 +1,7 @@
 package iuh.fit.se.techgalaxy.dto.request;
 
-import iuh.fit.se.techgalaxy.entities.Order;
-import iuh.fit.se.techgalaxy.entities.ProductVariantDetail;
+import iuh.fit.se.techgalaxy.dto.response.OrderResponse;
+import iuh.fit.se.techgalaxy.dto.response.ProductVariantDetailResponse;
 import iuh.fit.se.techgalaxy.entities.enumeration.DetailStatus;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -14,8 +14,8 @@ import lombok.experimental.FieldDefaults;
 public class OrderDetailRequest {
     String id;
     DetailStatus detailStatus;
-    Order order;
-    ProductVariantDetail productVariantDetail;
-    Integer quantity;
-    Double price;
+    OrderResponse order;
+    ProductVariantDetailResponse productVariantDetail;
+    int quantity;
+    double price;
 }

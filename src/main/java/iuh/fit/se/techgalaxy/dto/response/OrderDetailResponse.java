@@ -14,8 +14,8 @@ import lombok.experimental.FieldDefaults;
 public class OrderDetailResponse {
     String id;
     DetailStatus detailStatus;
-    Order order;
-    ProductVariantDetail productVariantDetail;
-    Integer quantity;
-    Double price;
+    OrderResponse order;
+    ProductVariantDetailResponse productVariantDetail;
+    int quantity;
+    double price;
 }
