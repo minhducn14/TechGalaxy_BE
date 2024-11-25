@@ -6,6 +6,7 @@ import iuh.fit.se.techgalaxy.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
@@ -83,5 +84,19 @@ public class EmailServiceImpl  implements EmailService {
         Context context = new Context();
         String content = templateEngine.process(templateName, context);
         this.sendEmailSync(to, subject, content, false, true);
+    }
+
+    public void sendSuccessRegistrationEmail(String to, String subject, Map<String, Object> variables) throws MessagingException {
+        MimeMessage mimeMessage = this.javaMailSender.createMimeMessage();
+
+        Context context = new Context();
+        context.setVariables(variables);
+
+        String htmlContent = templateEngine.process("success-registration", context);
+
+        MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, StandardCharsets.UTF_8.name());
+        this.sendEmailSync(to, subject, htmlContent, true, true);
+
+
     }
 }

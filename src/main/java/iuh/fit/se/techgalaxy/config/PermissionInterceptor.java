@@ -21,7 +21,6 @@ import org.springframework.web.servlet.HandlerMapping;
 @RequiredArgsConstructor
 public class PermissionInterceptor implements HandlerInterceptor {
 
-    @Autowired
     private AccountServiceImpl accountService;
 
     @Override

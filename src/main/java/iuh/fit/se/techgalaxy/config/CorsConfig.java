@@ -1,5 +1,6 @@
 package iuh.fit.se.techgalaxy.config;
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +27,10 @@ public class CorsConfig {
 
         // gửi kèm cookies hay không
         configuration.setAllowCredentials(true);
-
+//
+//        // Cho phép FE đọc Set-Cookie
+//        configuration.setExposedHeaders(List.of("Set-Cookie"));
+//
         // thời gian pre-flight request có thể cache (tính theo seconds)
         configuration.setMaxAge(3600L);
 
