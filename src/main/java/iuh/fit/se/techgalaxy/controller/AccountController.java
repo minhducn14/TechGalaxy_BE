@@ -602,4 +602,25 @@ public class AccountController {
                 .data(Collections.singletonList(accountResponse))
                 .build());
     }
+
+
+    //get account by email
+    @GetMapping("/email/{email}")
+    public ResponseEntity<DataResponse<AccountResponse>> getAccountByEmail(@PathVariable String email) {
+        Account account = accountService.getAccountByEmail(email).orElseThrow(()-> new AppException(ErrorCode.ACCOUNT_NOTFOUND));
+        AccountResponse accountResponse = accountMapper.toAccountResponseToClient(account);
+        accountResponse.setRolesIds(account.getRoles().stream().map(Role::getId).toList());
+        if (account == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(DataResponse.<AccountResponse>builder()
+                            .status(404)
+                            .message("Account not found")
+                            .build());
+        }
+        return ResponseEntity.ok(DataResponse.<AccountResponse>builder()
+                .status(200)
+                .message("Account retrieved successfully")
+                .data(Collections.singletonList(accountResponse))
+                .build());
+    }
 }
