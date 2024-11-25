@@ -14,6 +14,7 @@ import java.util.Map;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProductVariantDetailResponse {
     String id;
+    String name;
     ProductStatus status;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;

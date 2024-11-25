@@ -2,10 +2,17 @@ package iuh.fit.se.techgalaxy.controller;
 
 
 import iuh.fit.se.techgalaxy.dto.request.EmailRequest;
+import iuh.fit.se.techgalaxy.dto.request.LoginRequest;
+import iuh.fit.se.techgalaxy.dto.response.LoginResponse;
 import iuh.fit.se.techgalaxy.service.impl.EmailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class EmailController {
@@ -17,7 +24,7 @@ public class EmailController {
     }
 
     @GetMapping("/email")
-    public String sendSimpleEmail() {
+    public String sendEmail(@RequestBody EmailRequest request) {
         EmailRequest emailRequest = new EmailRequest();
         emailRequest.setOrderCode("SP.190BHV.T23.12.000931");
         emailRequest.setPaymentInfo("GGDuck");

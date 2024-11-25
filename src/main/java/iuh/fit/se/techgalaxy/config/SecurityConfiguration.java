@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -50,7 +51,8 @@ public class SecurityConfiguration {
                 "/storage/**",
                 "/v3/api-docs/**",
                 "/swagger-ui/**",
-                "/swagger-ui.html"
+                "/swagger-ui.html",
+                "/storage/**",
         };
 
 
@@ -59,6 +61,13 @@ public class SecurityConfiguration {
 //                .cors(Customizer.withDefaults())
 //                .authorizeHttpRequests(auth -> auth
 //                        .requestMatchers(whiteList).permitAll()
+//                        .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
+//                        .requestMatchers(HttpMethod.GET, "/colors/**").permitAll()
+//                        .requestMatchers(HttpMethod.GET, "/trademarks/**").permitAll()
+//                        .requestMatchers(HttpMethod.GET, "/memories/**").permitAll()
+//                        .requestMatchers(HttpMethod.GET, "/usageCategories/**").permitAll()
+//                        .requestMatchers(HttpMethod.GET, "/attributes/**").permitAll()
+//                        .requestMatchers(HttpMethod.GET, "/product-feedbacks/**").permitAll()
 //                        .anyRequest().authenticated()
 //                )
 //                .httpBasic(Customizer.withDefaults())
@@ -83,6 +92,7 @@ public class SecurityConfiguration {
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults())
                         .authenticationEntryPoint(customAuthenticationEntryPoint)).formLogin(f -> f.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
         return http.build();
     }
 

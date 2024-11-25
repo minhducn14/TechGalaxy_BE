@@ -27,4 +27,9 @@ public class MemoryServiceImpl implements MemoryService {
     public Memory getMemoryById(String id) {
         return memoryRepository.findById(id).orElse(null);
     }
+
+    @Override
+    public List<Memory> getMemoriesByIDs(List<String> ids) {
+        return memoryRepository.findMemoriesByIdIsIn(ids);
+    }
 }

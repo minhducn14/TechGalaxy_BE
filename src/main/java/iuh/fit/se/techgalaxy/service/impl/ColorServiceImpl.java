@@ -28,4 +28,9 @@ public class ColorServiceImpl implements ColorService {
         return colorRepository.findById(id).orElse(null);
     }
 
+    @Override
+    public List<Color> getColorsByIDs(List<String> ids) {
+        return colorRepository.findColorsByIdIsIn(ids);
+    }
+
 }

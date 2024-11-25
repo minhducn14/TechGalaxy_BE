@@ -12,4 +12,6 @@ public interface EmailService {
             String templateName,
             EmailRequest emailRequest
     );
+
+    public void sendEmailFromTemplateSync(String to, String subject, String templateName);
 }
