@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -31,8 +32,17 @@ public class ImgProductFeedbackController {
 
 	ImgProductFeedbackServiceImpl imgProductFeedbackServiceImpl;
 
+	@GetMapping
+	public ResponseEntity<DataResponse<String>> getImgFeedbackPath(@PathVariable String productFeedbackId) {
+	    String imgFeedbackPath = imgProductFeedbackServiceImpl.getImgPath(productFeedbackId);
+	    return ResponseEntity.ok(
+	        DataResponse.<String>builder()
+	            .data(Collections.singletonList(imgFeedbackPath)) 
+	            .build()
+	    );
+	}
 
-    // Create ImgProductFeedback
+	
     @PostMapping
     public ResponseEntity<DataResponse<ImgProductFeedbackResponse>> createImgFeedback(@PathVariable String productFeedbackId, @RequestBody ImgProductFeedbackRequest request) {
     	 Set<ImgProductFeedbackResponse> createdImgFeedback = new HashSet<>();

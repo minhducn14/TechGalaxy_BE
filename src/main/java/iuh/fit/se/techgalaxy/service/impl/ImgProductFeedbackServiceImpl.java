@@ -1,6 +1,8 @@
 package iuh.fit.se.techgalaxy.service.impl;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -61,6 +63,20 @@ public class ImgProductFeedbackServiceImpl implements ImgProductFeedbackService 
 		}
 		return null;
 	}
+
+	@Override
+	public String getImgPath(String id) {
+		// TODO Auto-generated method stub
+		ImgProductFeedback imgProductFeedack = imgProductFeedbackRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.IMAGE_FEEDBACK_NOTFOUND));
+		if (imgProductFeedack != null) {
+			return imgProductFeedack.getImagePath();
+		}
+		return null;
+               
+		
+	}
+
+
 	}
 
 
