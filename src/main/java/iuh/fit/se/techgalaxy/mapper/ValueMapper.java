@@ -18,7 +18,8 @@ public interface ValueMapper {
 
 
 	ValueResponse toValueResponse(Value value);
-	
+
+	@Mapping(target = "type", source = "value.attribute.type")
 	ValueResponse toAttributeName(Value value, String attributeName);
 
 	ValueResponse toAttributeId(Value value, String attributeId);
