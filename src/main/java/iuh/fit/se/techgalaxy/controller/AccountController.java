@@ -78,7 +78,9 @@ public class AccountController {
                              SystemUserServiceImpl systemUserService,
                              RoleRepository roleRepository,
                              TokenServiceImpl tokenService,
-                             TokenProvider.TokenExtractor tokenExtractor, AccountMapper accountMapper) {
+                             TokenProvider.TokenExtractor tokenExtractor,
+                             AccountMapper accountMapper,
+                             EmailServiceImpl emailService) {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.accountService = accountService;
         this.passwordEncoder = passwordEncoder;
