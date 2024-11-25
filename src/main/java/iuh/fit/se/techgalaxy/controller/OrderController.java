@@ -35,6 +35,14 @@ public class OrderController {
                 .build());
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<DataResponse<OrderResponse>> updateOrder(@PathVariable String id, @RequestBody OrderRequest request) {
+        List<OrderResponse> orderResponses = List.of(orderService.update(id, request));
+        return ResponseEntity.ok(DataResponse.<OrderResponse>builder()
+                .data(orderResponses)
+                .build());
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<DataResponse<OrderResponse>> getOrderById(@PathVariable String id) {
         List<OrderResponse> orderResponses = List.of(orderService.findById(id));
@@ -43,11 +51,4 @@ public class OrderController {
                 .build());
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<DataResponse<OrderResponse>> updateOrder(@PathVariable String id, @RequestBody OrderRequest request) {
-        List<OrderResponse> orderResponses = List.of(orderService.update(id, request));
-        return ResponseEntity.ok(DataResponse.<OrderResponse>builder()
-                .data(orderResponses)
-                .build());
-    }
 }
