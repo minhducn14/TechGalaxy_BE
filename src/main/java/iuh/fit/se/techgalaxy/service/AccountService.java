@@ -120,5 +120,5 @@ public interface AccountService {
      * @return true nếu email đã tồn tại, ngược lại là false
      * author: Vũ Nguyễn Minh Đức
      */
-    public  boolean existsByEmail(String email);
+    public boolean existsByEmail(String email);
 }

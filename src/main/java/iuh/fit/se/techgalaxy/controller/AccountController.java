@@ -117,7 +117,7 @@ public class AccountController {
             System.out.println("Access token: " + accessToken);
 
             String refreshToken = securityUtil.createRefreshToken(loginDto.getUsername(), res);
-            this.accountService.updateToken(refreshToken,loginDto.getUsername());
+            this.accountService.updateToken(refreshToken, loginDto.getUsername());
 //            res.setAccount(null); // Xóa thông tin account khỏi response
 
             ResponseCookie resCookie = ResponseCookie
@@ -355,7 +355,7 @@ public class AccountController {
 
     @PostMapping("/auth/create-system-user")
     public ResponseEntity<DataResponse<SystemUserResponseDTO>> register(@Valid @RequestBody SystemUserRequestDTO user) {
-        if (user.getAccount().getEmail() == null ||user.getAccount().getEmail().isEmpty() || user.getAccount().getPassword() == null || user.getAccount().getPassword().isEmpty()) {
+        if (user.getAccount().getEmail() == null || user.getAccount().getEmail().isEmpty() || user.getAccount().getPassword() == null || user.getAccount().getPassword().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(DataResponse.<SystemUserResponseDTO>builder()
                             .status(400)
@@ -519,7 +519,7 @@ public class AccountController {
 
     @PutMapping
     public ResponseEntity<DataResponse<AccountUpdateResponse>> updateAccount(@RequestBody AccountUpdateRequest accountRequest) {
-        Account account = accountService.getAccountById(accountRequest.getId()).orElseThrow(()-> new AppException(ErrorCode.ACCOUNT_NOTFOUND));
+        Account account = accountService.getAccountById(accountRequest.getId()).orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOTFOUND));
         if (account == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(DataResponse.<AccountUpdateResponse>builder()
@@ -527,7 +527,7 @@ public class AccountController {
                             .message("Account not found")
                             .build());
         }
-        String hashPass= passwordEncoder.encode(accountRequest.getPassword());
+        String hashPass = passwordEncoder.encode(accountRequest.getPassword());
         accountRequest.setPassword(hashPass);
 
         AccountUpdateResponse updatedAccount = accountService.updateAccount(accountRequest);
@@ -542,7 +542,7 @@ public class AccountController {
 
     @PutMapping("/update-account-without-password")
     public ResponseEntity<DataResponse<AccountUpdateResponse>> updateAccountWithoutPassword(@RequestBody AccountUpdateRequest accountRequest) {
-        Account account = accountService.getAccountById(accountRequest.getId()).orElseThrow(()-> new AppException(ErrorCode.ACCOUNT_NOTFOUND));
+        Account account = accountService.getAccountById(accountRequest.getId()).orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOTFOUND));
         if (account == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(DataResponse.<AccountUpdateResponse>builder()
@@ -550,7 +550,7 @@ public class AccountController {
                             .message("Account not found")
                             .build());
         }
-        String hashPass= passwordEncoder.encode(accountRequest.getPassword());
+        String hashPass = passwordEncoder.encode(accountRequest.getPassword());
         accountRequest.setPassword(hashPass);
 
         AccountUpdateResponse updatedAccount = accountService.updateAccountWithoutPassword(accountRequest);
@@ -575,7 +575,7 @@ public class AccountController {
 
     @GetMapping("/{id}")
     public ResponseEntity<DataResponse<AccountResponse>> getAccountById(@PathVariable String id) {
-        Account account = accountService.getAccountById(id).orElseThrow(()-> new AppException(ErrorCode.ACCOUNT_NOTFOUND));
+        Account account = accountService.getAccountById(id).orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOTFOUND));
         AccountResponse accountResponse = accountMapper.toAccountResponseToClient(account);
         accountResponse.setRolesIds(account.getRoles().stream().map(Role::getId).toList());
         if (account == null) {
@@ -591,4 +591,11 @@ public class AccountController {
                 .data(Collections.singletonList(accountResponse))
                 .build());
     }
+
+    @GetMapping("/exists-by-email/{email}")
+    public boolean existsByEmail(@PathVariable String email) {
+        return accountService.existsByEmail(email);
+    }
+
+
 }
