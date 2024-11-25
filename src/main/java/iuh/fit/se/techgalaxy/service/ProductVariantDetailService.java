@@ -28,4 +28,5 @@ public interface ProductVariantDetailService {
                                                         Integer page,
                                                         Integer size);
 
+    ProductDetailResponse findProductVariantDetailByProductVariantAndColorAndMemory(String productVariantId, String color, String memory);
 }

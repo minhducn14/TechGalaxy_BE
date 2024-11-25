@@ -49,4 +49,7 @@ public interface ProductVariantDetailRepository extends JpaRepository<ProductVar
             Pageable pageable
     );
 
+    @Query("SELECT pvd FROM ProductVariantDetail pvd JOIN pvd.productVariant pv JOIN pvd.color c JOIN pvd.memory m WHERE pv.id = :productVariantId AND c.id = :colorId AND m.id = :memoryId")
+    ProductVariantDetail findProductVariantDetailByProductVariantAndColorAndMemory(@Param("productVariantId") String productVariantId,@Param("colorId") String colorId,@Param("memoryId") String memoryId);
+
 }

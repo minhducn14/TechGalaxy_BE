@@ -112,4 +112,10 @@ public class ProductVariantDetailServiceImpl implements ProductVariantDetailServ
         Page<ProductVariantDetail> productVariantDetails = productVariantDetailRepository.findFilteredProductDetails(trademark, minPrice, maxPrice, memory, usageCategoryId, values, pageable);
         return productVariantDetails.map(productVariantDetailMapper::toResponsePage);
     }
+
+    @Override
+    public ProductDetailResponse findProductVariantDetailByProductVariantAndColorAndMemory(String productVariantId, String color, String memory) {
+        ProductVariantDetail productVariantDetail = productVariantDetailRepository.findProductVariantDetailByProductVariantAndColorAndMemory(productVariantId, color, memory);
+        return productVariantDetailMapper.toResponse(productVariantDetail);
+    }
 }

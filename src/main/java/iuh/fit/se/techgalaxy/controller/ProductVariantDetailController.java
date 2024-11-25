@@ -80,4 +80,10 @@ public class ProductVariantDetailController {
         PagedModel<EntityModel<ProductPageResponse>> pagedModel = pagedResourcesAssembler.toModel(response);
         return ResponseEntity.ok(pagedModel);
     }
+
+    @GetMapping("/getProductVariantDetailByProductVariantAndColorAndMemory")
+    public ResponseEntity<DataResponse<ProductDetailResponse>> findProductVariantDetailByProductVariantAndColorAndMemory(@RequestParam String productVariantId, @RequestParam String color, @RequestParam String memory) {
+        List<ProductDetailResponse> productDetailResponses = List.of(productVariantDetailServiceImpl.findProductVariantDetailByProductVariantAndColorAndMemory(productVariantId, color, memory));
+        return ResponseEntity.ok(DataResponse.<ProductDetailResponse>builder().data(productDetailResponses).build());
+    }
 }
