@@ -5,6 +5,9 @@ import iuh.fit.se.techgalaxy.entities.Memory;
 import java.util.List;
 
 public interface MemoryService {
-    public List<Memory> getAllMemories();
-    public Memory getMemoryById(String id);
+     List<Memory> getAllMemories();
+     Memory getMemoryById(String id);
+
+     List<Memory> getMemoriesByIDs(List<String> ids);
+
 }
