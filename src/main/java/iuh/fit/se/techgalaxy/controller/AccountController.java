@@ -14,11 +14,9 @@ import iuh.fit.se.techgalaxy.mapper.RoleMapper;
 import iuh.fit.se.techgalaxy.provider.TokenProvider;
 import iuh.fit.se.techgalaxy.repository.RoleRepository;
 import iuh.fit.se.techgalaxy.service.RoleService;
-import iuh.fit.se.techgalaxy.service.impl.AccountServiceImpl;
-import iuh.fit.se.techgalaxy.service.impl.CustomerServiceImpl;
-import iuh.fit.se.techgalaxy.service.impl.SystemUserServiceImpl;
-import iuh.fit.se.techgalaxy.service.impl.TokenServiceImpl;
+import iuh.fit.se.techgalaxy.service.impl.*;
 import iuh.fit.se.techgalaxy.util.SecurityUtil;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,14 +34,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/accounts")
 public class AccountController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-
+    private final EmailServiceImpl emailService;
     private final AccountServiceImpl accountService;
     private final PasswordEncoder passwordEncoder;
 
@@ -91,6 +91,7 @@ public class AccountController {
         this.tokenService = tokenService;
         this.tokenExtractor = tokenExtractor;
         this.accountMapper = accountMapper;
+        this.emailService = emailService;
     }
 
     @PostMapping("/auth/login")
@@ -117,7 +118,7 @@ public class AccountController {
             System.out.println("Access token: " + accessToken);
 
             String refreshToken = securityUtil.createRefreshToken(loginDto.getUsername(), res);
-            this.accountService.updateToken(refreshToken, loginDto.getUsername());
+            this.accountService.updateToken(refreshToken,loginDto.getUsername());
 //            res.setAccount(null); // Xóa thông tin account khỏi response
 
             ResponseCookie resCookie = ResponseCookie
@@ -180,7 +181,7 @@ public class AccountController {
     }
 
     @PostMapping("/auth/register")
-    public ResponseEntity<DataResponse<CustommerCreateResponse>> register(@Valid @RequestBody UserRegisterRequest user) {
+    public ResponseEntity<DataResponse<CustommerCreateResponse>> register(@Valid @RequestBody UserRegisterRequest user) throws MessagingException {
         if (user.getEmail() == null || user.getEmail().isEmpty() || user.getPassword() == null || user.getPassword().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(DataResponse.<CustommerCreateResponse>builder()
@@ -237,6 +238,14 @@ public class AccountController {
 
         CustommerCreateResponse response = new CustommerCreateResponse();
         response.setName(customerResponse.getName());
+
+        Map<String, Object> variables = Map.of(
+                "name", customerResponse.getName(),
+                "email", newAccount.getEmail(),
+                "registrationDate",  LocalDateTime.now().toString()
+        );
+
+        emailService.sendSuccessRegistrationEmail(newAccount.getEmail(), "TechGalaxy Registration", variables);
 
         return ResponseEntity.ok(DataResponse.<CustommerCreateResponse>builder()
                 .status(200)
@@ -402,6 +411,7 @@ public class AccountController {
 
     @PostMapping("/auth/logout")
     public ResponseEntity<DataResponse<String>> logout(HttpServletRequest request) {
+        System.out.println("Logout");
         String email = SecurityUtil.getCurrentUserLogin().orElse("");
 
         if (email.isEmpty()) {
@@ -576,6 +586,27 @@ public class AccountController {
     @GetMapping("/{id}")
     public ResponseEntity<DataResponse<AccountResponse>> getAccountById(@PathVariable String id) {
         Account account = accountService.getAccountById(id).orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOTFOUND));
+        AccountResponse accountResponse = accountMapper.toAccountResponseToClient(account);
+        accountResponse.setRolesIds(account.getRoles().stream().map(Role::getId).toList());
+        if (account == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(DataResponse.<AccountResponse>builder()
+                            .status(404)
+                            .message("Account not found")
+                            .build());
+        }
+        return ResponseEntity.ok(DataResponse.<AccountResponse>builder()
+                .status(200)
+                .message("Account retrieved successfully")
+                .data(Collections.singletonList(accountResponse))
+                .build());
+    }
+
+
+    //get account by email
+    @GetMapping("/email/{email}")
+    public ResponseEntity<DataResponse<AccountResponse>> getAccountByEmail(@PathVariable String email) {
+        Account account = accountService.getAccountByEmail(email).orElseThrow(()-> new AppException(ErrorCode.ACCOUNT_NOTFOUND));
         AccountResponse accountResponse = accountMapper.toAccountResponseToClient(account);
         accountResponse.setRolesIds(account.getRoles().stream().map(Role::getId).toList());
         if (account == null) {

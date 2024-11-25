@@ -53,7 +53,6 @@ public class ProductVariantController {
 
     @GetMapping("/all")
     public ResponseEntity<DataResponse<ProductVariantResponse>> getAll() {
-        System.out.println("Get all product variant");
         return ResponseEntity.ok(DataResponse.<ProductVariantResponse>builder().data(productVariantServiceImpl.getAll()).build());
     }
 
