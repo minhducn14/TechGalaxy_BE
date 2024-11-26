@@ -56,42 +56,42 @@ public class SecurityConfiguration {
         };
 
 
-//        http
-//                .csrf(c -> c.disable())
-//                .cors(Customizer.withDefaults())
-//                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers(whiteList).permitAll()
-//                        .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
-//                        .requestMatchers(HttpMethod.GET, "/colors/**").permitAll()
-//                        .requestMatchers(HttpMethod.GET, "/trademarks/**").permitAll()
-//                        .requestMatchers(HttpMethod.GET, "/memories/**").permitAll()
-//                        .requestMatchers(HttpMethod.GET, "/usageCategories/**").permitAll()
-//                        .requestMatchers(HttpMethod.GET, "/attributes/**").permitAll()
-//                        .requestMatchers(HttpMethod.GET, "/product-feedbacks/**").permitAll()
-//                        .anyRequest().authenticated()
-//                )
-//                .httpBasic(Customizer.withDefaults())
-//                .addFilterBefore(tokenBlacklistFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
-//                .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults())
-//                        .authenticationEntryPoint(customAuthenticationEntryPoint))
-//                .exceptionHandling(
-//                        exceptions -> exceptions
-//                                .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
-//                                .accessDeniedHandler(new BearerTokenAccessDeniedHandler()))
-//                .formLogin(f -> f.disable())
-//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
         http
-                .csrf(csrf -> csrf.disable())
+                .csrf(c -> c.disable())
+                .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(whiteList).permitAll()
-                        .anyRequest().permitAll()
+                        .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/colors/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/trademarks/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/memories/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/usageCategories/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/attributes/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/product-feedbacks/**").permitAll()
+                        .anyRequest().authenticated()
                 )
-                .addFilterBefore(tokenBlacklistFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(Customizer.withDefaults())
+                .addFilterBefore(tokenBlacklistFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults())
-                        .authenticationEntryPoint(customAuthenticationEntryPoint)).formLogin(f -> f.disable())
+                        .authenticationEntryPoint(customAuthenticationEntryPoint))
+                .exceptionHandling(
+                        exceptions -> exceptions
+                                .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
+                                .accessDeniedHandler(new BearerTokenAccessDeniedHandler()))
+                .formLogin(f -> f.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+//        http
+//                .csrf(csrf -> csrf.disable())
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers(whiteList).permitAll()
+//                        .anyRequest().permitAll()
+//                )
+//                .addFilterBefore(tokenBlacklistFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
+//                .httpBasic(Customizer.withDefaults())
+//                .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults())
+//                        .authenticationEntryPoint(customAuthenticationEntryPoint)).formLogin(f -> f.disable())
+//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
     }
