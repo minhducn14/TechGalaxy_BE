@@ -16,4 +16,5 @@ public class ValueResponse {
     String attributeName;
     String attributeId;
     String value;
+    String type;
 }
