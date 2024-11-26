@@ -126,4 +126,11 @@ public class RoleServiceImpl implements RoleService {
                 .map(roleMapper::toResponse)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<RoleResponse> fechByEmail(String email) {
+        return roleRepository.findRolesByAccountEmail(email).stream()
+                .map(roleMapper::toResponse)
+                .collect(Collectors.toList());
+    }
 }

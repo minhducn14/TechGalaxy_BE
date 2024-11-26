@@ -83,6 +83,18 @@ public class RoleController {
         return ResponseEntity.ok(DataResponse.<RoleResponse>builder().data(List.of(roleResponse)).build());
     }
 
+    @GetMapping("/email/{email}")
+    public ResponseEntity<DataResponse<RoleResponse>> getByEmail(@PathVariable("email") String email) {
+        List<RoleResponse> roleResponse = this.roleService.fechByEmail(email);
+
+        if (roleResponse == null) {
+            return ResponseEntity.badRequest()
+                    .body(DataResponse.<RoleResponse>builder().message("Role với email = " + email + " không tồn tại.").build());
+        }
+
+        return ResponseEntity.ok(DataResponse.<RoleResponse>builder().data(roleResponse).build());
+    }
+
     @GetMapping("/all")
     public ResponseEntity<DataResponse<RoleResponse>> getAll() {
         return ResponseEntity.ok(DataResponse.<RoleResponse>builder().data(this.roleService.findAll()).build());
