@@ -52,4 +52,6 @@ public interface ProductVariantDetailRepository extends JpaRepository<ProductVar
     @Query("SELECT pvd FROM ProductVariantDetail pvd JOIN pvd.productVariant pv JOIN pvd.color c JOIN pvd.memory m WHERE pv.id = :productVariantId AND c.id = :colorId AND m.id = :memoryId")
     ProductVariantDetail findProductVariantDetailByProductVariantAndColorAndMemory(@Param("productVariantId") String productVariantId,@Param("colorId") String colorId,@Param("memoryId") String memoryId);
 
+    @Query("SELECT COUNT(od) FROM OrderDetail od WHERE od.productVariantDetail.id = :productVariantDetailId")
+    long countOrderDetailsByProductVariantDetailId(@Param("productVariantDetailId") String productVariantDetailId);
 }

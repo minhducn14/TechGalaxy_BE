@@ -120,6 +120,10 @@ public class CustomerServiceImpl implements CustomerService {
     public boolean delete(String id) {
         if (!customerRepository.existsById(id))
             return false;
+        long orderCount = customerRepository.countOrdersByCustomerId(id);
+        if (orderCount > 0) {
+            throw new IllegalStateException("Cannot delete account as the user has placed orders.");
+        }
         customerRepository.deleteById(id);
         return true;
     }
