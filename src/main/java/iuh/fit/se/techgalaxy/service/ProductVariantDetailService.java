@@ -15,7 +15,7 @@ public interface ProductVariantDetailService {
 
     ProductDetailResponse getProductDetail(String productDetailId);
 
-    Boolean createProductVariantDetail(String variantId, List<ProductVariantDetailRequest> productVariantDetailRequest);
+    List<String> createProductVariantDetail(String variantId, List<ProductVariantDetailRequest> productVariantDetailRequest);
     Boolean updateProductVariantDetail(String productDetailId, ProductDetailUpdateRequest productDetailUpdateRequest);
     void deleteProductVariantDetail(String productDetailId);
 

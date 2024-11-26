@@ -58,7 +58,7 @@ public class ProductVariantDetailServiceImpl implements ProductVariantDetailServ
     }
 
     @Override
-    public Boolean createProductVariantDetail(String variantId, List<ProductVariantDetailRequest> productVariantDetailRequests) {
+    public List<String> createProductVariantDetail(String variantId, List<ProductVariantDetailRequest> productVariantDetailRequests) {
         ProductVariant productVariant = productVariantRepository.findById(variantId)
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOTFOUND));
         List<ProductVariantDetail> detailsToSave = new ArrayList<>();
@@ -73,8 +73,15 @@ public class ProductVariantDetailServiceImpl implements ProductVariantDetailServ
                 detailsToSave.add(detail);
             }
         }
-        productVariantDetailRepository.saveAll(detailsToSave);
-        return true;
+//        productVariantDetailRepository.saveAll(detailsToSave);
+        Iterable<ProductVariantDetail> savedDetails = productVariantDetailRepository.saveAll(detailsToSave);
+        List<String> detailIds = new ArrayList<>();
+
+        if(savedDetails.iterator().hasNext()) {
+            savedDetails.forEach(detail -> detailIds.add(detail.getId()));
+            return detailIds;
+        }
+        return detailIds;
     }
 
     @Override
