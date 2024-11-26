@@ -18,4 +18,6 @@ public interface OrderService {
     PagedModel<OrderResponse> findAllOrders(int page, int size);
 
     List<OrderResponse> findAll();
+
+    List<OrderResponse> findOrdersByCustomerId(String id);
 }

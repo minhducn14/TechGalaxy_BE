@@ -96,4 +96,12 @@ public class OrderServiceImpl implements OrderService {
                 .map(OrderMapper.INSTANCE::toOrderResponse)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<OrderResponse> findOrdersByCustomerId(String id) {
+        return orderRepository.getOrdersByCustomerId(id)
+                .stream()
+                .map(OrderMapper.INSTANCE::toOrderResponse)
+                .collect(Collectors.toList());
+    }
 }
