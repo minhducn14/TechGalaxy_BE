@@ -4,6 +4,8 @@ import iuh.fit.se.techgalaxy.entities.Permission;
 import iuh.fit.se.techgalaxy.entities.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.stereotype.Repository;
 
@@ -21,4 +23,6 @@ public interface RoleRepository extends JpaRepository<Role, String>,
 
 
     List<Role> findByNameIn(List<String> name);
+    @Query("SELECT r FROM Role r JOIN r.accounts a WHERE a.email = :email")
+    List<Role> findRolesByAccountEmail(@Param("email") String email);
 }
