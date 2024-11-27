@@ -58,15 +58,6 @@ public class ProductVariantDetailServiceImpl implements ProductVariantDetailServ
     }
 
     @Override
-    public List<ProductDetailResponse> getProductDetailsByIds(List<String> productDetailIds) {
-        List<ProductVariantDetail> productVariantDetails = productVariantDetailRepository.findAllByIdIsIn(productDetailIds);
-        if (!productVariantDetails.isEmpty()) {
-            return productVariantDetails.stream().map(productVariantDetailMapper::toResponse).toList();
-        }
-        return null;
-    }
-
-    @Override
     public Boolean createProductVariantDetail(String variantId, List<ProductVariantDetailRequest> productVariantDetailRequests) {
         ProductVariant productVariant = productVariantRepository.findById(variantId)
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOTFOUND));

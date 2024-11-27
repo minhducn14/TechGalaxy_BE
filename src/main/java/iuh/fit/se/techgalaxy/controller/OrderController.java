@@ -51,4 +51,11 @@ public class OrderController {
                 .build());
     }
 
+    @GetMapping("/customer/{customerId}")
+    public ResponseEntity<DataResponse<OrderResponse>> getOrdersByCustomerId(@PathVariable String customerId) {
+        return ResponseEntity.ok(DataResponse.<OrderResponse>builder()
+                .data(orderService.findOrdersByCustomerId(customerId))
+                .build());
+    }
+
 }

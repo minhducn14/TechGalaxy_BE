@@ -86,4 +86,13 @@ public interface RoleService {
     public List<Role> findByNameIn(List<String> names);
 
     public List<RoleResponse> findAll();
+
+    /**
+     * Fetch role by email
+     *
+     * @param email
+     * @return List<RoleResponse>
+     *     author: Vũ Nguyễn Minh Đức
+     */
+    public List<RoleResponse> fechByEmail(String email);
 }
