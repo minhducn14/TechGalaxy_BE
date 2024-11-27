@@ -45,7 +45,13 @@ public class ProductVariantDetailController {
        productDetailResponses.add(productVariantDetailServiceImpl.getProductDetail(productDetailId));
         return  ResponseEntity.ok(DataResponse.<ProductDetailResponse>builder().data(productDetailResponses).build());
     }
-
+    @GetMapping("/getProductDetailsByIds")
+    public ResponseEntity<DataResponse<ProductDetailResponse>> getAllProductDetailsByIds(
+            @RequestParam List<String> productDetailIds
+    ) {
+        List<ProductDetailResponse> productDetailResponses = productVariantDetailServiceImpl.getProductDetailsByIds(productDetailIds);
+        return ResponseEntity.ok(DataResponse.<ProductDetailResponse>builder().data(productDetailResponses).build());
+    }
     @PostMapping
     public ResponseEntity<DataResponse<Boolean>> createProductVariantDetail(@PathVariable String variantId, @RequestBody List<ProductVariantDetailRequest> productVariantDetailRequest) {
         productVariantDetailServiceImpl.createProductVariantDetail(variantId, productVariantDetailRequest);
