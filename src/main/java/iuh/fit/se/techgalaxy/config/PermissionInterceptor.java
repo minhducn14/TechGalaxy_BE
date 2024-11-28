@@ -18,8 +18,8 @@ import java.util.List;
 
 @RequiredArgsConstructor
 public class PermissionInterceptor implements HandlerInterceptor {
-
-    private AccountServiceImpl accountService;
+    @Autowired
+    private final AccountServiceImpl accountService;
 
     @Override
     @Transactional

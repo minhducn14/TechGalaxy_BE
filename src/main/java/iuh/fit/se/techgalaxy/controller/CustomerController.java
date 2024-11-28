@@ -3,8 +3,11 @@ package iuh.fit.se.techgalaxy.controller;
 import iuh.fit.se.techgalaxy.dto.request.CustomerRequest;
 import iuh.fit.se.techgalaxy.dto.response.CustomerResponse;
 import iuh.fit.se.techgalaxy.dto.response.DataResponse;
+import iuh.fit.se.techgalaxy.dto.response.LoginResponse;
 import iuh.fit.se.techgalaxy.service.CustomerService;
+import iuh.fit.se.techgalaxy.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,10 +17,12 @@ import java.util.*;
 @RequestMapping("/customers")
 public class CustomerController {
     CustomerService customerService;
+    private final SecurityUtil securityUtil;
 
     @Autowired
-    public CustomerController(CustomerService customerService) {
+    public CustomerController(CustomerService customerService, SecurityUtil securityUtil) {
         this.customerService = customerService;
+        this.securityUtil = securityUtil;
     }
 
     @GetMapping
@@ -71,6 +76,32 @@ public class CustomerController {
         customerResponses.add(customerService.findByEmail(email));
         return ResponseEntity.ok(DataResponse.<CustomerResponse>builder()
                 .message("Get customer by email success")
+                .data(customerResponses)
+                .build());
+    }
+
+    @GetMapping("/profile/email/{email}")
+    public ResponseEntity<DataResponse<CustomerResponse>> getProfile(@PathVariable String email) {
+        System.out.println("email: " + email);
+        String emailLogin = SecurityUtil.getCurrentUserLogin().orElse(null);
+        System.out.println("emailLogin: " + emailLogin);
+        if (email == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(DataResponse.<CustomerResponse>builder()
+                            .status(401)
+                            .message("No user logged in")
+                            .build());
+        }
+        if (!email.equals(emailLogin)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(DataResponse.<CustomerResponse>builder()
+                            .status(403)
+                            .message("You do not have permission to access this resource")
+                            .build());
+        }
+        List<CustomerResponse> customerResponses = new ArrayList<>();
+        customerResponses.add(customerService.findByEmail(email));
+        return ResponseEntity.ok(DataResponse.<CustomerResponse>builder()
                 .data(customerResponses)
                 .build());
     }
