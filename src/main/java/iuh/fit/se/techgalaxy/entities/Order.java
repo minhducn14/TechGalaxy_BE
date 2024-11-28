@@ -44,7 +44,7 @@ public class Order {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private OrderStatus orderStatus;
+    private OrderStatus orderStatus = OrderStatus.NEW;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
