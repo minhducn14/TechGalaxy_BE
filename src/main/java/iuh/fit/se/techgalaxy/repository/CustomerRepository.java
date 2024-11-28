@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.hateoas.PagedModel;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -14,10 +13,10 @@ import java.util.List;
 public interface CustomerRepository extends JpaRepository<Customer, String> {
 
     @Query("SELECT c FROM  Customer c JOIN c.account a WHERE a.email LIKE :email")
-    public List<Customer> findByEmail(String email);
+    List<Customer> findByEmail(String email);
 
     @Query("SELECT c FROM Customer c")
-    public PagedModel<Customer> findAllCustomers(int page, int size);
+    PagedModel<Customer> findAllCustomers(int page, int size);
 
     @Query("SELECT COUNT(o) FROM Order o WHERE o.customer.id = :customerId")
     long countOrdersByCustomerId(@Param("customerId") String customerId);

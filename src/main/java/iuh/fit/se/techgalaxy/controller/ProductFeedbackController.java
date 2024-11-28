@@ -2,18 +2,12 @@ package iuh.fit.se.techgalaxy.controller;
 
 
 import iuh.fit.se.techgalaxy.dto.request.ProductFeedbackRequest;
-import iuh.fit.se.techgalaxy.dto.request.TrademarkRequest;
-import iuh.fit.se.techgalaxy.dto.response.ProductFeedbackResponse;
-import iuh.fit.se.techgalaxy.dto.response.TrademarkResponse;
 import iuh.fit.se.techgalaxy.dto.response.DataResponse;
-import iuh.fit.se.techgalaxy.service.ProductFeedbackService;
+import iuh.fit.se.techgalaxy.dto.response.ProductFeedbackResponse;
 import iuh.fit.se.techgalaxy.service.impl.ProductFeedbackServiceImpl;
-import iuh.fit.se.techgalaxy.service.impl.ProductVariantServiceImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +28,7 @@ public class ProductFeedbackController {
     @GetMapping
     public ResponseEntity<DataResponse<ProductFeedbackResponse>> getAllFeedbacks() {
         List<ProductFeedbackResponse> feedbackResponses = productFeedbackServiceImpl.getAllFeedback();
-     	return ResponseEntity.ok(DataResponse.<ProductFeedbackResponse>builder()
+        return ResponseEntity.ok(DataResponse.<ProductFeedbackResponse>builder()
                 .data(feedbackResponses)
                 .build());
     }
@@ -56,14 +50,13 @@ public class ProductFeedbackController {
      * Update an existing feedback by ID
      */
     @PutMapping("/{id}")
-    public ResponseEntity<DataResponse<ProductFeedbackResponse>>updateFeedback(@RequestBody ProductFeedbackRequest productFeedbackRequest){
+    public ResponseEntity<DataResponse<ProductFeedbackResponse>> updateFeedback(@RequestBody ProductFeedbackRequest productFeedbackRequest) {
 
 
-    		
-    		ProductFeedbackResponse productFeedback = productFeedbackServiceImpl.updateFeedback(productFeedbackRequest.getId(),productFeedbackRequest.getFeedbackRating(),productFeedbackRequest.getFeedbackText());
-    		return ResponseEntity.ok(DataResponse.<ProductFeedbackResponse>builder()
-                    .data(List.of(productFeedback))
-                    .build());
+        ProductFeedbackResponse productFeedback = productFeedbackServiceImpl.updateFeedback(productFeedbackRequest.getId(), productFeedbackRequest.getFeedbackRating(), productFeedbackRequest.getFeedbackText());
+        return ResponseEntity.ok(DataResponse.<ProductFeedbackResponse>builder()
+                .data(List.of(productFeedback))
+                .build());
     }
 
     /**
@@ -71,7 +64,7 @@ public class ProductFeedbackController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<DataResponse<ProductFeedbackResponse>> deleteFeedback(@PathVariable String id) {
-    	
+
         boolean isDeleted = productFeedbackServiceImpl.deleteFeedback(id);
         return ResponseEntity.ok(DataResponse.<ProductFeedbackResponse>builder().message("Delete " + id + " success").build());
     }

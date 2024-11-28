@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ProductsImageService {
 
-    List<ProductsImageResponse> createProductsImage(String variantDetail,List<ProductsImageRequest> productsImageRequest);
+    List<ProductsImageResponse> createProductsImage(String variantDetail, List<ProductsImageRequest> productsImageRequest);
 
     List<ProductsImageResponse> getProductsImageByProductId(String productId);
 

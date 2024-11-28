@@ -21,16 +21,18 @@ import java.util.Objects;
 public class GlobalException {
     private static final String MIN_ATTRIBUTE = "min";
     private static final String MAX_ATTRIBUTE = "max";
+
     // Handle all exception
     @ExceptionHandler(Exception.class)
-    public  ResponseEntity<DataResponse> handleException() {
+    public ResponseEntity<DataResponse> handleException() {
         DataResponse dataResponse = DataResponse.builder().status(ErrorCode.UNCATEGORIZED_ERROR.getCode()).message(ErrorCode.UNCATEGORIZED_ERROR.getMessage()).build();
         return ResponseEntity.status(ErrorCode.UNCATEGORIZED_ERROR.getHttpStatus()).body(dataResponse);
     }
+
     // Handle AppException Custom
     @ExceptionHandler(AppException.class)
     public ResponseEntity<DataResponse> handleAppException(AppException ex) {
-        String message = ex.getCustomMessage() != null ? ex.getErrorCode().getMessage()+ " " + ex.getCustomMessage() : ex.getErrorCode().getMessage();
+        String message = ex.getCustomMessage() != null ? ex.getErrorCode().getMessage() + " " + ex.getCustomMessage() : ex.getErrorCode().getMessage();
         DataResponse dataResponse = DataResponse.builder()
                 .status(ex.getErrorCode().getCode())
                 .message(message)
@@ -44,21 +46,24 @@ public class GlobalException {
         DataResponse dataResponse = DataResponse.builder().status(ErrorCode.NO_RESOURCE_FOUND.getCode()).message(ErrorCode.NO_RESOURCE_FOUND.getMessage()).build();
         return ResponseEntity.status(ErrorCode.NO_RESOURCE_FOUND.getHttpStatus()).body(dataResponse);
     }
+
     // Handle File Exception
     @ExceptionHandler({URISyntaxException.class, IOException.class})
     public ResponseEntity<DataResponse> handleFileException() {
         DataResponse dataResponse = DataResponse.builder().status(ErrorCode.CREATE_DIRECTORY_FAILED.getCode()).message(ErrorCode.CREATE_DIRECTORY_FAILED.getMessage()).build();
         return ResponseEntity.status(ErrorCode.CREATE_DIRECTORY_FAILED.getHttpStatus()).body(dataResponse);
     }
+
     // Handle DataIntegrityViolationException
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<DataResponse> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
         if (ex.getCause() instanceof ConstraintViolationException) {
             ErrorCode errorCode = ErrorCode.DATA_DUPLICATE_PRODUCT_DETAIL;
-            return  ResponseEntity.status(errorCode.getHttpStatus()).body(DataResponse.builder().status(errorCode.getCode()).message(errorCode.getMessage()).build());
+            return ResponseEntity.status(errorCode.getHttpStatus()).body(DataResponse.builder().status(errorCode.getCode()).message(errorCode.getMessage()).build());
         }
         return handleException();
     }
+
     // Handle Validation Exception
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<DataResponse> handleValidationException(MethodArgumentNotValidException ex) {

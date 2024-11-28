@@ -69,6 +69,6 @@ public interface ProductVariantDetailMapper {
     ProductPageResponse toResponsePage(ProductVariantDetail detail);
 
 
-    @Mapping(source = "productVariant.id",target = "productVariantId")
+    @Mapping(source = "productVariant.id", target = "productVariantId")
     ProductDetailResponse toResponse(ProductVariantDetail detail);
 }

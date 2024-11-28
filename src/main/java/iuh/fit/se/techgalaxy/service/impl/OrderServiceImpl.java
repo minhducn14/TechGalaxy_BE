@@ -31,14 +31,15 @@ import java.util.stream.Collectors;
 @Slf4j
 public class OrderServiceImpl implements OrderService {
 
-     OrderRepository orderRepository;
-     CustomerRepository customerRepository;
-     OrderDetailRepository orderDetailRepository;
-     ProductVariantDetailRepository productVariantDetailRepository;
+    OrderRepository orderRepository;
+    CustomerRepository customerRepository;
+    OrderDetailRepository orderDetailRepository;
+    ProductVariantDetailRepository productVariantDetailRepository;
     SystemUserRepository systemUserRepository;
 
     /**
      * Save order
+     *
      * @param orderRequest
      * @return OrderResponse
      * author: PhamVanThanh
@@ -51,6 +52,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * Find order by id
+     *
      * @param id
      * @return OrderResponse
      * author: PhamVanThanh
@@ -63,6 +65,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * Update order
+     *
      * @param orderRequest
      * @return OrderResponse
      * author: PhamVanThanh
@@ -77,6 +80,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * Find all orders with pagination
+     *
      * @param page
      * @param size
      * @return PagedModel<OrderResponse>
@@ -177,7 +181,6 @@ public class OrderServiceImpl implements OrderService {
 
         return orderResponse;
     }
-
 
 
 }

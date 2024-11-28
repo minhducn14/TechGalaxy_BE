@@ -28,6 +28,7 @@ public class OrderController {
                 .data(orderService.findAll())
                 .build());
     }
+
     @PostMapping("/v2")
     public ResponseEntity<DataResponse<OrderResponse>> createOrderAndOrderDetails(@RequestBody OrderRequestV2 request) {
         List<OrderResponse> orderResponses = List.of(orderService.createOrders(request));

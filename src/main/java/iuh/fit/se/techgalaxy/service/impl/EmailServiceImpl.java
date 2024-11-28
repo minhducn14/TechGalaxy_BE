@@ -1,13 +1,12 @@
 package iuh.fit.se.techgalaxy.service.impl;
+
 import iuh.fit.se.techgalaxy.dto.request.EmailRequest;
 import iuh.fit.se.techgalaxy.exception.AppException;
 import iuh.fit.se.techgalaxy.exception.ErrorCode;
 import iuh.fit.se.techgalaxy.service.EmailService;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Map;
-
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
@@ -17,11 +16,11 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 @Service
-public class EmailServiceImpl  implements EmailService {
+public class EmailServiceImpl implements EmailService {
     private final MailSender mailSender;
     private final JavaMailSender javaMailSender;
     private final SpringTemplateEngine templateEngine;
@@ -55,6 +54,7 @@ public class EmailServiceImpl  implements EmailService {
             new AppException(ErrorCode.FAILED_SEND_EMAIL);
         }
     }
+
     public void sendEmailFromTemplateSync(
             String to,
             String subject,
@@ -77,7 +77,6 @@ public class EmailServiceImpl  implements EmailService {
         String content = templateEngine.process(templateName, context);
         this.sendEmailSync(to, subject, content, false, true);
     }
-
 
 
     public void sendEmailFromTemplateSync(String to, String subject, String templateName) {

@@ -1,8 +1,5 @@
 package iuh.fit.se.techgalaxy.config;
 
-import java.util.List;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
@@ -11,6 +8,10 @@ import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
 
 @Configuration
 public class OpenAPIConfig {
@@ -45,17 +46,17 @@ public class OpenAPIConfig {
                 .version("1.0")
                 .contact(createContact())
                 .description("""
-                    Welcome to the Tech Galaxy Mobile Store API!
-                    
-                    This project is developed by a team of enthusiastic members who are passionate about technology and customer satisfaction. 
-                    
-                    **Key Features**:
-                    - Secure and reliable API for managing mobile store operations.
-                    - Detailed product listings with real-time updates.
-                    - Comprehensive user and order management system.
-
-                    Enjoy exploring our API and happy coding!
-                """)
+                            Welcome to the Tech Galaxy Mobile Store API!
+                        
+                            This project is developed by a team of enthusiastic members who are passionate about technology and customer satisfaction. 
+                        
+                            **Key Features**:
+                            - Secure and reliable API for managing mobile store operations.
+                            - Detailed product listings with real-time updates.
+                            - Comprehensive user and order management system.
+                        
+                            Enjoy exploring our API and happy coding!
+                        """)
                 .license(createLicense());
     }
 

@@ -1,17 +1,5 @@
 package iuh.fit.se.techgalaxy.service.impl;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-
 import iuh.fit.se.techgalaxy.exception.AppException;
 import iuh.fit.se.techgalaxy.exception.ErrorCode;
 import iuh.fit.se.techgalaxy.service.FileService;
@@ -21,21 +9,31 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+
 @Service
 public class FileServiceImpl implements FileService {
 
     @Value("${upload-file.base-uri}")
     private String uploadDir;
-    private String baseURI ;
+    private String baseURI;
+
     @PostConstruct
     public void init() {
         Path uploadPath = Paths.get(uploadDir).toAbsolutePath();
         this.baseURI = uploadPath.toString();
-        this.baseURI =  this.baseURI.replace("\\", "/");
-        this.baseURI = "file:///"+ this.baseURI+ "/";
+        this.baseURI = this.baseURI.replace("\\", "/");
+        this.baseURI = "file:///" + this.baseURI + "/";
         this.baseURI = this.baseURI.replace(" ", "%20");
-        
+
     }
+
     @Override
     public void createDirectory(String folder) throws URISyntaxException {
         folder = folder.replace(" ", "%20");
@@ -67,7 +65,6 @@ public class FileServiceImpl implements FileService {
 
         return currentPath.toString();
     }
-
 
 
     @Override

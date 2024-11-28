@@ -1,27 +1,18 @@
 package iuh.fit.se.techgalaxy.controller;
 
 import iuh.fit.se.techgalaxy.dto.request.ImgProductFeedbackRequest;
-import iuh.fit.se.techgalaxy.dto.request.ProductFeedbackRequest;
 import iuh.fit.se.techgalaxy.dto.response.DataResponse;
 import iuh.fit.se.techgalaxy.dto.response.ImgProductFeedbackResponse;
-import iuh.fit.se.techgalaxy.dto.response.ProductFeedbackResponse;
-import iuh.fit.se.techgalaxy.dto.response.ProductVariantResponse;
-import iuh.fit.se.techgalaxy.service.ImgProductFeedbackService;
 import iuh.fit.se.techgalaxy.service.impl.ImgProductFeedbackServiceImpl;
-import iuh.fit.se.techgalaxy.service.impl.ProductFeedbackServiceImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 @RequiredArgsConstructor

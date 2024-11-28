@@ -2,7 +2,6 @@ package iuh.fit.se.techgalaxy.service.impl;
 
 import iuh.fit.se.techgalaxy.dto.request.CustomerRequest;
 import iuh.fit.se.techgalaxy.dto.response.CustomerResponse;
-import iuh.fit.se.techgalaxy.dto.response.DataResponse;
 import iuh.fit.se.techgalaxy.entities.Account;
 import iuh.fit.se.techgalaxy.entities.Customer;
 import iuh.fit.se.techgalaxy.exception.AppException;
@@ -17,7 +16,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,8 +29,10 @@ public class CustomerServiceImpl implements CustomerService {
         this.customerRepository = customerRepository;
         this.accountRepository = accountRepository;
     }
+
     /**
      * Find all customers with pagination
+     *
      * @param page
      * @param size
      * @return PagedModel<CustomerResponse>
@@ -59,6 +59,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     /**
      * Find all customers
+     *
      * @return List<CustomerResponse>
      * author: PhamVanThanh
      */
@@ -72,6 +73,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     /**
      * Find customer by id and convert to CustomerResponse if exist else return null
+     *
      * @param id
      * @return CustomerResponse
      * author: PhamVanThanh
@@ -79,17 +81,19 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerResponse findById(String id) {
         return customerRepository.findById(id)
-                .map(CustomerMapper.INSTANCE::toCustomerResponse).orElseThrow(()-> new AppException(ErrorCode.CUSTOMER_NOTFOUND));
+                .map(CustomerMapper.INSTANCE::toCustomerResponse).orElseThrow(() -> new AppException(ErrorCode.CUSTOMER_NOTFOUND));
     }
+
     /**
      * Save new customer
+     *
      * @param customerRequest
      * @return CustomerResponse
      * author: PhamVanThanh
      */
     @Override
     public CustomerResponse save(CustomerRequest customerRequest) {
-        Account account = accountRepository.findById(customerRequest.getAccount().getId()).orElseThrow(()-> new AppException(ErrorCode.ACCOUNT_NOTFOUND));
+        Account account = accountRepository.findById(customerRequest.getAccount().getId()).orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOTFOUND));
         customerRequest.setAccount(account);
         Customer customer = CustomerMapper.INSTANCE.toCustomerFromRequest(customerRequest);
         Customer customerAdd = customerRepository.save(customer);
@@ -98,6 +102,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     /**
      * Update customer if exist else return null
+     *
      * @param customerRequest
      * @return CustomerResponse
      * author: PhamVanThanh
@@ -112,6 +117,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     /**
      * Delete customer by id
+     *
      * @param id
      * @return boolean
      * author: PhamVanThanh
@@ -130,6 +136,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     /**
      * Find customer by email
+     *
      * @param email
      * @return List<CustomerResponse>
      * author: PhamVanThanh

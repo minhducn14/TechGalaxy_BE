@@ -26,6 +26,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     /**
      * Get order details by order id
+     *
      * @param orderId
      * @return List<OrderDetailResponse>
      * author: PhamVanThanh
@@ -40,6 +41,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     /**
      * Save order detail
+     *
      * @param orderDetailRequest
      * @return OrderDetailResponse
      * author: PhamVanThanh
@@ -53,12 +55,13 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     /**
      * Find order detail by id
+     *
      * @param id
      * @return OrderDetailResponse
      * author: PhamVanThanh
      */
     @Override
     public OrderDetailResponse findById(String id) {
-        return OrderDetailMapper.INSTANCE.toOrderDetailResponse(orderDetailRepository.findById(id).orElseThrow(()->new AppException(ErrorCode.ORDER_DETAIL_NOTFOUND)));
+        return OrderDetailMapper.INSTANCE.toOrderDetailResponse(orderDetailRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.ORDER_DETAIL_NOTFOUND)));
     }
 }

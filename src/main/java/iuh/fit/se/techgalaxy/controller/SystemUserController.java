@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +24,7 @@ public class SystemUserController {
     public SystemUserController(SystemUserService systemUserService) {
         this.systemUserService = systemUserService;
     }
+
     @GetMapping
     public ResponseEntity<DataResponse<ResultPaginationDTO>> getAllSystemUsers(Specification<SystemUser> spec, Pageable pageable) {
         ResultPaginationDTO result = systemUserService.fetchAllSystemUser(spec, pageable);

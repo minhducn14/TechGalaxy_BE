@@ -3,15 +3,16 @@ package iuh.fit.se.techgalaxy.service;
 import iuh.fit.se.techgalaxy.dto.request.EmailRequest;
 
 public interface EmailService {
-    public void sendSimpleEmail();
-    public void sendEmailSync(String to, String subject, String content, boolean isMultipart, boolean isHtml);
+    void sendSimpleEmail();
 
-    public void sendEmailFromTemplateSync(
+    void sendEmailSync(String to, String subject, String content, boolean isMultipart, boolean isHtml);
+
+    void sendEmailFromTemplateSync(
             String to,
             String subject,
             String templateName,
             EmailRequest emailRequest
     );
 
-    public void sendEmailFromTemplateSync(String to, String subject, String templateName);
+    void sendEmailFromTemplateSync(String to, String subject, String templateName);
 }

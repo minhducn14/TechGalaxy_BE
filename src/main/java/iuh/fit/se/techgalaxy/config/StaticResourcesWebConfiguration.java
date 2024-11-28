@@ -16,15 +16,17 @@ public class StaticResourcesWebConfiguration
 
     @Value("${upload-file.base-uri}")
     private String uploadDir;
-    private String baseURI ;
+    private String baseURI;
+
     @PostConstruct
     public void init() {
         Path uploadPath = Paths.get(uploadDir).toAbsolutePath();
         this.baseURI = uploadPath.toString();
-        this.baseURI =  this.baseURI.replace("\\", "/");
-        this.baseURI = "file:///"+ this.baseURI+ "/";
+        this.baseURI = this.baseURI.replace("\\", "/");
+        this.baseURI = "file:///" + this.baseURI + "/";
 
     }
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/storage/**")

@@ -53,10 +53,10 @@ public class AccountServiceImpl implements AccountService {
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
 
 
-        if (account.getEmail() != null && !account.getEmail().isEmpty()){
+        if (account.getEmail() != null && !account.getEmail().isEmpty()) {
             if (existingAccount.getEmail().equals(account.getEmail())) {
 
-            } else if(accountRepository.existsByEmail(account.getEmail())) {
+            } else if (accountRepository.existsByEmail(account.getEmail())) {
                 throw new IllegalArgumentException("Email already exists");
             }
         }
@@ -86,10 +86,10 @@ public class AccountServiceImpl implements AccountService {
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
 
 
-        if (account.getEmail() != null && !account.getEmail().isEmpty()){
+        if (account.getEmail() != null && !account.getEmail().isEmpty()) {
             if (existingAccount.getEmail().equals(account.getEmail())) {
 
-            } else if(accountRepository.existsByEmail(account.getEmail())) {
+            } else if (accountRepository.existsByEmail(account.getEmail())) {
                 throw new IllegalArgumentException("Email already exists");
             }
         }

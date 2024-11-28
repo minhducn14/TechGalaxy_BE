@@ -6,7 +6,6 @@ import iuh.fit.se.techgalaxy.dto.request.AttributeValueUpdateRequest;
 import iuh.fit.se.techgalaxy.dto.response.AttributeResponse;
 import iuh.fit.se.techgalaxy.dto.response.DataResponse;
 import iuh.fit.se.techgalaxy.dto.response.ValueResponse;
-import iuh.fit.se.techgalaxy.entities.Attribute;
 import iuh.fit.se.techgalaxy.service.impl.AttributeServiceImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

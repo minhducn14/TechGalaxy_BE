@@ -5,12 +5,13 @@ import iuh.fit.se.techgalaxy.dto.response.AccountResponse;
 import iuh.fit.se.techgalaxy.dto.response.AccountUpdateResponse;
 import iuh.fit.se.techgalaxy.entities.Account;
 import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface AccountMapper {
-     AccountUpdateResponse toAccountResponse(Account account);
-     Account toAccount(AccountUpdateRequest accountRequest);
-     AccountResponse toAccountResponseToClient(Account account);
+    AccountUpdateResponse toAccountResponse(Account account);
+
+    Account toAccount(AccountUpdateRequest accountRequest);
+
+    AccountResponse toAccountResponseToClient(Account account);
 
 }

@@ -1,12 +1,10 @@
 package iuh.fit.se.techgalaxy.repository;
 
+import iuh.fit.se.techgalaxy.entities.Value;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
-import org.springframework.stereotype.Repository;
-
-import iuh.fit.se.techgalaxy.entities.Value;
 
 import java.util.List;
 
@@ -22,8 +20,8 @@ public interface ValueRepository extends JpaRepository<Value, String> {
                 )
             """)
     List<Value> findDistinctValuesByNameAndAttributeName(@Param("attributeName") String attributeName);
-    
-    
+
+
     List<Value> findAllByProductVariantId(String variantId);
 
 }

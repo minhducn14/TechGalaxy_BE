@@ -10,11 +10,13 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface PermissionMapper {
 
-    @Mapping(target = "id", ignore = true) // Bỏ qua trường id khi tạo mới
+    @Mapping(target = "id", ignore = true)
+        // Bỏ qua trường id khi tạo mới
     Permission toEntity(PermissionRequest request);
 
     PermissionResponse toResponse(Permission permission);
 
-    @Mapping(target = "id", ignore = true) // Không cập nhật id khi sửa
+    @Mapping(target = "id", ignore = true)
+        // Không cập nhật id khi sửa
     void updateEntityFromRequest(PermissionRequest request, @MappingTarget Permission permission);
 }

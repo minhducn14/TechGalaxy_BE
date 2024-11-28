@@ -60,7 +60,7 @@ public class ProductVariantServiceImpl implements ProductVariantService {
 
     @Override
     public ProductVariantResponse updateVariant(String id, ProductVariantRequest request) {
-        ProductVariant productVariant = productVariantRepository.findById(id).orElseThrow(()->
+        ProductVariant productVariant = productVariantRepository.findById(id).orElseThrow(() ->
                 new AppException(ErrorCode.PRODUCT_NOTFOUND));
         UsageCategory usageCategory = usageCategoryRepository.findById(request.getUsageCategoryId()).orElseThrow(
                 () -> new AppException(ErrorCode.USAGE_CATEGORY_NOTFOUND)
@@ -73,7 +73,7 @@ public class ProductVariantServiceImpl implements ProductVariantService {
 
     @Override
     public void deleteVariant(String id) {
-        ProductVariant productVariant = productVariantRepository.findById(id).orElseThrow(()->
+        ProductVariant productVariant = productVariantRepository.findById(id).orElseThrow(() ->
                 new RuntimeException("Product variant not found"));
         long usageCount = productVariantRepository.countOrderDetailsByProductVariantId(id);
         if (usageCount > 0) {

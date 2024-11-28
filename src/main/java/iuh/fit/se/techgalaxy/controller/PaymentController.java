@@ -1,7 +1,7 @@
 package iuh.fit.se.techgalaxy.controller;
 
-import iuh.fit.se.techgalaxy.dto.response.PaymentResponse;
 import iuh.fit.se.techgalaxy.dto.response.DataResponse;
+import iuh.fit.se.techgalaxy.dto.response.PaymentResponse;
 import iuh.fit.se.techgalaxy.service.impl.PaymentServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +16,19 @@ import java.util.List;
 @RequestMapping("/payment")
 public class PaymentController {
     private final PaymentServiceImpl paymentService;
+
     @Autowired
     public PaymentController(PaymentServiceImpl paymentService) {
         this.paymentService = paymentService;
     }
+
     @GetMapping("/vn-pay")
     public ResponseEntity<DataResponse<PaymentResponse.VNPayResponseCreate>> pay(HttpServletRequest request) {
         return ResponseEntity.ok(DataResponse.<PaymentResponse.VNPayResponseCreate>builder()
                 .data(List.of(paymentService.createVnPayPayment(request)))
                 .build());
     }
+
     @GetMapping("/vn-pay-callback")
     public ResponseEntity<DataResponse<PaymentResponse.VNPayResponse>> payCallbackHandler(HttpServletRequest request) {
         String amount = request.getParameter("vnp_Amount");
