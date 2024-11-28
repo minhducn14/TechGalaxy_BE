@@ -9,7 +9,9 @@ import iuh.fit.se.techgalaxy.service.impl.AccountServiceImpl;
 import iuh.fit.se.techgalaxy.util.SecurityUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
@@ -17,9 +19,10 @@ import org.springframework.web.servlet.HandlerMapping;
 import java.util.List;
 
 @RequiredArgsConstructor
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class PermissionInterceptor implements HandlerInterceptor {
-    @Autowired
-    private final AccountServiceImpl accountService;
+
+      AccountServiceImpl accountService;
 
     @Override
     @Transactional
