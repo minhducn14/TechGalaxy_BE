@@ -132,4 +132,20 @@ public class ProductVariantDetailServiceImpl implements ProductVariantDetailServ
         ProductVariantDetail productVariantDetail = productVariantDetailRepository.findProductVariantDetailByProductVariantAndColorAndMemory(productVariantId, color, memory);
         return productVariantDetailMapper.toResponse(productVariantDetail);
     }
+
+    @Override
+    public void updateQuantity(String productVariantDetailId, int quantity) {
+        ProductVariantDetail productVariantDetail = productVariantDetailRepository.findById(productVariantDetailId).orElseThrow(() ->
+                new AppException(ErrorCode.PRODUCT_NOTFOUND));
+        if (productVariantDetail.getQuantity() >= quantity) {
+            productVariantDetail.setQuantity(productVariantDetail.getQuantity() - quantity);
+        } else {
+            throw new AppException(ErrorCode.PRODUCT_NOT_ENOUGH);
+        }
+        try {
+            productVariantDetailRepository.save(productVariantDetail);
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.PRODUCT_UPDATE_FAILED);
+        }
+    }
 }
