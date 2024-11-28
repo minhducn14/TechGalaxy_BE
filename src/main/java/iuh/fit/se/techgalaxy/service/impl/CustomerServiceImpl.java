@@ -10,6 +10,7 @@ import iuh.fit.se.techgalaxy.mapper.CustomerMapper;
 import iuh.fit.se.techgalaxy.repository.AccountRepository;
 import iuh.fit.se.techgalaxy.repository.CustomerRepository;
 import iuh.fit.se.techgalaxy.service.CustomerService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final AccountRepository accountRepository;
@@ -143,6 +145,7 @@ public class CustomerServiceImpl implements CustomerService {
      */
     @Override
     public CustomerResponse findByEmail(String email) {
+
         return customerRepository.findByEmail(email)
                 .stream()
                 .map(CustomerMapper.INSTANCE::toCustomerResponse)
