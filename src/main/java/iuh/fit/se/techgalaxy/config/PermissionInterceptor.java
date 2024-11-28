@@ -10,15 +10,16 @@ import iuh.fit.se.techgalaxy.util.SecurityUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
 
 import java.util.List;
 
+@Component
 @RequiredArgsConstructor
 public class PermissionInterceptor implements HandlerInterceptor {
-    @Autowired
     private final AccountServiceImpl accountService;
 
     @Override
