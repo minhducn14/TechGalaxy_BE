@@ -28,6 +28,7 @@ public class OrderDetailController {
         productVariantDetailService.updateQuantity(orderDetailRequest.getProductVariantDetail().getId(), orderDetailRequest.getQuantity());
         List<OrderDetailResponse> orderDetailResponses = List.of(orderDetailService.save(orderDetailRequest));
         return ResponseEntity.ok(DataResponse.<OrderDetailResponse>builder()
+                .message("Create order detail success")
                 .data(orderDetailResponses)
                 .build());
     }
@@ -35,6 +36,7 @@ public class OrderDetailController {
     @GetMapping("/order/{orderId}")
     public ResponseEntity<DataResponse<OrderDetailResponse>> getOrderDetailsByOrderId(@PathVariable String orderId) {
         return ResponseEntity.ok(DataResponse.<OrderDetailResponse>builder()
+                .message("Get order details by order id success")
                 .data(orderDetailService.getOrderDetailsByOrderId(orderId))
                 .build());
     }
@@ -43,6 +45,7 @@ public class OrderDetailController {
     public ResponseEntity<DataResponse<OrderDetailResponse>> getById(@PathVariable String id) {
         List<OrderDetailResponse> orderDetailResponses = List.of(orderDetailService.findById(id));
         return ResponseEntity.ok(DataResponse.<OrderDetailResponse>builder()
+                .message("Get order detail by id success")
                 .data(orderDetailResponses)
                 .build());
     }

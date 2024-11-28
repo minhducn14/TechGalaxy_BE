@@ -23,6 +23,7 @@ public class CustomerController {
     @GetMapping
     public ResponseEntity<DataResponse<CustomerResponse>> getAllCustomers() {
         return ResponseEntity.ok(DataResponse.<CustomerResponse>builder()
+                .message("Get all customers success")
                 .data(customerService.findAll())
                 .build());
     }
@@ -42,6 +43,7 @@ public class CustomerController {
         List<CustomerResponse> customerResponses = new ArrayList<>();
         customerResponses.add(customerService.findById(id));
         return ResponseEntity.ok(DataResponse.<CustomerResponse>builder()
+                .message("Get customer by id success")
                 .data(customerResponses)
                 .build());
     }
@@ -58,7 +60,9 @@ public class CustomerController {
     @DeleteMapping("/{id}")
     public ResponseEntity<DataResponse<Object>> deleteCustomer(@PathVariable String id) {
         customerService.delete(id);
-        return ResponseEntity.ok(DataResponse.<Object>builder().message("Delete " + id + " success").build());
+        return ResponseEntity.ok(DataResponse.<Object>builder()
+                .message("Delete " + id + " success")
+                .build());
     }
 
     @GetMapping("/email/{email}")
@@ -66,6 +70,7 @@ public class CustomerController {
         List<CustomerResponse> customerResponses = new ArrayList<>();
         customerResponses.add(customerService.findByEmail(email));
         return ResponseEntity.ok(DataResponse.<CustomerResponse>builder()
+                .message("Get customer by email success")
                 .data(customerResponses)
                 .build());
     }
