@@ -35,6 +35,7 @@ public enum ErrorCode {
     IMAGE_FEEDBACK_NOTFOUND(1011, "Image Feedback not found", HttpStatus.NOT_FOUND),
     ORDER_NOTFOUND(1006, "Order not found", HttpStatus.NOT_FOUND),
     ORDER_DETAIL_NOTFOUND(1007, "Order detail not found", HttpStatus.NOT_FOUND),
+    SYSTEM_USER_NOT_FOUND(1008, "System user not found", HttpStatus.NOT_FOUND),
 
     // 2000 - 2999: Validation error in request body
     PRODUCT_DISCOUNT_INVALID(2000, "Product discount min value is {min} and max value is {max}", HttpStatus.BAD_REQUEST),
@@ -63,8 +64,7 @@ public enum ErrorCode {
     FILE_NOT_FOUND(4002, "File not found", HttpStatus.NOT_FOUND),
     FILE_SIZE_EXCEEDED(4003, "File size exceeded", HttpStatus.PAYLOAD_TOO_LARGE),
     MISSING_FILE(4004, "Missing file", HttpStatus.BAD_REQUEST),
-    CREATE_DIRECTORY_FAILED(4005, "Create directory failed", HttpStatus.INTERNAL_SERVER_ERROR),
-    ;
+    CREATE_DIRECTORY_FAILED(4005, "Create directory failed", HttpStatus.INTERNAL_SERVER_ERROR);
     int code;
     String message;
     HttpStatus httpStatus;
