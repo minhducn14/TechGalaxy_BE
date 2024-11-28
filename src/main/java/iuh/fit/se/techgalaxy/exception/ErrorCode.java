@@ -33,10 +33,12 @@ public enum ErrorCode {
     TRADEMARK_NOTFOUND(1009, "Trademark not found", HttpStatus.NOT_FOUND),
     FEEDBACK_NOTFOUND(1010, "Feedback not found", HttpStatus.NOT_FOUND),
     IMAGE_FEEDBACK_NOTFOUND(1011, "Image Feedback not found", HttpStatus.NOT_FOUND),
-    ORDER_NOTFOUND(1006, "Order not found", HttpStatus.NOT_FOUND),
-    ORDER_DETAIL_NOTFOUND(1007, "Order detail not found", HttpStatus.NOT_FOUND),
-    SYSTEM_USER_NOT_FOUND(1008, "System user not found", HttpStatus.NOT_FOUND),
-    PRODUCT_NOT_ENOUGH(1009, "Product not enough", HttpStatus.BAD_REQUEST),
+    ORDER_NOTFOUND(1012, "Order not found", HttpStatus.NOT_FOUND),
+    ORDER_DETAIL_NOTFOUND(1013, "Order detail not found", HttpStatus.NOT_FOUND),
+    SYSTEM_USER_NOTFOUND(1014, "System user not found", HttpStatus.NOT_FOUND),
+    INSUFFICIENT_PRODUCT_QUANTITY(1015, "Insufficient product quantity", HttpStatus.BAD_REQUEST),
+    SYSTEM_USER_NOT_FOUND(1016, "System user not found", HttpStatus.NOT_FOUND),
+    PRODUCT_NOT_ENOUGH(1017, "Product not enough", HttpStatus.BAD_REQUEST),
 
     // 2000 - 2999: Validation error in request body
     PRODUCT_DISCOUNT_INVALID(2000, "Product discount min value is {min} and max value is {max}", HttpStatus.BAD_REQUEST),

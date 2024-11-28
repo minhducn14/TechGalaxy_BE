@@ -2,10 +2,7 @@ package iuh.fit.se.techgalaxy.entities;
 
 import iuh.fit.se.techgalaxy.entities.enumeration.DetailStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
@@ -17,6 +14,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "Orders_Details")
 public class OrderDetail {
@@ -27,7 +25,7 @@ public class OrderDetail {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private DetailStatus detailStatus;
+    private DetailStatus detailStatus = DetailStatus.PROCESSING;
 
     @ManyToOne
     @JoinColumn(name = "order_id")

@@ -4,10 +4,7 @@ package iuh.fit.se.techgalaxy.entities;
 import iuh.fit.se.techgalaxy.entities.enumeration.OrderStatus;
 import iuh.fit.se.techgalaxy.entities.enumeration.PaymentStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
@@ -20,6 +17,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 @Table(name = "Orders")
 public class Order {
 
@@ -37,7 +35,7 @@ public class Order {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 50)
-    private PaymentStatus paymentStatus;
+    private PaymentStatus  paymentStatus = PaymentStatus.PENDING;
 
     @Column(length = 255)
     private String address;

@@ -1,6 +1,7 @@
 package iuh.fit.se.techgalaxy.controller;
 
 import iuh.fit.se.techgalaxy.dto.request.OrderRequest;
+import iuh.fit.se.techgalaxy.dto.request.OrderRequestV2;
 import iuh.fit.se.techgalaxy.dto.response.DataResponse;
 import iuh.fit.se.techgalaxy.dto.response.OrderResponse;
 import iuh.fit.se.techgalaxy.service.OrderService;
@@ -25,6 +26,13 @@ public class OrderController {
         return ResponseEntity.ok(DataResponse.<OrderResponse>builder()
                 .message("Get all orders success")
                 .data(orderService.findAll())
+                .build());
+    }
+    @PostMapping("/v2")
+    public ResponseEntity<DataResponse<OrderResponse>> createOrderAndOrderDetails(@RequestBody OrderRequestV2 request) {
+        List<OrderResponse> orderResponses = List.of(orderService.createOrders(request));
+        return ResponseEntity.ok(DataResponse.<OrderResponse>builder()
+                .data(orderResponses)
                 .build());
     }
 

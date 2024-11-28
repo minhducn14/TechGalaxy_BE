@@ -1,29 +1,41 @@
 package iuh.fit.se.techgalaxy.service.impl;
 
 import iuh.fit.se.techgalaxy.dto.request.OrderRequest;
+import iuh.fit.se.techgalaxy.dto.request.OrderRequestV2;
 import iuh.fit.se.techgalaxy.dto.response.OrderResponse;
-import iuh.fit.se.techgalaxy.entities.Order;
+import iuh.fit.se.techgalaxy.entities.*;
+import iuh.fit.se.techgalaxy.entities.enumeration.DetailStatus;
+import iuh.fit.se.techgalaxy.entities.enumeration.OrderStatus;
+import iuh.fit.se.techgalaxy.exception.AppException;
+import iuh.fit.se.techgalaxy.exception.ErrorCode;
 import iuh.fit.se.techgalaxy.mapper.OrderMapper;
-import iuh.fit.se.techgalaxy.repository.OrderRepository;
+import iuh.fit.se.techgalaxy.repository.*;
 import iuh.fit.se.techgalaxy.service.OrderService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
+@Slf4j
 public class OrderServiceImpl implements OrderService {
 
-    private final OrderRepository orderRepository;
-
-    @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository) {
-        this.orderRepository = orderRepository;
-    }
+     OrderRepository orderRepository;
+     CustomerRepository customerRepository;
+     OrderDetailRepository orderDetailRepository;
+     ProductVariantDetailRepository productVariantDetailRepository;
+    SystemUserRepository systemUserRepository;
 
     /**
      * Save order
@@ -104,4 +116,68 @@ public class OrderServiceImpl implements OrderService {
                 .map(OrderMapper.INSTANCE::toOrderResponse)
                 .collect(Collectors.toList());
     }
+
+
+    @Transactional
+    @Override
+    public OrderResponse createOrders(OrderRequestV2 orderRequestV2) {
+        Customer customer = customerRepository.findById(orderRequestV2.getCustomerId()).orElseThrow(
+                () -> new AppException(ErrorCode.CUSTOMER_NOTFOUND)
+        );
+
+        Order.OrderBuilder orderBuilder = Order.builder()
+                .customer(customer)
+                .paymentStatus(orderRequestV2.getPaymentStatus())
+                .address(orderRequestV2.getAddress())
+                .orderStatus(OrderStatus.NEW);
+        if (orderRequestV2.getSystemUserId() != null && !orderRequestV2.getSystemUserId().isEmpty()) {
+            SystemUser systemUser = systemUserRepository.findById(orderRequestV2.getSystemUserId()).orElseThrow(
+                    () -> new AppException(ErrorCode.SYSTEM_USER_NOTFOUND)
+            );
+            orderBuilder.orderStatus(OrderStatus.COMPLETED)
+                    .systemUser(systemUser);
+        }
+        Order order = orderBuilder.build();
+        orderRepository.save(order);
+
+        List<OrderDetail> orderDetails = new ArrayList<>();
+        for (OrderRequestV2.ProductDetailOrder productDetail : orderRequestV2.getProductDetailOrders()) {
+            ProductVariantDetail productVariantDetail = productVariantDetailRepository.findById(productDetail.getProductVariantDetailId()).orElseThrow(
+                    () -> new AppException(ErrorCode.PRODUCT_NOTFOUND)
+            );
+
+            if (productVariantDetail.getQuantity() < productDetail.getQuantity()) {
+                throw new AppException(ErrorCode.INSUFFICIENT_PRODUCT_QUANTITY, "Product: " + productVariantDetail.getProductVariant().getName() + " - Quantity: " + productVariantDetail.getQuantity());
+            }
+
+            double discountedPrice = (1 - productVariantDetail.getSale()) * productVariantDetail.getPrice();
+            double totalPrice = discountedPrice * productDetail.getQuantity();
+
+            orderDetails.add(OrderDetail.builder()
+                    .order(order)
+                    .detailStatus(DetailStatus.PROCESSING)
+                    .productVariantDetail(productVariantDetail)
+                    .quantity(productDetail.getQuantity())
+                    .price(totalPrice)
+                    .build());
+        }
+
+        orderDetailRepository.saveAll(orderDetails);
+
+        // Cập nhật số lượng sản phẩm trong kho sau khi lưu tất cả OrderDetails
+        for (OrderRequestV2.ProductDetailOrder productDetail : orderRequestV2.getProductDetailOrders()) {
+            ProductVariantDetail productVariantDetail = productVariantDetailRepository.findById(productDetail.getProductVariantDetailId()).orElseThrow(
+                    () -> new AppException(ErrorCode.PRODUCT_NOTFOUND)
+            );
+            productVariantDetail.setQuantity(productVariantDetail.getQuantity() - productDetail.getQuantity());
+            productVariantDetailRepository.save(productVariantDetail);
+        }
+
+        OrderResponse orderResponse = OrderMapper.INSTANCE.toOrderResponse(order);
+
+        return orderResponse;
+    }
+
+
+
 }

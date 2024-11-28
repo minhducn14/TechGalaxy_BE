@@ -30,9 +30,14 @@ public class GlobalException {
     // Handle AppException Custom
     @ExceptionHandler(AppException.class)
     public ResponseEntity<DataResponse> handleAppException(AppException ex) {
-        DataResponse dataResponse = DataResponse.builder().status(ex.getErrorCode().getCode()).message(ex.getErrorCode().getMessage()).build();
+        String message = ex.getCustomMessage() != null ? ex.getErrorCode().getMessage()+ " " + ex.getCustomMessage() : ex.getErrorCode().getMessage();
+        DataResponse dataResponse = DataResponse.builder()
+                .status(ex.getErrorCode().getCode())
+                .message(message)
+                .build();
         return ResponseEntity.status(ex.getErrorCode().getHttpStatus()).body(dataResponse);
     }
+
     // Handle NoResourceFoundException File
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<DataResponse> handleNoResourceFoundException() {
