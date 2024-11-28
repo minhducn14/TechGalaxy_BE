@@ -16,6 +16,8 @@ public interface ProductVariantDetailRepository extends JpaRepository<ProductVar
 
     List<ProductVariantDetail> findAllByProductVariantId(String productVariantId);
 
+    List<ProductVariantDetail> findAllByIdIsIn(List<String> ids);
+
     @Modifying
     @Query("UPDATE ProductVariantDetail p SET p.price = :price, p.sale = :sale  WHERE p.productVariant.id = :variantId")
     int updatePriceByVariantId(@Param("price") Double price, @Param("sale") Double sale, @Param("variantId") String variantId);
