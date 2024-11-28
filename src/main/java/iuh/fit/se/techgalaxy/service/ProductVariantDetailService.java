@@ -30,4 +30,6 @@ public interface ProductVariantDetailService {
                                                         Integer size);
 
     ProductDetailResponse findProductVariantDetailByProductVariantAndColorAndMemory(String productVariantId, String color, String memory);
+
+    void updateQuantity(String productVariantDetailId, int quantity);
 }
