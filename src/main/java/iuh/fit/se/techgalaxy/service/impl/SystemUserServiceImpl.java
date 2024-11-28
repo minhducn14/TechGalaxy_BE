@@ -6,6 +6,8 @@ import iuh.fit.se.techgalaxy.dto.response.SystemUserResponseDTO;
 import iuh.fit.se.techgalaxy.entities.Account;
 import iuh.fit.se.techgalaxy.entities.SystemUser;
 import iuh.fit.se.techgalaxy.entities.enumeration.SystemUserStatus;
+import iuh.fit.se.techgalaxy.exception.AppException;
+import iuh.fit.se.techgalaxy.exception.ErrorCode;
 import iuh.fit.se.techgalaxy.mapper.SystemUserMapper;
 import iuh.fit.se.techgalaxy.repository.AccountRepository;
 import iuh.fit.se.techgalaxy.repository.SystemUserRepository;
@@ -92,7 +94,7 @@ public class SystemUserServiceImpl implements SystemUserService {
     @Override
     public SystemUserResponseDTO handleUpdateSystemUser(SystemUserRequestDTO reqUser) {
         SystemUser existingUser = systemUserRepository.findById(reqUser.getId())
-                .orElseThrow(() -> new EntityNotFoundException("SystemUser not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.SYSTEM_USER_NOT_FOUND));
         if (reqUser.getName() != null)
             existingUser.setName(reqUser.getName());
         if (reqUser.getPhone() != null)

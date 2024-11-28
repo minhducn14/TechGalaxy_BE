@@ -32,6 +32,7 @@ public class CustomerController {
         List<CustomerResponse> customerResponses = new ArrayList<>();
         customerResponses.add(customerService.save(request));
         return ResponseEntity.ok(DataResponse.<CustomerResponse>builder()
+                .message("Create customer success")
                 .data(customerResponses)
                 .build());
     }
@@ -47,9 +48,9 @@ public class CustomerController {
 
     @PutMapping("/{id}")
     public ResponseEntity<DataResponse<CustomerResponse>> updateCustomer(@PathVariable String id, @RequestBody CustomerRequest request) {
-        List<CustomerResponse> customerResponses = new ArrayList<>();
-        customerResponses.add(customerService.update(id, request));
+        List<CustomerResponse> customerResponses = List.of(customerService.update(id, request));
         return ResponseEntity.ok(DataResponse.<CustomerResponse>builder()
+                .message("Update customer success")
                 .data(customerResponses)
                 .build());
     }

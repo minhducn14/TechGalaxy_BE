@@ -36,6 +36,11 @@ public class TrademarkServiceImpl implements TrademarkService {
 
 		Trademark trademark = trademarkRepository.findById(id)
 				.orElseThrow(() -> new AppException(ErrorCode.TRADEMARK_NOTFOUND));
+		long productCount = trademarkRepository.countProductsByTrademarkId(id);
+
+		if (productCount > 0) {
+			throw new IllegalStateException("Cannot delete category as it contains products.");
+		}
 		if (trademark != null) {
 			trademarkRepository.deleteById(id);
 			return true;

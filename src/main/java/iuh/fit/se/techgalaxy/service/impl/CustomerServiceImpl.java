@@ -104,7 +104,7 @@ public class CustomerServiceImpl implements CustomerService {
      */
     @Override
     public CustomerResponse update(String id, CustomerRequest customerRequest) {
-        if (!customerRepository.existsById(id))
+        if (customerRepository.existsById(id))
             return null;
         Customer customer = customerRepository.save(CustomerMapper.INSTANCE.toCustomerFromRequest(customerRequest));
         return CustomerMapper.INSTANCE.toCustomerResponse(customer);
@@ -120,6 +120,10 @@ public class CustomerServiceImpl implements CustomerService {
     public boolean delete(String id) {
         if (!customerRepository.existsById(id))
             return false;
+        long orderCount = customerRepository.countOrdersByCustomerId(id);
+        if (orderCount > 0) {
+            throw new IllegalStateException("Cannot delete account as the user has placed orders.");
+        }
         customerRepository.deleteById(id);
         return true;
     }
