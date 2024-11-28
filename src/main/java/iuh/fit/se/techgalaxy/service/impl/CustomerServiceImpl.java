@@ -104,7 +104,7 @@ public class CustomerServiceImpl implements CustomerService {
      */
     @Override
     public CustomerResponse update(String id, CustomerRequest customerRequest) {
-        if (!customerRepository.existsById(id))
+        if (customerRepository.existsById(id))
             return null;
         Customer customer = customerRepository.save(CustomerMapper.INSTANCE.toCustomerFromRequest(customerRequest));
         return CustomerMapper.INSTANCE.toCustomerResponse(customer);
