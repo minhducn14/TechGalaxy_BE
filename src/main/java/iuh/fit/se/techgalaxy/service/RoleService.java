@@ -62,7 +62,7 @@ public interface RoleService {
      *
      * @param id author: Vũ Nguyễn Minh Đức
      */
-    public void delete(String id);
+    void delete(String id);
 
     /**
      * Get all roles
@@ -72,10 +72,11 @@ public interface RoleService {
      * @return ResultPaginationDTO
      * author: Vũ Nguyễn Minh Đức
      */
-    public ResultPaginationDTO getRoles(Specification<Role> spec, Pageable pageable);
+    ResultPaginationDTO getRoles(Specification<Role> spec, Pageable pageable);
 
 
     //findByNameIn
+
     /**
      * Find roles by name in list
      *
@@ -83,16 +84,16 @@ public interface RoleService {
      * @return List<Role>
      * author: Vũ Nguyễn Minh Đức
      */
-    public List<Role> findByNameIn(List<String> names);
+    List<Role> findByNameIn(List<String> names);
 
-    public List<RoleResponse> findAll();
+    List<RoleResponse> findAll();
 
     /**
      * Fetch role by email
      *
      * @param email
      * @return List<RoleResponse>
-     *     author: Vũ Nguyễn Minh Đức
+     * author: Vũ Nguyễn Minh Đức
      */
-    public List<RoleResponse> fechByEmail(String email);
+    List<RoleResponse> fechByEmail(String email);
 }

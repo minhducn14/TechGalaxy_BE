@@ -6,7 +6,6 @@ import iuh.fit.se.techgalaxy.dto.response.DataResponse;
 import iuh.fit.se.techgalaxy.dto.response.ResultPaginationDTO;
 import iuh.fit.se.techgalaxy.dto.response.RoleResponse;
 import iuh.fit.se.techgalaxy.entities.Role;
-import iuh.fit.se.techgalaxy.service.RoleService;
 import iuh.fit.se.techgalaxy.service.impl.RoleServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

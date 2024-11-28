@@ -27,6 +27,7 @@ public class ProductServiceImpl implements ProductService {
     ProductRepository productRepository;
     TrademarkRepository trademarkRepository;
     ProductMapper productMapper;
+
     @Override
     public Set<ProductResponse> getAllProducts() {
         return productRepository.findAll().stream()
@@ -66,7 +67,7 @@ public class ProductServiceImpl implements ProductService {
         if (usageCount > 0) {
             throw new IllegalStateException("Cannot delete product as it is referenced in orders.");
         }
-        Product product = productRepository.findById(id).orElseThrow(()-> new RuntimeException("Product not found"));
+        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
         productRepository.delete(product);
     }
 }

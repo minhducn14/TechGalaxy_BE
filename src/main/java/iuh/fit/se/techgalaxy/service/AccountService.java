@@ -43,7 +43,7 @@ public interface AccountService {
      * Xóa tài khoản theo ID.
      *
      * @param id ID của tài khoản cần xóa
-     * author: Vũ Nguyễn Minh Đức
+     *           author: Vũ Nguyễn Minh Đức
      */
     boolean deleteAccountById(String id);
 
@@ -78,7 +78,7 @@ public interface AccountService {
      *
      * @param id          ID của tài khoản
      * @param newPassword mật khẩu mới
-     * author: Vũ Nguyễn Minh Đức
+     *                    author: Vũ Nguyễn Minh Đức
      */
     void resetPassword(String id, String newPassword);
 
@@ -98,7 +98,7 @@ public interface AccountService {
      *
      * @param token refreshToken mới
      * @param email email của tài khoản
-     * author: Vũ Nguyễn Minh Đức
+     *              author: Vũ Nguyễn Minh Đức
      */
     public void updateToken(String token, String email);
 

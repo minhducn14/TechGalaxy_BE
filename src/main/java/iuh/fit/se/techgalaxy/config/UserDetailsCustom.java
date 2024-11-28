@@ -16,10 +16,12 @@ import java.util.List;
 public class UserDetailsCustom implements UserDetailsService {
 
     private final AccountService accountService;
+
     @Autowired
     public UserDetailsCustom(AccountService accountService) {
         this.accountService = accountService;
     }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Account account = accountService.getAccountByEmail(username)

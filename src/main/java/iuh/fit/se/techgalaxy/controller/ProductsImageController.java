@@ -41,6 +41,7 @@ public class ProductsImageController {
                 .message("Delete success")
                 .build());
     }
+
     @DeleteMapping("/delete/{imageId}")
     public ResponseEntity<DataResponse<Object>> deleteProductsImageByImageId(@PathVariable String imageId) {
         productsImageService.deleteProductsImageByImageId(imageId);

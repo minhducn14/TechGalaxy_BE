@@ -14,10 +14,13 @@ public interface ProductVariantDetailService {
     ProductVariantDetailResponse getProductVariantDetail(String variantId);
 
     ProductDetailResponse getProductDetail(String productDetailId);
+
     List<ProductDetailResponse> getProductDetailsByIds(List<String> productDetailIds);
 
     List<String> createProductVariantDetail(String variantId, List<ProductVariantDetailRequest> productVariantDetailRequest);
+
     Boolean updateProductVariantDetail(String productDetailId, ProductDetailUpdateRequest productDetailUpdateRequest);
+
     void deleteProductVariantDetail(String productDetailId);
 
     Page<ProductPageResponse> getFilteredProductDetails(List<String> trademark,

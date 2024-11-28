@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
     // 9000 - 9999: System error with authorization
     INVALID_KEY(9998, "Invalid key", HttpStatus.UNAUTHORIZED),
-    JWT_INVALID(9997, "JWT invalid",  HttpStatus.UNAUTHORIZED),
+    JWT_INVALID(9997, "JWT invalid", HttpStatus.UNAUTHORIZED),
     UNCATEGORIZED_ERROR(9999, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
     NO_LOGIN(9996, "No login", HttpStatus.UNAUTHORIZED),
     NOT_IN_REQUEST(9995, "Not in request", HttpStatus.BAD_REQUEST),
@@ -54,7 +54,7 @@ public enum ErrorCode {
     ADDRESS_INVALID(2011, "Address is invalid", HttpStatus.BAD_REQUEST),
     SYSTEM_USER_STATUS_NOT_EMPTY(2012, "System user status is not empty", HttpStatus.BAD_REQUEST),
     LEVEL_NOT_EMPTY(2013, "Level is not empty", HttpStatus.BAD_REQUEST),
-    GENDER_NOT_EMPTY(2014,"Gender is not empty", HttpStatus.BAD_REQUEST),
+    GENDER_NOT_EMPTY(2014, "Gender is not empty", HttpStatus.BAD_REQUEST),
     ROLE_NOT_EMPTY(2015, "Role is not empty", HttpStatus.BAD_REQUEST),
 
     //Mail

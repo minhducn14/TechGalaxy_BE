@@ -14,7 +14,7 @@ public interface PermissionRepository extends JpaRepository<Permission, String>,
 
     List<Permission> findByIdIn(List<String> id);
 
-//    findByName
+    //    findByName
     Permission findByName(String name);
 
 }

@@ -1,7 +1,6 @@
 package iuh.fit.se.techgalaxy.service.impl;
 
 
-
 import iuh.fit.se.techgalaxy.entities.BlacklistedToken;
 import iuh.fit.se.techgalaxy.repository.BlacklistedTokenRepository;
 import iuh.fit.se.techgalaxy.service.TokenService;
@@ -11,14 +10,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+
 @Service
 public class TokenServiceImpl implements TokenService {
 
     private final BlacklistedTokenRepository blacklistedTokenRepository;
+
     @Autowired
     public TokenServiceImpl(BlacklistedTokenRepository blacklistedTokenRepository) {
         this.blacklistedTokenRepository = blacklistedTokenRepository;
     }
+
     @Override
     @Transactional
     public void blacklistToken(String token) {

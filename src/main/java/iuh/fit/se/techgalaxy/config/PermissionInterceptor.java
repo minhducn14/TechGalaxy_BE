@@ -1,7 +1,5 @@
 package iuh.fit.se.techgalaxy.config;
 
-import java.util.List;
-
 import iuh.fit.se.techgalaxy.entities.Account;
 import iuh.fit.se.techgalaxy.entities.Permission;
 import iuh.fit.se.techgalaxy.entities.Role;
@@ -11,17 +9,17 @@ import iuh.fit.se.techgalaxy.service.impl.AccountServiceImpl;
 import iuh.fit.se.techgalaxy.util.SecurityUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 public class PermissionInterceptor implements HandlerInterceptor {
-
-    private AccountServiceImpl accountService;
+    @Autowired
+    private final AccountServiceImpl accountService;
 
     @Override
     @Transactional
@@ -56,12 +54,10 @@ public class PermissionInterceptor implements HandlerInterceptor {
                             throw new AppException(ErrorCode.AUTHENTICATION_ERROR);
                         }
                     }
-                }
-                else {
+                } else {
                     throw new AppException(ErrorCode.AUTHENTICATION_ERROR);
                 }
-            }
-            else {
+            } else {
                 throw new AppException(ErrorCode.AUTHENTICATION_ERROR);
             }
 

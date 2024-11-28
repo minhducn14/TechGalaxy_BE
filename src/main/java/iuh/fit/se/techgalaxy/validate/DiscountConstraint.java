@@ -9,15 +9,17 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Target({ FIELD })
+@Target({FIELD})
 @Retention(RUNTIME)
-@Constraint(validatedBy = { ValidateDiscountProduct.class})
+@Constraint(validatedBy = {ValidateDiscountProduct.class})
 public @interface DiscountConstraint {
     int min() default 0;
+
     int max() default 1;
+
     String message() default "{jakarta.validation.constraints.Size.message}";
 
-    Class<?>[] groups() default { };
+    Class<?>[] groups() default {};
 
-    Class<? extends Payload>[] payload() default { };
+    Class<? extends Payload>[] payload() default {};
 }

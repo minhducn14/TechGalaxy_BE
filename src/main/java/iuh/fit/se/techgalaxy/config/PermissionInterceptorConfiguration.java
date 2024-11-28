@@ -18,10 +18,12 @@
 //        String[] whiteList = {
 //                "/",
 //                "/api/accounts/auth/register", "/api/accounts/auth/login",
+//                "/api/accounts/auth/logout", "/api/accounts/auth/account",
 //                "/storage/**",
-//                "/v3/api-docs/**",
-//                "/swagger-ui/**",
-//                "/swagger-ui.html"
+//                "/v3/api-docs/**","/swagger-ui/**",
+//                "/swagger-ui.html","/products/**", "/colors/**","/trademarks/**",
+//                "/memories/**", "/usageCategories/**", "/attributes/**", "/product-feedbacks/**",
+//                "/payment/**","/file","/files"
 //        };
 //        registry.addInterceptor(getPermissionInterceptor())
 //                .excludePathPatterns(whiteList);

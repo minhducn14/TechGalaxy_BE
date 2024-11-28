@@ -20,14 +20,14 @@ public interface SystemUserService {
      * @return User
      * author: Vũ Nguyễn Minh Đức
      */
-    public SystemUserResponseDTO handleCreateSystemUser(SystemUserRequestDTO user);
+    SystemUserResponseDTO handleCreateSystemUser(SystemUserRequestDTO user);
 
     /**
      * Handle delete user
      *
      * @param id author: Vũ Nguyễn Minh Đức
      */
-    public void handleDeleteSystemUser(String id);
+    void handleDeleteSystemUser(String id);
 
 
     /**
@@ -37,9 +37,9 @@ public interface SystemUserService {
      * @return User
      * author: Vũ Nguyễn Minh Đức
      */
-    public SystemUserResponseDTO fetchUserById(String id);
+    SystemUserResponseDTO fetchUserById(String id);
 
-    public List<SystemUserResponseDTO> fetchAllSystemUser();
+    List<SystemUserResponseDTO> fetchAllSystemUser();
 
     /**
      * Fetch all user
@@ -49,7 +49,7 @@ public interface SystemUserService {
      * @return ResultPaginationDTO
      * author: Vũ Nguyễn Minh Đức
      */
-    public ResultPaginationDTO fetchAllSystemUser(Specification<SystemUser> spec, Pageable pageable);
+    ResultPaginationDTO fetchAllSystemUser(Specification<SystemUser> spec, Pageable pageable);
 
     /**
      * Handle update user
@@ -58,7 +58,7 @@ public interface SystemUserService {
      * @return User
      * author: Vũ Nguyễn Minh Đức
      */
-    public SystemUserResponseDTO handleUpdateSystemUser(SystemUserRequestDTO reqUser);
+    SystemUserResponseDTO handleUpdateSystemUser(SystemUserRequestDTO reqUser);
 
     /**
      * Check if email exist
@@ -67,7 +67,7 @@ public interface SystemUserService {
      * @return boolean
      * author: Vũ Nguyễn Minh Đức
      */
-    public boolean isEmailExist(String email);
+    boolean isEmailExist(String email);
 
     /**
      * Handle get user by status
@@ -76,7 +76,7 @@ public interface SystemUserService {
      * @return List<SystemUser>
      * author: Vũ Nguyễn Minh Đức
      */
-    public List<SystemUserResponseDTO> handleGetSystemUsersByStatus(SystemUserStatus status);
+    List<SystemUserResponseDTO> handleGetSystemUsersByStatus(SystemUserStatus status);
 
-    public SystemUserResponseDTO findSystemUserByEmail(String email);
+    SystemUserResponseDTO findSystemUserByEmail(String email);
 }

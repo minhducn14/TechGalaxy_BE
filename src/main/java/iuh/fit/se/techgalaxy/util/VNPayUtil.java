@@ -1,4 +1,5 @@
 package iuh.fit.se.techgalaxy.util;
+
 import jakarta.servlet.http.HttpServletRequest;
 
 import javax.crypto.Mac;
@@ -8,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
+
 public class VNPayUtil {
     public static String hmacSHA512(final String key, final String data) {
         try {
@@ -53,6 +55,7 @@ public class VNPayUtil {
         }
         return sb.toString();
     }
+
     public static String getPaymentURL(Map<String, String> paramsMap, boolean encodeKey) {
         return paramsMap.entrySet().stream()
                 .filter(entry -> entry.getValue() != null && !entry.getValue().isEmpty())

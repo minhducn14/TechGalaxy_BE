@@ -56,6 +56,7 @@ public class ProductVariantDetailServiceImpl implements ProductVariantDetailServ
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOTFOUND));
         return productVariantDetailMapper.toResponse(productVariantDetail);
     }
+
     @Override
     public List<ProductDetailResponse> getProductDetailsByIds(List<String> productDetailIds) {
         List<ProductVariantDetail> productVariantDetails = productVariantDetailRepository.findAllByIdIsIn(productDetailIds);
@@ -84,7 +85,7 @@ public class ProductVariantDetailServiceImpl implements ProductVariantDetailServ
         //productVariantDetailRepository.saveAll(detailsToSave);
         Iterable<ProductVariantDetail> savedDetails = productVariantDetailRepository.saveAll(detailsToSave);
         List<String> detailIds = new ArrayList<>();
-        if(savedDetails.iterator().hasNext()) {
+        if (savedDetails.iterator().hasNext()) {
             savedDetails.forEach(detail -> detailIds.add(detail.getId()));
             return detailIds;
         }

@@ -18,6 +18,7 @@ import java.util.List;
 public class ColorServiceImpl implements ColorService {
 
     ColorRepository colorRepository;
+
     @Override
     public List<Color> getAllColors() {
         return colorRepository.findAll();

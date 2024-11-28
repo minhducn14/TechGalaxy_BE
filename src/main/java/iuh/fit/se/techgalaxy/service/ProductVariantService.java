@@ -11,7 +11,7 @@ import java.util.Set;
 public interface ProductVariantService {
     Set<ProductVariantResponse> getAllProductVariantsByProductId(String productId);
 
-    ProductVariantResponse createProductVariant(String productId,ProductVariantRequest request);
+    ProductVariantResponse createProductVariant(String productId, ProductVariantRequest request);
 
     ProductVariantResponse findVariantById(String id);
 
