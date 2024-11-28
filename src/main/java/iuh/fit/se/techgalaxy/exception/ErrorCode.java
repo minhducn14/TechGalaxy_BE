@@ -68,6 +68,7 @@ public enum ErrorCode {
     FILE_SIZE_EXCEEDED(4003, "File size exceeded", HttpStatus.PAYLOAD_TOO_LARGE),
     MISSING_FILE(4004, "Missing file", HttpStatus.BAD_REQUEST),
     CREATE_DIRECTORY_FAILED(4005, "Create directory failed", HttpStatus.INTERNAL_SERVER_ERROR);
+
     int code;
     String message;
     HttpStatus httpStatus;
