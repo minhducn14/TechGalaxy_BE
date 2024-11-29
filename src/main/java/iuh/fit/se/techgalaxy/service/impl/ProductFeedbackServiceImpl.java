@@ -2,6 +2,7 @@ package iuh.fit.se.techgalaxy.service.impl;
 
 import iuh.fit.se.techgalaxy.dto.request.ProductFeedbackRequest;
 import iuh.fit.se.techgalaxy.dto.response.ProductFeedbackResponse;
+import iuh.fit.se.techgalaxy.dto.response.ProductFeedbackResponseV2;
 import iuh.fit.se.techgalaxy.entities.ProductFeedback;
 import iuh.fit.se.techgalaxy.exception.AppException;
 import iuh.fit.se.techgalaxy.exception.ErrorCode;
@@ -87,4 +88,11 @@ public class ProductFeedbackServiceImpl implements ProductFeedbackService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<ProductFeedbackResponseV2> getFeedbackByProductVariantIdV2(String productVariantId) {
+        List<ProductFeedback> feedbacks = productFeedbackRepository.findByProductVariantId(productVariantId);
+        return feedbacks.stream()
+                .map(productFeedbackMapper::toProductFeedbackResponseV2)
+                .collect(Collectors.toList());
+    }
 }

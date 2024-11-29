@@ -4,7 +4,8 @@ package iuh.fit.se.techgalaxy.controller;
 import iuh.fit.se.techgalaxy.dto.request.ProductFeedbackRequest;
 import iuh.fit.se.techgalaxy.dto.response.DataResponse;
 import iuh.fit.se.techgalaxy.dto.response.ProductFeedbackResponse;
-import iuh.fit.se.techgalaxy.service.impl.ProductFeedbackServiceImpl;
+import iuh.fit.se.techgalaxy.dto.response.ProductFeedbackResponseV2;
+import iuh.fit.se.techgalaxy.service.ProductFeedbackService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -19,7 +20,7 @@ import java.util.List;
 @RequestMapping("/product-feedbacks")
 public class ProductFeedbackController {
 
-    ProductFeedbackServiceImpl productFeedbackServiceImpl;
+    ProductFeedbackService productFeedbackServiceImpl;
 
 
     /**
@@ -94,4 +95,14 @@ public class ProductFeedbackController {
                         .build()
         );
     }
+    @GetMapping("/product-variantv2/{productVariantId}")
+    public ResponseEntity<DataResponse<ProductFeedbackResponseV2>> getFeedbackByProductVariantIdV2(@PathVariable String productVariantId) {
+        List<ProductFeedbackResponseV2> feedbackResponses = productFeedbackServiceImpl.getFeedbackByProductVariantIdV2(productVariantId);
+        return
+                ResponseEntity.ok(DataResponse.<ProductFeedbackResponseV2>builder()
+                        .data(feedbackResponses)
+                        .build()
+        );
+    }
+
 }

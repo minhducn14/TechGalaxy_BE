@@ -150,10 +150,12 @@ public class OrderServiceImpl implements OrderService {
                     () -> new AppException(ErrorCode.PRODUCT_NOTFOUND)
             );
 
-            if (productVariantDetail.getQuantity() < productDetail.getQuantity()) {
+            if (productVariantDetail.getQuantity() < productDetail.getQuantity()){
                 throw new AppException(ErrorCode.INSUFFICIENT_PRODUCT_QUANTITY, "Product: " + productVariantDetail.getProductVariant().getName() + " - Quantity: " + productVariantDetail.getQuantity());
             }
-
+            if (productDetail.getQuantity() <= 0){
+                throw new AppException(ErrorCode.INVALID_PRODUCT_QUANTITY, "Product quantity: " + productDetail.getQuantity());
+            }
             double discountedPrice = (1 - productVariantDetail.getSale()) * productVariantDetail.getPrice();
             double totalPrice = discountedPrice * productDetail.getQuantity();
 
