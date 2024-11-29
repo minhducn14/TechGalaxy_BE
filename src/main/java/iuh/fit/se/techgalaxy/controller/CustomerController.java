@@ -5,6 +5,7 @@ import iuh.fit.se.techgalaxy.dto.response.CustomerResponse;
 import iuh.fit.se.techgalaxy.dto.response.DataResponse;
 import iuh.fit.se.techgalaxy.dto.response.LoginResponse;
 import iuh.fit.se.techgalaxy.service.CustomerService;
+import iuh.fit.se.techgalaxy.service.impl.AccountServiceImpl;
 import iuh.fit.se.techgalaxy.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,8 @@ import java.util.*;
 @RequestMapping("/customers")
 public class CustomerController {
     CustomerService customerService;
+    AccountServiceImpl accountService;
+
     private final SecurityUtil securityUtil;
 
     @Autowired
@@ -101,6 +104,31 @@ public class CustomerController {
         }
         List<CustomerResponse> customerResponses = new ArrayList<>();
         customerResponses.add(customerService.findByEmail(email));
+        return ResponseEntity.ok(DataResponse.<CustomerResponse>builder()
+                .data(customerResponses)
+                .build());
+    }
+
+    @PutMapping("/profile/{id}")
+    public ResponseEntity<DataResponse<CustomerResponse>> updateProfile(@PathVariable String id, @RequestBody CustomerRequest request) {
+        String emailLogin = SecurityUtil.getCurrentUserLogin().orElse(null);
+        CustomerResponse customerResponse = customerService.findByEmail(emailLogin);
+        String idLogin = customerResponse.getId();
+        if (emailLogin == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(DataResponse.<CustomerResponse>builder()
+                            .status(401)
+                            .message("No user logged in")
+                            .build());
+        }
+        if (!idLogin.equals(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(DataResponse.<CustomerResponse>builder()
+                            .status(403)
+                            .message("You do not have permission to access this resource")
+                            .build());
+        }
+        List<CustomerResponse> customerResponses = List.of(customerService.update(id, request));
         return ResponseEntity.ok(DataResponse.<CustomerResponse>builder()
                 .data(customerResponses)
                 .build());
