@@ -56,6 +56,7 @@ public class SecurityConfiguration {
                 "/swagger-ui/**",
                 "/swagger-ui.html",
                 "/storage/**",
+                "/payment/**"
         };
 
 
