@@ -10,9 +10,11 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
+
 public interface ProductFeedbackMapper {
     ProductFeedbackResponse toResponsedto(ProductFeedback productFeedback);
 
@@ -28,8 +30,13 @@ public interface ProductFeedbackMapper {
     ProductFeedbackResponseV2 toProductFeedbackResponseV2(ProductFeedback productFeedback);
 
     default List<String> mapImagePaths(List<ImgProductFeedback> imgProductFeedbacks) {
+        if (imgProductFeedbacks == null) {
+            return null;
+        }
         return imgProductFeedbacks.stream()
                 .map(ImgProductFeedback::getImagePath)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
+
 } 
