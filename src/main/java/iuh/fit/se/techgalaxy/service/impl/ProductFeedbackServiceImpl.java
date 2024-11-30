@@ -19,15 +19,18 @@ import iuh.fit.se.techgalaxy.util.SecurityUtil;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
 public class ProductFeedbackServiceImpl implements ProductFeedbackService {
     ProductFeedbackRepository productFeedbackRepository;
     CustomerRepository customerRepository;
@@ -105,29 +108,44 @@ public class ProductFeedbackServiceImpl implements ProductFeedbackService {
                 .map(productFeedbackMapper::toProductFeedbackResponseV2)
                 .collect(Collectors.toList());
     }
-
     @Override
     public ProductFeedbackResponseV2 createFeedbackV2(ProductFeedbackRequestV2 productFeedbackRequestV2) {
         ProductFeedback productFeedback = productFeedbackMapper.toEntityV2(productFeedbackRequestV2);
+
         Customer customer = customerRepository.findById(productFeedbackRequestV2.getCustomerId())
                 .orElseThrow(() -> new AppException(ErrorCode.CUSTOMER_NOTFOUND));
+
         String emailLogin = SecurityUtil.getCurrentUserLogin().orElse(null);
-        if (!customer.getAccount().getEmail().equals(emailLogin)) {
+        if (emailLogin == null || !customer.getAccount().getEmail().equals(emailLogin)) {
             throw new AppException(ErrorCode.CUSTOMER_NOTMATCH_LOGIN);
         }
+
         ProductVariant productVariant = productVariantRepository.findById(productFeedbackRequestV2.getProductVariantId())
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOTFOUND));
-        List<ImgProductFeedback> imgProductFeedbacks = new ArrayList<>();
-        for (String imgPath : productFeedbackRequestV2.getImagePaths()) {
-            ImgProductFeedback imgProductFeedback = new ImgProductFeedback();
-            imgProductFeedback.setImagePath(imgPath);
-            imgProductFeedback.setProductFeedback(productFeedback);
-            imgProductFeedbacks.add(imgProductFeedback);
+        log.info("Product variant: {}", productVariant);
+        if (productFeedbackRequestV2.getImagePaths() != null && !productFeedbackRequestV2.getImagePaths().isEmpty()) {
+            log.info("Image paths: {}", productFeedbackRequestV2.getImagePaths());
+            List<ImgProductFeedback> imgProductFeedbacks = productFeedbackRequestV2.getImagePaths().stream()
+                    .filter(Objects::nonNull)
+                    .map(imgPath -> {
+                        ImgProductFeedback imgProductFeedback = new ImgProductFeedback();
+                        imgProductFeedback.setImagePath(imgPath);
+                        imgProductFeedback.setProductFeedback(productFeedback);
+                        return imgProductFeedback;
+                    })
+                    .toList();
+
+            productFeedback.setImgProductFeedbacks(imgProductFeedbacks);
         }
+
         productFeedback.setCustomer(customer);
         productFeedback.setProductVariant(productVariant);
-        productFeedback.setImgProductFeedbacks(imgProductFeedbacks);
+        log.info("Product feedback to create: {}", productFeedback);
         ProductFeedback productFeedbackCreate = productFeedbackRepository.save(productFeedback);
+        log.info("Product feedback created: {}", productFeedbackCreate);
         return productFeedbackMapper.toProductFeedbackResponseV2(productFeedbackCreate);
     }
+
+
+
 }
