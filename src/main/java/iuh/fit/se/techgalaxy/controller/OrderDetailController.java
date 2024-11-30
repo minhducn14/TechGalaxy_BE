@@ -33,14 +33,6 @@ public class OrderDetailController {
                 .build());
     }
 
-    @GetMapping("/order/{orderId}")
-    public ResponseEntity<DataResponse<OrderDetailResponse>> getOrderDetailsByOrderId(@PathVariable String orderId) {
-        return ResponseEntity.ok(DataResponse.<OrderDetailResponse>builder()
-                .message("Get order details by order id success")
-                .data(orderDetailService.getOrderDetailsByOrderId(orderId))
-                .build());
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<DataResponse<OrderDetailResponse>> getById(@PathVariable String id) {
         List<OrderDetailResponse> orderDetailResponses = List.of(orderDetailService.findById(id));
@@ -49,4 +41,22 @@ public class OrderDetailController {
                 .data(orderDetailResponses)
                 .build());
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<DataResponse<OrderDetailResponse>> updateOrderDetail(@PathVariable String id, @RequestBody OrderDetailRequest orderDetailRequest) {
+        List<OrderDetailResponse> orderDetailResponses = List.of(orderDetailService.update(id, orderDetailRequest));
+        return ResponseEntity.ok(DataResponse.<OrderDetailResponse>builder()
+                .message("Update order detail success")
+                .data(orderDetailResponses)
+                .build());
+    }
+
+    @GetMapping("/order/{orderId}")
+    public ResponseEntity<DataResponse<OrderDetailResponse>> getOrderDetailsByOrderId(@PathVariable String orderId) {
+        return ResponseEntity.ok(DataResponse.<OrderDetailResponse>builder()
+                .message("Get order details by order id success")
+                .data(orderDetailService.getOrderDetailsByOrderId(orderId))
+                .build());
+    }
+
 }

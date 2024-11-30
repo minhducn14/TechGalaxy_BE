@@ -11,4 +11,6 @@ public interface OrderDetailService {
     OrderDetailResponse save(OrderDetailRequest orderDetailRequest);
 
     OrderDetailResponse findById(String id);
+
+    OrderDetailResponse update(String id, OrderDetailRequest orderDetailRequest);
 }
