@@ -1,6 +1,7 @@
 package iuh.fit.se.techgalaxy.service;
 
 import iuh.fit.se.techgalaxy.dto.request.ProductFeedbackRequest;
+import iuh.fit.se.techgalaxy.dto.request.ProductFeedbackRequestV2;
 import iuh.fit.se.techgalaxy.dto.response.ProductFeedbackResponse;
 import iuh.fit.se.techgalaxy.dto.response.ProductFeedbackResponseV2;
 
@@ -20,4 +21,6 @@ public interface ProductFeedbackService {
     List<ProductFeedbackResponse> getFeedbackByProductVariantId(String productVariantId);
 
     List<ProductFeedbackResponseV2> getFeedbackByProductVariantIdV2(String productVariantId);
+
+    ProductFeedbackResponseV2 createFeedbackV2(ProductFeedbackRequestV2 productFeedbackRequestV2);
 }

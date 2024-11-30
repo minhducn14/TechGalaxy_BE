@@ -16,6 +16,7 @@ public enum ErrorCode {
     UNCATEGORIZED_ERROR(9999, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
     NO_LOGIN(9996, "No login", HttpStatus.UNAUTHORIZED),
     NOT_IN_REQUEST(9995, "Not in request", HttpStatus.BAD_REQUEST),
+    CUSTOMER_NOTMATCH_LOGIN(9994, "Customer not match", HttpStatus.BAD_REQUEST),
 
     //8000 - 8999: error with authentication
     AUTHENTICATION_ERROR(8000, "You no access to method", HttpStatus.FORBIDDEN),

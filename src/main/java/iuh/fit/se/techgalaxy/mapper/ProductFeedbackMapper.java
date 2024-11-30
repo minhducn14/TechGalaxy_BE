@@ -1,6 +1,7 @@
 package iuh.fit.se.techgalaxy.mapper;
 
 import iuh.fit.se.techgalaxy.dto.request.ProductFeedbackRequest;
+import iuh.fit.se.techgalaxy.dto.request.ProductFeedbackRequestV2;
 import iuh.fit.se.techgalaxy.dto.response.ProductFeedbackResponse;
 import iuh.fit.se.techgalaxy.dto.response.ProductFeedbackResponseV2;
 import iuh.fit.se.techgalaxy.entities.ImgProductFeedback;
@@ -16,7 +17,7 @@ public interface ProductFeedbackMapper {
     ProductFeedbackResponse toResponsedto(ProductFeedback productFeedback);
 
     ProductFeedback toEntity(ProductFeedbackRequest feedbackRequest);
-
+    ProductFeedback toEntityV2(ProductFeedbackRequestV2 feedbackRequest);
     @Mapping(source = "productFeedback.id", target = "id")
     @Mapping(source = "productFeedback.feedbackText", target = "feedbackText")
     @Mapping(source = "productFeedback.customer.name", target = "customerName")

@@ -15,13 +15,13 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProductFeedbackRequest {
-    private String id;
+     String id;
 
-    private Integer feedbackRating;
+     Integer feedbackRating;
 
-    private String feedbackText;
+     String feedbackText;
 
-    private String customerId;
+     String customerId;
 
-    private String productVariantId;
+     String productVariantId;
 }

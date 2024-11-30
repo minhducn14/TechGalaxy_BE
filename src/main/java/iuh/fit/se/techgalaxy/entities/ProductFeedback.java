@@ -45,6 +45,6 @@ public class ProductFeedback {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "productFeedback")
+    @OneToMany(mappedBy = "productFeedback", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ImgProductFeedback> imgProductFeedbacks;
 }

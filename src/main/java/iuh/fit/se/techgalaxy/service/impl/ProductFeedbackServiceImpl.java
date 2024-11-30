@@ -1,19 +1,27 @@
 package iuh.fit.se.techgalaxy.service.impl;
 
 import iuh.fit.se.techgalaxy.dto.request.ProductFeedbackRequest;
+import iuh.fit.se.techgalaxy.dto.request.ProductFeedbackRequestV2;
 import iuh.fit.se.techgalaxy.dto.response.ProductFeedbackResponse;
 import iuh.fit.se.techgalaxy.dto.response.ProductFeedbackResponseV2;
+import iuh.fit.se.techgalaxy.entities.Customer;
+import iuh.fit.se.techgalaxy.entities.ImgProductFeedback;
 import iuh.fit.se.techgalaxy.entities.ProductFeedback;
+import iuh.fit.se.techgalaxy.entities.ProductVariant;
 import iuh.fit.se.techgalaxy.exception.AppException;
 import iuh.fit.se.techgalaxy.exception.ErrorCode;
 import iuh.fit.se.techgalaxy.mapper.ProductFeedbackMapper;
+import iuh.fit.se.techgalaxy.repository.CustomerRepository;
 import iuh.fit.se.techgalaxy.repository.ProductFeedbackRepository;
+import iuh.fit.se.techgalaxy.repository.ProductVariantRepository;
 import iuh.fit.se.techgalaxy.service.ProductFeedbackService;
+import iuh.fit.se.techgalaxy.util.SecurityUtil;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +30,8 @@ import java.util.stream.Collectors;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ProductFeedbackServiceImpl implements ProductFeedbackService {
     ProductFeedbackRepository productFeedbackRepository;
+    CustomerRepository customerRepository;
+    ProductVariantRepository productVariantRepository;
     ProductFeedbackMapper productFeedbackMapper;
 
     @Override
@@ -94,5 +104,30 @@ public class ProductFeedbackServiceImpl implements ProductFeedbackService {
         return feedbacks.stream()
                 .map(productFeedbackMapper::toProductFeedbackResponseV2)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public ProductFeedbackResponseV2 createFeedbackV2(ProductFeedbackRequestV2 productFeedbackRequestV2) {
+        ProductFeedback productFeedback = productFeedbackMapper.toEntityV2(productFeedbackRequestV2);
+        Customer customer = customerRepository.findById(productFeedbackRequestV2.getCustomerId())
+                .orElseThrow(() -> new AppException(ErrorCode.CUSTOMER_NOTFOUND));
+        String emailLogin = SecurityUtil.getCurrentUserLogin().orElse(null);
+        if (!customer.getAccount().getEmail().equals(emailLogin)) {
+            throw new AppException(ErrorCode.CUSTOMER_NOTMATCH_LOGIN);
+        }
+        ProductVariant productVariant = productVariantRepository.findById(productFeedbackRequestV2.getProductVariantId())
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOTFOUND));
+        List<ImgProductFeedback> imgProductFeedbacks = new ArrayList<>();
+        for (String imgPath : productFeedbackRequestV2.getImagePaths()) {
+            ImgProductFeedback imgProductFeedback = new ImgProductFeedback();
+            imgProductFeedback.setImagePath(imgPath);
+            imgProductFeedback.setProductFeedback(productFeedback);
+            imgProductFeedbacks.add(imgProductFeedback);
+        }
+        productFeedback.setCustomer(customer);
+        productFeedback.setProductVariant(productVariant);
+        productFeedback.setImgProductFeedbacks(imgProductFeedbacks);
+        ProductFeedback productFeedbackCreate = productFeedbackRepository.save(productFeedback);
+        return productFeedbackMapper.toProductFeedbackResponseV2(productFeedbackCreate);
     }
 }

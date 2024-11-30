@@ -2,6 +2,7 @@ package iuh.fit.se.techgalaxy.controller;
 
 
 import iuh.fit.se.techgalaxy.dto.request.ProductFeedbackRequest;
+import iuh.fit.se.techgalaxy.dto.request.ProductFeedbackRequestV2;
 import iuh.fit.se.techgalaxy.dto.response.DataResponse;
 import iuh.fit.se.techgalaxy.dto.response.ProductFeedbackResponse;
 import iuh.fit.se.techgalaxy.dto.response.ProductFeedbackResponseV2;
@@ -42,6 +43,16 @@ public class ProductFeedbackController {
         ProductFeedbackResponse createdFeedback = productFeedbackServiceImpl.createFeedback(request);
         return ResponseEntity.ok(
                 DataResponse.<ProductFeedbackResponse>builder()
+                        .data(List.of(createdFeedback))
+                        .build()
+        );
+    }
+
+    @PostMapping("/v2")
+    public ResponseEntity<DataResponse<ProductFeedbackResponseV2>> createFeedbackV2(@RequestBody ProductFeedbackRequestV2 request) {
+        ProductFeedbackResponseV2 createdFeedback = productFeedbackServiceImpl.createFeedbackV2(request);
+        return ResponseEntity.ok(
+                DataResponse.<ProductFeedbackResponseV2>builder()
                         .data(List.of(createdFeedback))
                         .build()
         );
