@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -39,6 +40,15 @@ public class PermissionInterceptor implements HandlerInterceptor {
         System.out.println(">>> path= " + path);
         System.out.println(">>> httpMethod= " + httpMethod);
         System.out.println(">>> requestURI= " + requestURI);
+        if (httpMethod.equals(HttpMethod.GET.name()) && path.startsWith("/products")) {
+            return true;
+        }
+        if (httpMethod.equals(HttpMethod.GET.name()) && path.startsWith("/product-feedbacks")) {
+            return true;
+        }
+        if (httpMethod.equals(HttpMethod.GET.name()) && path.startsWith("/trademarks")) {
+            return true;
+        }
 
         String email = SecurityUtil.getCurrentUserLogin().isPresent() == true
                 ? SecurityUtil.getCurrentUserLogin().get()
