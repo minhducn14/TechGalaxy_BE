@@ -605,7 +605,6 @@ public class AccountController {
     }
 
 
-    //get account by email
     @GetMapping("/email/{email}")
     public ResponseEntity<DataResponse<AccountResponse>> getAccountByEmail(@PathVariable String email) {
         Account account = accountService.getAccountByEmail(email).orElseThrow(()-> new AppException(ErrorCode.ACCOUNT_NOTFOUND));
