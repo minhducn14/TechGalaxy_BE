@@ -15,6 +15,7 @@ import java.util.Map;
 public class ProductVariantDetailResponse {
     String id;
     String name;
+    String imgAva;
     ProductStatus status;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;

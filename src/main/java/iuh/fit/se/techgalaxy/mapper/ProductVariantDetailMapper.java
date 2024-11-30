@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface ProductVariantDetailMapper {
     @Mapping(target = "name", source = "productVariantDetail.productVariant.name")
+    @Mapping(target = "imgAva", source = "productVariantDetail.productVariant.avatar")
     @Mapping(target = "memories", expression = "java(mapMemories(productVariantDetails))")
     ProductVariantDetailResponse toProductVariantDetailResponse(ProductVariantDetail productVariantDetail, List<ProductVariantDetail> productVariantDetails);
 

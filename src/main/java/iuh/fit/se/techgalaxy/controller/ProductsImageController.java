@@ -26,6 +26,12 @@ public class ProductsImageController {
                 .data(productsImageService.getProductsImageByProductId(productId))
                 .build());
     }
+    @GetMapping("/getByVariant/{productVariantId}")
+    public ResponseEntity<DataResponse<ProductsImageResponse>> getAllProductsImageByProductVariantId(@PathVariable String productVariantId) {
+        return ResponseEntity.ok(DataResponse.<ProductsImageResponse>builder()
+                .data(productsImageService.getProductsImageByProductVariantId(productVariantId))
+                .build());
+    }
 
     @PostMapping("/{variantDetail}")
     public ResponseEntity<DataResponse<ProductsImageResponse>> createProductsImage(@PathVariable String variantDetail, @RequestBody List<ProductsImageRequest> productsImageRequest) {

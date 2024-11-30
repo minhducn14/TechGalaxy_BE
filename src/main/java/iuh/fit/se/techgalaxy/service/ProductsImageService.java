@@ -11,6 +11,8 @@ public interface ProductsImageService {
 
     List<ProductsImageResponse> getProductsImageByProductId(String productId);
 
+    List<ProductsImageResponse> getProductsImageByProductVariantId(String productVariantId);
+
     void deleteProductsImageByProductId(String productId);
 
     void deleteProductsImageByImageId(String imageId);

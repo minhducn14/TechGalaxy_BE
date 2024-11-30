@@ -48,6 +48,12 @@ public class ProductsImageServiceImpl implements ProductsImageService {
     }
 
     @Override
+    public List<ProductsImageResponse> getProductsImageByProductVariantId(String productVariantId) {
+        List<ProductsImage> productsImages = productsImageRepository.findAllByProductVariantId(productVariantId);
+        return productsImages.stream().map(productsImageMapper::toProductsImageResponse).collect(Collectors.toList());
+    }
+
+    @Override
     public void deleteProductsImageByProductId(String productId) {
         List<ProductsImage> productsImages = productsImageRepository.findAllByProductVariantDetailId(productId);
         productsImageRepository.deleteAll(productsImages);
