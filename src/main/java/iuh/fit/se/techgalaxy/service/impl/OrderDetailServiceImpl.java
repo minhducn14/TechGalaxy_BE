@@ -75,7 +75,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     @Override
     public OrderDetailResponse update(String id, OrderDetailRequest orderDetailRequest) {
-        if (orderDetailRequest.getOrder().getOrderStatus() != OrderStatus.NEW || orderDetailRequest.getOrder().getOrderStatus() != OrderStatus.PROCESSING) {
+        if (orderDetailRequest.getOrder().getOrderStatus() != OrderStatus.NEW && orderDetailRequest.getOrder().getOrderStatus() != OrderStatus.PROCESSING) {
             throw new AppException(ErrorCode.NOT_UPDATE_ORDER);
         }
         return orderDetailRepository.findById(id)
