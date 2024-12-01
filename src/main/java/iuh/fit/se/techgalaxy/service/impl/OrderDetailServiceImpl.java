@@ -4,6 +4,7 @@ import iuh.fit.se.techgalaxy.dto.request.OrderDetailRequest;
 import iuh.fit.se.techgalaxy.dto.response.OrderDetailResponse;
 import iuh.fit.se.techgalaxy.entities.OrderDetail;
 import iuh.fit.se.techgalaxy.entities.ProductVariantDetail;
+import iuh.fit.se.techgalaxy.entities.enumeration.OrderStatus;
 import iuh.fit.se.techgalaxy.exception.AppException;
 import iuh.fit.se.techgalaxy.exception.ErrorCode;
 import iuh.fit.se.techgalaxy.mapper.OrderDetailMapper;
@@ -74,6 +75,9 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     @Override
     public OrderDetailResponse update(String id, OrderDetailRequest orderDetailRequest) {
+        if (orderDetailRequest.getOrder().getOrderStatus() != OrderStatus.NEW || orderDetailRequest.getOrder().getOrderStatus() != OrderStatus.PROCESSING) {
+            throw new AppException(ErrorCode.NOT_UPDATE_ORDER);
+        }
         return orderDetailRepository.findById(id)
                 .map(orderDetail -> {
                     ProductVariantDetail productVariantDetail = new ProductVariantDetail();
