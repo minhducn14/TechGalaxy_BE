@@ -2,6 +2,7 @@ package iuh.fit.se.techgalaxy.service.impl;
 
 import iuh.fit.se.techgalaxy.dto.request.OrderDetailRequest;
 import iuh.fit.se.techgalaxy.dto.response.OrderDetailResponse;
+import iuh.fit.se.techgalaxy.dto.response.ProductVariantDetailResponse;
 import iuh.fit.se.techgalaxy.entities.OrderDetail;
 import iuh.fit.se.techgalaxy.entities.ProductVariantDetail;
 import iuh.fit.se.techgalaxy.entities.enumeration.OrderStatus;
