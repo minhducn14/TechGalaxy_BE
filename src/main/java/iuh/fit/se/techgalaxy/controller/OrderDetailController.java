@@ -59,4 +59,11 @@ public class OrderDetailController {
                 .build());
     }
 
+    @GetMapping("/order/{orderId}/product-variant-detail/{productVariantDetailId}")
+    public ResponseEntity<DataResponse<OrderDetailResponse>> getOrderDetailByOrderIdAndProductVariantDetailId(@PathVariable String orderId, @PathVariable String productVariantDetailId) {
+        return ResponseEntity.ok(DataResponse.<OrderDetailResponse>builder()
+                .message("Get order detail by order id and product variant detail id success")
+                .data(List.of(orderDetailService.getOrderDetailByOrderIdAndProductVariantDetailId(orderId, productVariantDetailId)))
+                .build());
+    }
 }

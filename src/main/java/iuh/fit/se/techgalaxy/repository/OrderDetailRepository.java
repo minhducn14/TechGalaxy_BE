@@ -9,4 +9,6 @@ import java.util.List;
 @RepositoryRestResource(collectionResourceRel = "orderDetails", path = "orderDetails", exported = false)
 public interface OrderDetailRepository extends JpaRepository<OrderDetail, String> {
     List<OrderDetail> findOrderDetailsByOrderId(String orderId);
+
+    OrderDetail findOrderDetailByOrderIdAndProductVariantDetailId(String orderId, String productVariantDetailId);
 }

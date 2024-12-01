@@ -84,4 +84,10 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 })
                 .orElseThrow(() -> new AppException(ErrorCode.ORDER_DETAIL_NOTFOUND));
     }
+
+    @Override
+    public OrderDetailResponse getOrderDetailByOrderIdAndProductVariantDetailId(String orderId, String productVariantDetailId) {
+        OrderDetail orderDetail = orderDetailRepository.findOrderDetailByOrderIdAndProductVariantDetailId(orderId, productVariantDetailId);
+        return OrderDetailMapper.INSTANCE.toOrderDetailResponse(orderDetail);
+    }
 }

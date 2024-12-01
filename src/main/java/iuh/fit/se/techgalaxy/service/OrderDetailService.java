@@ -13,4 +13,6 @@ public interface OrderDetailService {
     OrderDetailResponse findById(String id);
 
     OrderDetailResponse update(String id, OrderDetailRequest orderDetailRequest);
+
+    OrderDetailResponse getOrderDetailByOrderIdAndProductVariantDetailId(String orderId, String productVariantDetailId);
 }
