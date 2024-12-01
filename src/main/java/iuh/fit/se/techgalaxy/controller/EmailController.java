@@ -6,6 +6,7 @@ import iuh.fit.se.techgalaxy.service.impl.EmailServiceImpl;
 import iuh.fit.se.techgalaxy.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,7 +21,7 @@ public class EmailController {
         this.emailService = emailService;
     }
 
-    @GetMapping("/email")
+    @PostMapping("/email")
     public String sendEmail(@RequestBody EmailRequest request) {
         String emailLogin = SecurityUtil.getCurrentUserLogin().orElse(null);
         EmailRequest emailRequest = new EmailRequest();
