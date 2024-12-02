@@ -1,4 +1,39 @@
-# Getting Started
+# TechGalaxy Store Backend
+
+This repository contains the backend implementation for the **Tech Galaxy Store** system. It provides a RESTful API for managing the store's functionalities such as product listing, user management, and order processing.
+
+## Features
+
+- **User Management**: Registration, login, and profile management.
+- **Role-Based Access Control**: 
+  - Predefined roles with specific permissions.
+  - Customizable permissions for each account, allowing two accounts with the same role to have different permissions.
+- **Product Management**: CRUD operations for products and categories.
+- **Order Processing**: Handle cart, orders, and payments.
+- **Payment Integration**: Support for VNPay payment gateway.
+- **API Documentation**: Swagger/OpenAPI support for easy API exploration.
+
+## Technology Stack
+
+- **Language**: Java
+- **Framework**: Spring Boot
+- **Database**: MySQL
+- **API**: RESTful API
+- **Build Tool**: Maven
+
+## Prerequisites
+
+Ensure you have the following installed:
+
+- Java 17 or higher
+- Maven 
+- MySQL
+
+## Getting Started
+
+Clone the repository:
+   git clone [https://github.com/minhducn14/TechGalaxy_BE](https://github.com/minhducn14/TechGalaxy_BE)
+
 
 ### Reference Documentation
 
