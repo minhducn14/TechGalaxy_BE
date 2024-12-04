@@ -70,10 +70,8 @@ To prevent this, the project POM contains empty overrides for these elements.
 If you manually switch to a different parent and actually want the inheritance, you need to remove those overrides.
 
 ### Front-end admin
-<a href="[https://www.w3schools.com](https://github.com/PhamVanThanh2111/TechGalaxyFEAdmin
-)">Admin</a>
+<a href="https://github.com/PhamVanThanh2111/TechGalaxyFEAdmin">Admin</a>
 
 ### Front-end custommer
-<a href="[https://www.w3schools.com](https://github.com/Kha03/PhoneStore_GUI
-)">Custommers</a>
+<a href="https://github.com/Kha03/PhoneStore_GUI">Custommers</a>
 
