@@ -73,5 +73,5 @@ If you manually switch to a different parent and actually want the inheritance, 
 <a href="https://github.com/PhamVanThanh2111/TechGalaxyFEAdmin">Admin</a>
 
 ### Front-end customer
-<a href="https://github.com/Kha03/PhoneStore_GUI">Customers</a>
+<a href="https://github.com/Kha03/PhoneStore_GUI">Customers</a> 
 
